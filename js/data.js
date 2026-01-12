@@ -1727,3 +1727,35 @@ const quickEntriesData = [
         link: 'tutorials'
     }
 ];
+
+// 增补快速入口：品牌库、产品对比、医生中心、患者中心
+quickEntriesData.push(
+    {
+        id: 5,
+        title: '品牌库',
+        desc: '了解全球品牌信息',
+        icon: 'el-icon-shop',
+        link: 'brands'
+    },
+    {
+        id: 6,
+        title: '产品对比',
+        desc: '并排对比不同机型',
+        icon: 'el-icon-data-analysis',
+        link: 'compare'
+    },
+    {
+        id: 7,
+        title: '医生中心',
+        desc: '专业医学知识库',
+        icon: 'el-icon-user',
+        link: 'doctor'
+    },
+    {
+        id: 8,
+        title: '患者中心',
+        desc: '患者教育与支持',
+        icon: 'el-icon-user-solid',
+        link: 'patient'
+    }
+)
