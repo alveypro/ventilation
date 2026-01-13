@@ -143,6 +143,7 @@ const diseases = ref<Disease[]>([])
 const recommendations = ref<Recommendation[]>([])
 const isLoading = ref(false)
 const allProducts = ref<Product[]>([])
+const disableSelectorApi = import.meta.env.VITE_DISABLE_SELECTOR_API === '1'
 
 const form = reactive({
   disease: '',
@@ -268,24 +269,26 @@ const scoreProduct = (product: Product) => {
 
 const getRecommendations = async () => {
   isLoading.value = true
-  try {
-    const res = await selectorApi.recommend({
-      disease: form.disease,
-      severity: form.severity as 'mild' | 'moderate' | 'severe',
-      budget: form.budget,
-      portability: form.portability as 'low' | 'medium' | 'high',
-      noiseSensitive: form.noiseSensitive,
-      humidification: form.humidification,
-      useCase: form.useCase as 'home' | 'travel' | 'mixed',
-      experience: form.experience as 'beginner' | 'advanced',
-    })
-    if (res.code === 200 && Array.isArray(res.data)) {
-      recommendations.value = res.data
-      isLoading.value = false
-      return
+  if (!disableSelectorApi) {
+    try {
+      const res = await selectorApi.recommend({
+        disease: form.disease,
+        severity: form.severity as 'mild' | 'moderate' | 'severe',
+        budget: form.budget,
+        portability: form.portability as 'low' | 'medium' | 'high',
+        noiseSensitive: form.noiseSensitive,
+        humidification: form.humidification,
+        useCase: form.useCase as 'home' | 'travel' | 'mixed',
+        experience: form.experience as 'beginner' | 'advanced',
+      })
+      if (res.code === 200 && Array.isArray(res.data)) {
+        recommendations.value = res.data
+        isLoading.value = false
+        return
+      }
+    } catch (error) {
+      // Fallback to local scoring
     }
-  } catch (error) {
-    // Fallback to local scoring
   }
 
   if (!allProducts.value.length) {
