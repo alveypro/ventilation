@@ -222,6 +222,7 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ProductCard from '@/components/ProductCard.vue'
 import { fetchBrandById, fetchProducts } from '@/services/dataService'
+import { formatPriceRange } from '@/utils/helpers'
 import type { Brand, Product } from '@/types'
 
 const route = useRoute()
@@ -375,7 +376,7 @@ const buildProductHighlight = (product: Product) => {
         : '便携PAP'
     details.push(label)
   }
-  if (product.price > 0) details.push(`参考价 ¥${product.price}`)
+  if (product.price > 0) details.push(formatPriceRange(product.price))
   return `${product.name}：${details.join(' · ') || '参数与版本信息需结合官方资料确认'}`
 }
 

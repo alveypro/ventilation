@@ -78,11 +78,85 @@ h1, h2, h3, h4, h5 {
 /* 响应式 */
 @media (max-width: 768px) {
   .main-content {
-    padding: 10px !important;
+    padding: 14px !important;
   }
 
   .logo span {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  .page-header {
+    padding: 18px 14px !important;
+    border-radius: 16px !important;
+  }
+
+  .page-header h1 {
+    font-size: 22px !important;
+  }
+
+  .page-header p {
+    font-size: 13px !important;
+  }
+
+  .header-label {
+    font-size: 11px !important;
+  }
+
+  .el-card__header {
+    padding: 12px 14px !important;
+  }
+
+  .el-card__body {
+    padding: 14px !important;
+  }
+
+  .el-table__header-wrapper,
+  .el-table__body-wrapper {
+    overflow-x: auto;
+  }
+
+  .el-table__header,
+  .el-table__body {
+    min-width: 640px;
+  }
+
+  .el-descriptions__body {
+    overflow-x: auto;
+  }
+
+  .el-descriptions__table {
+    min-width: 520px;
+  }
+
+  .el-tabs__nav-wrap {
+    overflow-x: auto;
+  }
+
+  .el-tabs__nav {
+    flex-wrap: nowrap;
+  }
+
+  .el-tabs__item {
+    white-space: nowrap;
+  }
+
+  .el-pagination {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .el-button {
+    min-height: 36px;
+  }
+
+  .el-breadcrumb {
+    font-size: 12px;
   }
 }
 

@@ -75,7 +75,7 @@ export const extendedProductsData = [
       annualMaintenancePredictz: 600,
       replacementCycle: '5年',
       totalCostOfOwnership: '13000',
-      healthcareReduction: '年省医疗费用3000-5000元',
+      healthcareReduction: '可减少长期医疗支出',
       roi: '1.5-2年内收回成本',
     },
 
@@ -215,7 +215,7 @@ export const extendedProductsData = [
       initialCost: 7800,
       annualMaintenance: 500,
       totalCostOfOwnership: '12000',
-      healthcareReduction: '年省医疗费用2500-4000元',
+      healthcareReduction: '可降低长期医疗支出',
       roi: '2-2.5年内收回成本',
     },
 
@@ -327,7 +327,7 @@ export const extendedProductsData = [
       '适用范围最广（OSA、COPD、肥胖低通气等）',
     ],
     disadvantages: [
-      '价格较高（15800元）',
+      '价格较高（高端区间）',
       '学习曲线较陡，需医生指导',
       '功能复杂，初期使用难度大',
     ],
@@ -406,7 +406,7 @@ export const extendedProductsData = [
       '临床推荐率最高',
     ],
     disadvantages: [
-      '价格最高（22000元）',
+      '价格最高（旗舰区间）',
       '仅用于医疗机构',
       '需要专业医护人员操作',
       '不适合家庭个人使用',
@@ -449,7 +449,7 @@ export const extendedProductsData = [
 
     dealerReference: {
       targetMarket: '初次使用者，预算有限患者',
-      competitiveAdvantage: '国产品牌，价格优势明显，售后服务完善',
+      competitiveAdvantage: '国产品牌，价格带友好，售后服务完善',
     },
 
     suitableFor: ['sleep_apnea'],
@@ -460,7 +460,7 @@ export const extendedProductsData = [
       '重量': '1.5 kg',
     },
     advantages: [
-      '价格极低，性价比最高',
+      '价格区间较低，性价比突出',
       '国产品牌，售后服务完善',
       '适合初次使用者和试用',
       '国内医院和诊所广泛使用',
@@ -851,11 +851,11 @@ export const selectionDecisionTree = {
   step4_budget: {
     title: '第4步：预算范围',
     budgets: [
-      { range: '< 5000元', machines: ['Escape Auto', 'Hero II'], note: '初次使用者、试用' },
-      { range: '5000-8000元', machines: ['S9 AutoSet', 'DreamStation 2'], note: '经济实惠，性能均衡' },
-      { range: '8000-12000元', machines: ['AirSense 11 AutoSet'], note: '高端家庭用户' },
-      { range: '12000-20000元', machines: ['AirCurve 10 VAuto', 'Hero 4'], note: '中重度患者，需要BiPAP' },
-      { range: '> 20000元', machines: ['Lumis 150 VPAP ST'], note: '医疗机构，重症患者' },
+      { range: '< 5,000 区间', machines: ['Escape Auto', 'Hero II'], note: '初次使用者、试用' },
+      { range: '5,000–8,000 区间', machines: ['S9 AutoSet', 'DreamStation 2'], note: '经济实惠，性能均衡' },
+      { range: '8,000–12,000 区间', machines: ['AirSense 11 AutoSet'], note: '高端家庭用户' },
+      { range: '12,000–20,000 区间', machines: ['AirCurve 10 VAuto', 'Hero 4'], note: '中重度患者，需要BiPAP' },
+      { range: '> 20,000 区间', machines: ['Lumis 150 VPAP ST'], note: '医疗机构，重症患者' },
     ],
   },
 

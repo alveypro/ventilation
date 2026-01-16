@@ -41,7 +41,7 @@
           <el-card shadow="hover" class="product-option" @click="selectProduct(product.id)">
             <div class="placeholder">{{ product.brand }}</div>
             <h4>{{ product.name }}</h4>
-            <p>¥{{ product.price }}</p>
+            <p>{{ formatPriceRange(product.price) }}</p>
             <el-button type="primary" size="small" @click.stop="selectProduct(product.id)">
               选择
             </el-button>
@@ -71,7 +71,7 @@
                 <div class="product-header">
                   <div class="product-image">{{ product.brand }}</div>
                   <h4>{{ product.name }}</h4>
-                  <p class="price">¥{{ product.price }}</p>
+                  <p class="price">{{ formatPriceRange(product.price) }}</p>
                   <el-button type="primary" size="small" @click="gotoProduct(product.id)">
                     查看详情
                   </el-button>
@@ -145,6 +145,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchProducts } from '@/services/dataService'
 import { loadFromStorage, saveToStorage } from '@/utils/storage'
+import { formatPriceRange } from '@/utils/helpers'
 import type { Product } from '@/types'
 
 const route = useRoute()
@@ -261,7 +262,9 @@ const comparisonReport = computed(() => {
 
 const buildReportText = () => {
   const header = `呼吸机对比报告\n生成时间：${new Date().toLocaleString()}`
-  const products = selectedProducts.value.map(product => `- ${product.name}（¥${product.price}）`).join('\n')
+  const products = selectedProducts.value
+    .map(product => `- ${product.name}（${formatPriceRange(product.price)}）`)
+    .join('\n')
   const specs = comparisonRows.value.map(row => {
     const values = selectedProducts.value.map(product => `${product.name}: ${row.values[product.id] || '—'}`).join(' | ')
     return `${row.label}: ${values}`
@@ -299,7 +302,7 @@ const printReport = () => {
         <h1>呼吸机对比报告</h1>
         <div>生成时间：${new Date().toLocaleString()}</div>
         <h2>对比机型</h2>
-        <ul>${selectedProducts.value.map(product => `<li>${product.name}（¥${product.price}）</li>`).join('')}</ul>
+        <ul>${selectedProducts.value.map(product => `<li>${product.name}（${formatPriceRange(product.price)}）</li>`).join('')}</ul>
         <h2>核心参数</h2>
         <table>
           <thead>

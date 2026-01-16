@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>呼吸机之家 - 专业呼吸机选购与使用指南</title>
+    <script>
+      (function () {
+        var redirectPath = sessionStorage.getItem('spa-redirect');
+        if (redirectPath) {
+          sessionStorage.removeItem('spa-redirect');
+          history.replaceState(null, '', redirectPath);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

@@ -73,47 +73,6 @@
       </el-row>
     </div>
 
-    <div class="content-section ranking-section">
-      <h2>📕 红皮书榜单</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :md="12">
-          <el-card shadow="hover" class="rank-card">
-            <h3>年度高评分 TOP</h3>
-            <ol>
-              <li v-for="item in topRatedProducts" :key="item.id">
-                <span>{{ item.name }}</span>
-                <el-tag size="small">{{ item.rating }}分</el-tag>
-              </li>
-            </ol>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :md="12">
-          <el-card shadow="hover" class="rank-card">
-            <h3>热度最高 TOP</h3>
-            <ol>
-              <li v-for="item in topReviewedProducts" :key="item.id">
-                <span>{{ item.name }}</span>
-                <el-tag size="small">{{ item.reviewCount }}评价</el-tag>
-              </li>
-            </ol>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
-    <div class="content-section badge-section">
-      <h2>🏅 内容质量徽章体系</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="6" v-for="badge in authorityBadges" :key="badge.title">
-          <el-card shadow="hover" class="badge-card">
-            <div class="badge-icon">{{ badge.icon }}</div>
-            <h4>{{ badge.title }}</h4>
-            <p>{{ badge.description }}</p>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
     <!-- 疾病指南 -->
     <div class="content-section">
       <h2>📋 常见疾病指南</h2>
@@ -189,10 +148,27 @@
       </el-row>
     </div>
 
+    <div class="content-section resource-section">
+      <h2>🧭 权威资源速览</h2>
+      <p class="section-note">精选呼吸医学权威网站与制造商官方资源，便于快速查证信息。</p>
+      <el-row :gutter="20">
+        <el-col :xs="24" :sm="12" v-for="item in resourceHighlights" :key="item.name">
+          <el-card shadow="hover" class="resource-card">
+            <h4>{{ item.name }}</h4>
+            <p>{{ item.description }}</p>
+            <a :href="item.url" target="_blank" rel="noopener">访问官网 →</a>
+          </el-card>
+        </el-col>
+      </el-row>
+      <div class="resource-footnote">
+        权威资源仅用于参考，诊疗与参数需由专业医护评估。
+      </div>
+    </div>
+
     <!-- 医生学习中心 -->
     <div class="content-section doctor-center">
       <h2>👨‍⚕️ 医生学习中心</h2>
-      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 8px; margin-bottom: 20px;">
+      <div class="highlight-banner doctor-banner">
         <h3 style="margin-top: 0;">专业医学知识库</h3>
         <p>AASM 2019 诊疗标准 | GOLD 2024 COPD指南 | 循证医学证据 | 典型病例讨论</p>
         <el-button type="light" size="large" @click="goTo('/doctor')">进入医生中心 →</el-button>
@@ -232,7 +208,7 @@
     <!-- 患者自学中心 -->
     <div class="content-section patient-center">
       <h2>👤 患者自学中心</h2>
-      <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; border-radius: 8px; margin-bottom: 20px;">
+      <div class="highlight-banner patient-banner">
         <h3 style="margin-top: 0;">患者教育与支持</h3>
         <p>疾病认知 | 使用指南 | 生活管理 | 故障排查 | 社区支持</p>
         <el-button type="light" size="large" @click="goTo('/patient')">进入患者中心 →</el-button>
@@ -293,6 +269,7 @@ import { useRouter } from 'vue-router'
 import ProductCard from '@/components/ProductCard.vue'
 import { faqsData } from '@/data/comprehensive'
 import { clinicalGuides } from '@/data/clinical-guides'
+import { resourceCategories } from '@/data/resource-links'
 import { fetchProducts, fetchDiseases, fetchTutorials, fetchBrands } from '@/services/dataService'
 import type { Product, Disease, Tutorial, Brand } from '@/types'
 
@@ -308,12 +285,7 @@ const clinicalGuideCount = ref(clinicalGuides.length)
 const faqs = ref(faqsData.slice(0, 2))
 
 const hotProducts = computed(() => products.value.filter(p => p.tag).slice(0, 4))
-const topRatedProducts = computed(() =>
-  products.value.slice().sort((a, b) => b.rating - a.rating).slice(0, 5)
-)
-const topReviewedProducts = computed(() =>
-  products.value.slice().sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 5)
-)
+const resourceHighlights = computed(() => resourceCategories.flatMap(category => category.items).slice(0, 6))
 
 const roleEntries = ref([
   {
@@ -389,12 +361,6 @@ const primaryNav = ref([
     icon: '🧪',
     path: '/products',
   },
-])
-const authorityBadges = ref([
-  { icon: '🧠', title: '资料等级', description: '标注信息完整度与覆盖范围。' },
-  { icon: '📑', title: '参考来源', description: '明确资料出处与补充状态。' },
-  { icon: '🧪', title: '参数校验', description: '核心参数与场景匹配可核对。' },
-  { icon: '🔎', title: '可追溯', description: '重要信息可检索、可更新。' },
 ])
 
 onMounted(async () => {
@@ -503,6 +469,27 @@ const goToBrand = (id: number) => {
   margin-bottom: 16px;
   border-left: 4px solid #1d4ed8;
   padding-left: 12px;
+}
+
+.section-note {
+  margin: 8px 0 18px;
+  color: #6b7280;
+}
+
+.resource-section .resource-card {
+  min-height: 140px;
+}
+
+.resource-section a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.resource-footnote {
+  margin-top: 12px;
+  color: #9ca3af;
+  font-size: 12px;
 }
 
 .nav-grid {
@@ -769,6 +756,24 @@ const goToBrand = (id: number) => {
   padding: 30px 20px !important;
 }
 
+.highlight-banner {
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.doctor-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.patient-banner {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
 .patient-center {
   background: #f0fdf4;
   border-radius: 12px;
@@ -812,6 +817,26 @@ const goToBrand = (id: number) => {
 }
 
 @media (max-width: 768px) {
+  .guide-hero h1 {
+    font-size: 22px;
+  }
+
+  .hero-subtitle {
+    font-size: 13px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions .el-button {
+    width: 100%;
+  }
+
+  .hero-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .banner-item h2 {
     font-size: 1.5rem;
   }
@@ -822,6 +847,23 @@ const goToBrand = (id: number) => {
 
   .content-section {
     padding: 20px 0;
+  }
+
+  .highlight-banner {
+    padding: 18px;
+  }
+
+  .highlight-banner .el-button {
+    width: 100%;
+  }
+
+  .module-card {
+    padding: 16px 12px;
+  }
+
+  .module-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
   }
 }
 </style>

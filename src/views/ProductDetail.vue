@@ -318,6 +318,7 @@
 
         <el-card class="model-block">
           <h3>价格与渠道</h3>
+          <p class="price-note">价格区间为市场参考，实际以渠道报价与售后政策为准。</p>
           <div class="block-row">
             <div>
               <h4>电商参考价</h4>
@@ -503,6 +504,7 @@ import { ElMessage } from 'element-plus'
 import { fetchProductById, fetchProducts, fetchDiseases, fetchTutorials, fetchBrands } from '@/services/dataService'
 import { loadFromStorage, saveToStorage } from '@/utils/storage'
 import { getRelatedForProduct } from '@/utils/knowledge'
+import { formatPriceRange, getPriceBand } from '@/utils/helpers'
 import type { Product } from '@/types'
 import ProductCard from '@/components/ProductCard.vue'
 import type { Brand, Disease, Tutorial } from '@/types'
@@ -628,10 +630,7 @@ const keySpecs = computed(() => {
   ]
 })
 
-const priceLabel = computed(() => {
-  if (!product.value.price || product.value.price <= 0) return '待补充'
-  return `¥${product.value.price}`
-})
+const priceLabel = computed(() => formatPriceRange(product.value.price))
 
 const parameterGraphSvg = computed(() => {
   const epap = product.value.epapMax ?? product.value.epapMin ?? 20
@@ -754,15 +753,15 @@ const accessoryProfile = computed(() => {
 })
 
 const priceProfile = computed(() => {
-  const hasPrice = product.value.price > 0
-  const price = hasPrice ? `约 ¥${product.value.price}` : '待补充'
+  const band = getPriceBand(product.value.price)
+  const priceText = band === '待补充' ? '价格区间：待补充' : `价格区间：${band}`
   const pitfalls = product.value.refurbRisk === '高'
     ? '翻新风险高，建议选择官方/授权渠道'
     : '注意版本/配件/保修差异'
   return {
-    ecom: price,
-    offline: hasPrice ? `约 ¥${Math.round(product.value.price * 1.1)}` : '待补充',
-    used: '视成色与配件而定',
+    ecom: priceText,
+    offline: priceText,
+    used: band === '待补充' ? '二手价格需核查成色与配件' : `二手参考：${band}`,
     channels: product.value.channels?.length ? product.value.channels.join(' / ') : '电商/线下',
     pitfalls,
   }
@@ -1171,6 +1170,12 @@ const goToBrand = () => {
   font-size: 24px;
   color: #f56c6c;
   font-weight: bold;
+}
+
+.price-note {
+  margin: 6px 0 14px;
+  color: #909399;
+  font-size: 13px;
 }
 
 .count {

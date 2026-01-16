@@ -50,30 +50,6 @@
     </div>
 
     <div class="content-section">
-      <h2>模块定位</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :md="12" v-for="module in moduleResponsibilities" :key="module.id">
-          <el-card shadow="hover" class="module-card clickable" @click="goTo(module.path)">
-            <div class="module-header">
-              <span class="module-icon">{{ module.icon }}</span>
-              <div>
-                <h3>{{ module.title }}</h3>
-                <p>{{ module.subtitle }}</p>
-              </div>
-            </div>
-            <div class="module-meta">
-              <span>目标人群：{{ module.audience }}</span>
-              <span>核心产出：{{ module.output }}</span>
-            </div>
-            <div class="module-tags">
-              <el-tag v-for="tag in module.tags" :key="tag" size="small" type="info">{{ tag }}</el-tag>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
-    <div class="content-section">
       <h2>专题索引</h2>
       <el-row :gutter="20">
         <el-col :xs="24" :sm="12" :md="8" v-for="topic in topicIndex" :key="topic.id">
@@ -98,45 +74,29 @@
     </div>
 
     <div class="content-section">
-      <h2>学习路径</h2>
+      <h2>权威资源导航</h2>
+      <p class="section-note">精选国际学会、制造商与学术资源，便于快速查阅权威资料。</p>
       <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="8" v-for="path in paths" :key="path.id">
-          <el-card shadow="hover" class="path-card">
-            <div class="path-header">
-              <span class="path-icon">{{ path.icon }}</span>
-              <h4>{{ path.title }}</h4>
+        <el-col :xs="24" :md="12" v-for="category in resourceCategories" :key="category.id">
+          <el-card shadow="hover" class="resource-card">
+            <div class="resource-header">
+              <h3>{{ category.title }}</h3>
+              <span>{{ category.subtitle }}</span>
             </div>
-            <ol>
-              <li v-for="step in path.steps" :key="step">{{ step }}</li>
-            </ol>
-            <el-button type="primary" plain size="small" @click="goTo(path.cta)">
-              立即进入
-            </el-button>
+            <ul class="resource-list">
+              <li v-for="item in category.items" :key="item.name">
+                <a :href="item.url" target="_blank" rel="noopener">{{ item.name }}</a>
+                <p>{{ item.description }}</p>
+              </li>
+            </ul>
           </el-card>
         </el-col>
       </el-row>
+      <div class="resource-notes">
+        <p v-for="note in resourceNotes" :key="note">{{ note }}</p>
+      </div>
     </div>
 
-    <div class="content-section">
-      <h2>知识包下载</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="6" v-for="pack in knowledgePacks" :key="pack.id">
-          <el-card shadow="hover" class="entry-card" @click="downloadPack(pack)">
-            <div class="entry-icon">{{ pack.icon }}</div>
-            <div class="entry-body">
-              <h3>{{ pack.title }}</h3>
-              <p>{{ pack.description }}</p>
-              <div class="pack-actions">
-                <el-tag size="small">一键下载</el-tag>
-                <el-button size="small" type="primary" plain @click.stop="openPdf(pack)">
-                  PDF模板
-                </el-button>
-              </div>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
   </div>
 </template>
 
@@ -144,11 +104,10 @@
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchProducts, fetchBrands, fetchDiseases, fetchTutorials, fetchReviews } from '@/services/dataService'
-import { buildKnowledgePack } from '@/utils/packs'
-import { openPdfTemplate } from '@/utils/pdfTemplates'
 import { clinicalHandbookData } from '@/data/clinical-handbook'
 import { publicUserLibraryData } from '@/data/public-user-library'
 import { topicCatalog } from '@/utils/topics'
+import { resourceCategories, resourceNotes } from '@/data/resource-links'
 import type { Product, Tutorial } from '@/types'
 
 const router = useRouter()
@@ -270,68 +229,6 @@ const modules = computed(() => [
   },
 ])
 
-const moduleResponsibilities = [
-  {
-    id: 'products',
-    title: '产品库',
-    subtitle: '型号参数与差异化卖点速览',
-    audience: '采购决策者、销售、工程师',
-    output: '对比清单、选型建议、规格卡',
-    tags: ['型号', '参数', '对比', '适应证'],
-    icon: '🧭',
-    path: '/products',
-  },
-  {
-    id: 'clinical',
-    title: '临床知识库',
-    subtitle: '循证要点与临床路径',
-    audience: '临床医生、呼吸治疗师',
-    output: '诊疗要点、适应证、禁忌证',
-    tags: ['循证', '诊断', '治疗', '通气策略'],
-    icon: '🩺',
-    path: '/clinical',
-  },
-  {
-    id: 'user-knowledge',
-    title: '用户知识库',
-    subtitle: '患者教育与家庭使用',
-    audience: '购机用户、家属、客服',
-    output: '使用指南、维护清单、常见问题',
-    tags: ['佩戴', '清洁', '依从性', '故障排查'],
-    icon: '👤',
-    path: '/user-knowledge',
-  },
-  {
-    id: 'tutorials',
-    title: '使用教程',
-    subtitle: '从入门到进阶的操作路径',
-    audience: '初学者、护理人员、培训师',
-    output: '操作步骤、参数设置、流程模板',
-    tags: ['入门', '调压', '维护', '实操'],
-    icon: '📚',
-    path: '/tutorials',
-  },
-  {
-    id: 'reviews',
-    title: '测评中心',
-    subtitle: '专业评测与真实反馈',
-    audience: '采购、用户、培训人员',
-    output: '优缺点、对比点评、性价比结论',
-    tags: ['评测', '体验', '差评点', '优选'],
-    icon: '⭐',
-    path: '/reviews',
-  },
-  {
-    id: 'centers',
-    title: '四大中心',
-    subtitle: '医生/患者/代理商/厂家协同',
-    audience: '多角色协作团队',
-    output: '流程模板、清单、工具包',
-    tags: ['角色中心', '工具包', '流程', '模板'],
-    icon: '🧰',
-    path: '/doctor',
-  },
-]
 
 const topicIndex = ref<
   {
@@ -373,81 +270,11 @@ const buildTopicIndex = () => {
   }))
 }
 
-const paths = ref([
-  {
-    id: 'patient-path',
-    icon: '👤',
-    title: '患者路径',
-    cta: '/patient',
-    steps: ['疾病了解', '智能选机', '设备使用', '生活管理'],
-  },
-  {
-    id: 'doctor-path',
-    icon: '👨‍⚕️',
-    title: '医生路径',
-    cta: '/doctor',
-    steps: ['诊断标准', '治疗指南', '临床证据', '随访管理'],
-  },
-  {
-    id: 'agent-path',
-    icon: '🧰',
-    title: '代理商路径',
-    cta: '/agent',
-    steps: ['客户画像', '竞品对比', '方案推荐', '报价成交'],
-  },
-  {
-    id: 'manufacturer-path',
-    icon: '🏭',
-    title: '厂家路径',
-    cta: '/manufacturer',
-    steps: ['市场洞察', '研发重点', '合规准备', '上市路线'],
-  },
-])
 
 const goTo = (path: string) => {
   router.push(path)
 }
 
-const knowledgePacks = ref([
-  {
-    id: 'doctor',
-    icon: '👨‍⚕️',
-    title: '医生知识包',
-    description: '诊断标准、治疗指南、随访模板。',
-  },
-  {
-    id: 'patient',
-    icon: '👤',
-    title: '患者知识包',
-    description: '通俗疾病认知、使用步骤、维护清单。',
-  },
-  {
-    id: 'agent',
-    icon: '🧰',
-    title: '代理商知识包',
-    description: '客户画像、对比模板、报价清单。',
-  },
-  {
-    id: 'manufacturer',
-    icon: '🏭',
-    title: '厂家知识包',
-    description: '竞品洞察、研发重点、合规清单。',
-  },
-])
-
-const downloadPack = (pack: { id: string; title: string }) => {
-  const content = buildKnowledgePack(pack.id as any)
-  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
-  const link = document.createElement('a')
-  link.href = URL.createObjectURL(blob)
-  link.download = `${pack.title}.txt`
-  link.click()
-  URL.revokeObjectURL(link.href)
-}
-
-const openPdf = (pack: { id: string }) => {
-  openPdfTemplate(pack.id as any)
-}
 
 onMounted(async () => {
   const [products, brands, diseases, tutorials, reviews] = await Promise.all([
@@ -533,6 +360,57 @@ onMounted(async () => {
 .stat .label {
   font-size: 12px;
   color: #64748b;
+}
+
+.section-note {
+  margin: 6px 0 18px;
+  color: #6b7280;
+}
+
+.resource-card {
+  min-height: 320px;
+}
+
+.resource-header h3 {
+  margin-bottom: 4px;
+}
+
+.resource-header span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.resource-list {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+}
+
+.resource-list li {
+  padding: 10px 0;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.resource-list li:last-child {
+  border-bottom: none;
+}
+
+.resource-list a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.resource-list p {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.resource-notes {
+  margin-top: 16px;
+  color: #9ca3af;
+  font-size: 12px;
 }
 
 .entry-card {

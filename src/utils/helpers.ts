@@ -2,11 +2,26 @@
  * 通用工具函数
  */
 
-/**
- * 格式化价格
- */
-export function formatPrice(price: number): string {
-  return `¥${price.toLocaleString()}`
+const PRICE_BANDS = [
+  { max: 4000, label: '¥2,000–4,000' },
+  { max: 8000, label: '¥4,000–8,000' },
+  { max: 12000, label: '¥8,000–12,000' },
+  { max: 18000, label: '¥12,000–18,000' },
+  { max: 25000, label: '¥18,000–25,000' },
+  { max: 35000, label: '¥25,000–35,000' },
+  { max: 50000, label: '¥35,000–50,000' },
+]
+
+export function getPriceBand(price: number): string {
+  if (!price || price <= 0) return '待补充'
+  const band = PRICE_BANDS.find(item => price <= item.max)
+  return band ? band.label : '¥50,000+'
+}
+
+export function formatPriceRange(price: number): string {
+  const band = getPriceBand(price)
+  if (band === '待补充') return '价格区间：待补充'
+  return `价格区间：${band}`
 }
 
 /**

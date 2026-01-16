@@ -16,23 +16,15 @@
           @select="handleMenuSelect"
           class="top-menu"
         >
-          <el-menu-item index="home">首页</el-menu-item>
-          <el-menu-item index="encyclopedia">指南总览</el-menu-item>
-          <el-menu-item index="clinical">临床知识库</el-menu-item>
-          <el-menu-item index="clinical-guides">临床专题</el-menu-item>
-          <el-menu-item index="diseases">疾病指南</el-menu-item>
-          <el-menu-item index="tutorials">教程</el-menu-item>
-          <el-menu-item index="user-knowledge">用户知识</el-menu-item>
-          <el-menu-item index="products">产品库</el-menu-item>
-          <el-menu-item index="brands">品牌库</el-menu-item>
-          <el-menu-item index="compare">对比</el-menu-item>
-          <el-menu-item index="selector">选机</el-menu-item>
-          <el-menu-item index="doctor">医生中心</el-menu-item>
-          <el-menu-item index="patient">患者中心</el-menu-item>
-          <el-menu-item index="agent">代理商</el-menu-item>
-          <el-menu-item index="manufacturer">厂家</el-menu-item>
+          <el-menu-item
+            v-for="item in menuItems"
+            :key="item.key"
+            :index="item.key"
+          >
+            {{ item.label }}
+          </el-menu-item>
         </el-menu>
-        <div class="header-search">
+        <div class="header-search desktop-only">
           <el-input
             v-model="searchQuery"
             placeholder="搜索产品/品牌/指南/教程"
@@ -45,8 +37,49 @@
             </template>
           </el-input>
         </div>
+        <div class="header-actions mobile-only">
+          <el-button class="menu-trigger" @click="mobileMenuOpen = true">导航</el-button>
+        </div>
       </div>
     </el-header>
+
+    <el-drawer
+      v-model="mobileMenuOpen"
+      direction="ltr"
+      size="88%"
+      class="mobile-drawer"
+    >
+      <div class="drawer-header">
+        <div class="drawer-title">快速导航</div>
+        <div class="drawer-subtitle">浏览内容与搜索</div>
+      </div>
+      <div class="drawer-search">
+        <el-input
+          v-model="searchQuery"
+          placeholder="搜索产品/品牌/指南/教程"
+          clearable
+          @keyup.enter="goSearch"
+        >
+          <template #append>
+            <el-button type="primary" @click="goSearch">搜索</el-button>
+          </template>
+        </el-input>
+      </div>
+      <el-menu
+        :default-active="activeMenu"
+        mode="vertical"
+        class="drawer-menu"
+        @select="handleDrawerSelect"
+      >
+        <el-menu-item
+          v-for="item in menuItems"
+          :key="item.key"
+          :index="item.key"
+        >
+          {{ item.label }}
+        </el-menu-item>
+      </el-menu>
+    </el-drawer>
 
     <!-- 主内容区域 -->
     <el-main class="main-content">
@@ -68,6 +101,24 @@ const route = useRoute()
 const router = useRouter()
 const activeMenu = ref('home')
 const searchQuery = ref('')
+const mobileMenuOpen = ref(false)
+const menuItems = [
+  { key: 'home', label: '首页' },
+  { key: 'encyclopedia', label: '指南总览' },
+  { key: 'clinical', label: '临床知识库' },
+  { key: 'clinical-guides', label: '临床专题' },
+  { key: 'diseases', label: '疾病指南' },
+  { key: 'tutorials', label: '教程' },
+  { key: 'user-knowledge', label: '用户知识' },
+  { key: 'products', label: '产品库' },
+  { key: 'brands', label: '品牌库' },
+  { key: 'compare', label: '对比' },
+  { key: 'selector', label: '选机' },
+  { key: 'doctor', label: '医生中心' },
+  { key: 'patient', label: '患者中心' },
+  { key: 'agent', label: '代理商' },
+  { key: 'manufacturer', label: '厂家' },
+]
 
 const syncActiveMenu = () => {
   const section = route.path.split('/')[1] || 'home'
@@ -129,10 +180,16 @@ const handleMenuSelect = (index: string) => {
   router.push(`/${index}`)
 }
 
+const handleDrawerSelect = (index: string) => {
+  mobileMenuOpen.value = false
+  handleMenuSelect(index)
+}
+
 const goSearch = () => {
   const keyword = searchQuery.value.trim()
   if (!keyword) return
   router.push({ path: '/search', query: { q: keyword } })
+  mobileMenuOpen.value = false
 }
 </script>
 
@@ -196,6 +253,57 @@ const goSearch = () => {
   max-width: 320px;
 }
 
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+.header-actions {
+  margin-left: auto;
+}
+
+.menu-trigger {
+  border-radius: 12px;
+  background: rgba(30, 90, 166, 0.12);
+  border: 1px solid rgba(30, 90, 166, 0.2);
+  color: #1e5aa6;
+  font-weight: 600;
+}
+
+:deep(.mobile-drawer) {
+  --el-drawer-padding-primary: 20px;
+}
+
+.drawer-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.drawer-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.drawer-subtitle {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.drawer-search {
+  margin-bottom: 16px;
+}
+
+.drawer-menu {
+  border-right: none;
+  background: transparent;
+}
+
 :deep(.top-menu) {
   flex: 1;
   min-width: 400px;
@@ -242,6 +350,33 @@ const goSearch = () => {
   .header-search {
     width: 100%;
     max-width: none;
+  }
+
+  .logo {
+    padding: 8px 12px;
+    font-size: 16px;
+    gap: 8px;
+  }
+
+  .logo-subtitle {
+    display: none;
+  }
+
+  :deep(.top-menu) {
+    display: none;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: flex;
+  }
+
+  .header-content {
+    justify-content: space-between;
+    padding: 6px 10px 12px;
   }
 }
 

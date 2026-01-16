@@ -63,7 +63,7 @@
             <h4>热销产品</h4>
             <ul>
               <li v-for="p in topProductsFor(brand.name)" :key="p.id">
-                <strong>{{ p.name }}</strong> · {{ formatPrice(p.price) }} · ⭐{{ p.rating }}
+              <strong>{{ p.name }}</strong> · {{ formatPriceRange(p.price) }} · ⭐{{ p.rating }}
               </li>
             </ul>
           </div>
@@ -80,6 +80,7 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchBrands, fetchProducts } from '@/services/dataService'
+import { formatPriceRange } from '@/utils/helpers'
 import type { Brand } from '@/types'
 
 const router = useRouter()
@@ -116,11 +117,6 @@ const topProductsFor = (brandName: string) => {
     .slice()
     .sort((a, b) => b.rating - a.rating)
     .slice(0, 2)
-}
-
-const formatPrice = (price: number) => {
-  if (!price || price <= 0) return '价格待补充'
-  return `¥${price}`
 }
 
 const goBrandDetail = (brandId: number) => {

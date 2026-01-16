@@ -64,7 +64,7 @@
                 <h4>{{ item.name }}</h4>
                 <div class="meta">
                   <el-tag size="small">{{ item.type }}</el-tag>
-                  <span class="duration">¥{{ item.price }}</span>
+                  <span class="duration">{{ formatPriceRange(item.price) }}</span>
                 </div>
               </el-card>
             </el-col>
@@ -183,6 +183,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { fetchTutorialById, fetchTutorials, fetchProducts, fetchDiseases, fetchReviews } from '@/services/dataService'
 import { getRelatedForTutorial } from '@/utils/knowledge'
+import { formatPriceRange } from '@/utils/helpers'
 import type { ContentSource, Tutorial, Product, Disease } from '@/types'
 import { renderMarkdown } from '@/utils/markdown'
 

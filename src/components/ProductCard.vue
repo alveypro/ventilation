@@ -46,7 +46,7 @@
       </div>
 
       <div class="product-footer">
-        <span class="price">¥{{ formatPrice(product.price) }}</span>
+        <span class="price">{{ priceLabel }}</span>
         <el-button type="primary" size="small" @click.stop="handleDetail">详情</el-button>
       </div>
 
@@ -63,7 +63,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, ref, watch, computed } from 'vue'
+import { formatPriceRange } from '@/utils/helpers'
 import type { Product } from '@/types'
 
 const props = defineProps<{
@@ -77,8 +78,6 @@ const emits = defineEmits<{
   detail: []
   toggleCompare: (id: number, checked: boolean) => void
 }>()
-
-import { ref, watch, computed } from 'vue'
 
 const localCompare = ref(Boolean(props.compareChecked))
 const isSyncing = ref(false)
@@ -105,10 +104,7 @@ const handleDetail = () => {
   emits('detail')
 }
 
-const formatPrice = (price: number) => {
-  if (!price || price <= 0) return '待补充'
-  return price.toLocaleString()
-}
+const priceLabel = computed(() => formatPriceRange(props.product.price))
 
 const previewSpecs = computed(() => {
   const s = props.product.specs || {}
@@ -300,8 +296,33 @@ const toggleCompare = () => {
 }
 
 @media (max-width: 768px) {
+  .product-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .product-header h4 {
+    white-space: normal;
+    line-height: 1.3;
+  }
+
+  .header-right {
+    flex-wrap: wrap;
+  }
+
   .product-image {
     height: 100px;
+  }
+
+  .product-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .product-footer .el-button {
+    width: 100%;
   }
 
   .price {

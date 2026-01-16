@@ -68,8 +68,6 @@
             <el-option label="智能优先" value="smart" />
             <el-option label="评分最高" value="rating" />
             <el-option label="评价最多" value="reviews" />
-            <el-option label="价格从低到高" value="price-asc" />
-            <el-option label="价格从高到低" value="price-desc" />
             <el-option label="资料完整度" value="completeness" />
           </el-select>
         </el-col>
@@ -293,7 +291,6 @@ const filterWith = (filters: ReturnType<typeof createDefaultFilters>) => {
     let score = item.dataCompleteness || 0
     if (item.image && item.image.startsWith('http')) score += 20
     if (item.specs?.['官方页面']) score += 10
-    if (item.price) score += 2
     if (item.epapMin || item.epapMax || item.ipapMax) score += 2
     return score
   }
@@ -326,12 +323,6 @@ const filterWith = (filters: ReturnType<typeof createDefaultFilters>) => {
       break
     case 'reviews':
       result = result.slice().sort((a, b) => b.reviewCount - a.reviewCount)
-      break
-    case 'price-asc':
-      result = result.slice().sort((a, b) => a.price - b.price)
-      break
-    case 'price-desc':
-      result = result.slice().sort((a, b) => b.price - a.price)
       break
     case 'completeness':
       result = result.slice().sort((a, b) => (b.dataCompleteness || 0) - (a.dataCompleteness || 0))
