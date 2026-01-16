@@ -175,6 +175,7 @@ const goTo = (path: string) => {
 }
 
 .guide-hero {
+  position: relative;
   display: flex;
   justify-content: space-between;
   gap: 24px;
@@ -182,8 +183,23 @@ const goTo = (path: string) => {
   padding: 28px;
   border: 1px solid #e5e7eb;
   border-radius: 18px;
-  background: linear-gradient(120deg, #f8fafc 0%, #eef2ff 100%);
+  background:
+    radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.12), transparent 45%),
+    radial-gradient(circle at 90% 20%, rgba(16, 185, 129, 0.12), transparent 40%),
+    linear-gradient(120deg, #f8fafc 0%, #eef2ff 100%);
   box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.guide-hero::after {
+  content: '';
+  position: absolute;
+  right: -80px;
+  bottom: -120px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.18), transparent 70%);
+  pointer-events: none;
 }
 
 .hero-label {
@@ -192,6 +208,15 @@ const goTo = (path: string) => {
   text-transform: uppercase;
   color: #64748b;
   margin-bottom: 8px;
+}
+
+.hero-content {
+  max-width: 560px;
+}
+
+.hero-content h1 {
+  font-size: 30px;
+  line-height: 1.25;
 }
 
 .hero-subtitle {
@@ -273,6 +298,9 @@ const goTo = (path: string) => {
   align-items: flex-start;
   cursor: pointer;
   border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: #fff;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .nav-card h3 {
@@ -290,13 +318,19 @@ const goTo = (path: string) => {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: #e0e7ff;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(99, 102, 241, 0.2));
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
   color: #1d4ed8;
   flex-shrink: 0;
+}
+
+.nav-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.12);
+  border-color: rgba(59, 130, 246, 0.45);
 }
 
 .content-section {
@@ -350,6 +384,14 @@ const goTo = (path: string) => {
 
   .hero-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nav-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-card {
+    padding: 2px;
   }
 
   .banner-item h2 {
