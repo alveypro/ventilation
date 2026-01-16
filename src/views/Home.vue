@@ -3,14 +3,13 @@
     <section class="guide-hero">
       <div class="hero-content">
         <p class="hero-label">医学指南 · 专业手册</p>
-        <h1>呼吸机之家 · 呼吸治疗知识总览</h1>
+        <h1>呼吸机之家 · 专业指南与选机入口</h1>
         <p class="hero-subtitle">
-          从诊断到处方，从设备选择到随访管理，覆盖呼吸治疗全流程。
+          以权威指南为基础，帮助医生与家庭快速找到可信信息与设备参考。
         </p>
         <div class="hero-actions">
           <el-button type="primary" @click="goTo('/encyclopedia')">进入指南总览</el-button>
-          <el-button plain @click="goTo('/clinical-guides')">临床专题课</el-button>
-          <el-button plain @click="goTo('/diseases')">疾病指南</el-button>
+          <el-button plain @click="goTo('/selector')">智能选机</el-button>
         </div>
       </div>
       <div class="hero-metrics">
@@ -48,106 +47,6 @@
       </div>
     </section>
 
-    <!-- 角色入口 -->
-    <div class="content-section role-section">
-      <h2>🎯 角色入口</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="6" v-for="role in roleEntries" :key="role.id">
-          <el-card shadow="hover" class="role-card" @click="goTo(role.path)">
-            <div class="role-icon">{{ role.icon }}</div>
-            <h3>{{ role.title }}</h3>
-            <p>{{ role.description }}</p>
-            <el-button type="primary" plain size="small">进入</el-button>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- 热门产品推荐 -->
-    <div class="content-section">
-      <h2>🔥 热门产品推荐</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="6" v-for="product in hotProducts" :key="product.id">
-          <ProductCard :product="product" @detail="goToProduct(product.id)" />
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- 疾病指南 -->
-    <div class="content-section">
-      <h2>📋 常见疾病指南</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="8" v-for="disease in diseases" :key="disease.id">
-          <el-card shadow="hover" class="disease-card" @click="goToDisease(disease.id)">
-            <div class="disease-header">
-              <h4>{{ disease.name }}</h4>
-              <el-tag :type="disease.severity === '严重' ? 'danger' : 'warning'">
-                {{ disease.severity }}
-              </el-tag>
-            </div>
-            <p class="description">{{ disease.description }}</p>
-            <div class="symptoms">
-              <el-tag v-for="symptom in disease.symptoms.slice(0, 2)" :key="symptom" size="small">
-                {{ symptom }}
-              </el-tag>
-            </div>
-            <el-button type="primary" size="small" class="view-btn">查看详情</el-button>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- 使用教程 -->
-    <div class="content-section">
-      <h2>📚 热门教程</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="8" v-for="tutorial in tutorials" :key="tutorial.id">
-          <el-card shadow="hover" class="tutorial-card" @click="goToTutorial(tutorial.id)">
-            <div class="tutorial-header">
-              <h4>{{ tutorial.title }}</h4>
-              <el-tag type="info" size="small">{{ tutorial.difficulty }}</el-tag>
-            </div>
-            <div class="meta">
-              <span>⏱️ {{ tutorial.duration }}</span>
-              <span>👁️ {{ tutorial.views }}</span>
-            </div>
-            <el-rate :model-value="tutorial.rating || 0" disabled size="small"></el-rate>
-            <el-button type="primary" size="small" class="view-btn">阅读</el-button>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- 品牌介绍 -->
-    <div class="content-section">
-      <h2>🌍 全球品牌</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="8" v-for="brand in brands" :key="brand.id">
-          <el-card shadow="hover" class="brand-card" @click="goToBrand(brand.id)">
-            <div class="brand-logo">{{ brand.name }}</div>
-            <h4>{{ brand.name }}</h4>
-            <p class="origin">🌐 {{ brand.country }} | 成立于 {{ brand.founded }}</p>
-            <p class="description">{{ brand.description }}</p>
-            <el-row :gutter="10" class="stats">
-              <el-col :span="12">
-                <div class="stat-item">
-                  <span class="label">产品数</span>
-                  <span class="value">{{ brand.productCount }}</span>
-                </div>
-              </el-col>
-              <el-col :span="12">
-                <div class="stat-item">
-                  <span class="label">市占率</span>
-                  <span class="value">{{ brand.marketShare }}</span>
-                </div>
-              </el-col>
-            </el-row>
-            <el-button type="primary" size="small" class="view-btn" @click.stop="goToBrand(brand.id)">了解更多</el-button>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
     <div class="content-section resource-section">
       <h2>🧭 权威资源速览</h2>
       <p class="section-note">精选呼吸医学权威网站与制造商官方资源，便于快速查证信息。</p>
@@ -165,100 +64,8 @@
       </div>
     </div>
 
-    <!-- 医生学习中心 -->
-    <div class="content-section doctor-center">
-      <h2>👨‍⚕️ 医生学习中心</h2>
-      <div class="highlight-banner doctor-banner">
-        <h3 style="margin-top: 0;">专业医学知识库</h3>
-        <p>AASM 2019 诊疗标准 | GOLD 2024 COPD指南 | 循证医学证据 | 典型病例讨论</p>
-        <el-button type="light" size="large" @click="goTo('/doctor')">进入医生中心 →</el-button>
-      </div>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="6">
-          <el-card class="module-card" @click="goTo('/doctor')">
-            <div class="module-icon">🔍</div>
-            <h4>诊断标准</h4>
-            <p>OSA分类、COPD分级、诊断流程</p>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="12" :md="6">
-          <el-card class="module-card" @click="goTo('/doctor')">
-            <div class="module-icon">💊</div>
-            <h4>治疗指南</h4>
-            <p>NIV指示、CPAP/BiPAP选择、机型推荐</p>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="12" :md="6">
-          <el-card class="module-card" @click="goTo('/doctor')">
-            <div class="module-icon">📊</div>
-            <h4>临床证据</h4>
-            <p>RCT数据、疗效分析、心血管保护</p>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="12" :md="6">
-          <el-card class="module-card" @click="goTo('/doctor')">
-            <div class="module-icon">👨‍⚕️</div>
-            <h4>病例讨论</h4>
-            <p>典型案例、诊疗方案、预期效果</p>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- 患者自学中心 -->
-    <div class="content-section patient-center">
-      <h2>👤 患者自学中心</h2>
-      <div class="highlight-banner patient-banner">
-        <h3 style="margin-top: 0;">患者教育与支持</h3>
-        <p>疾病认知 | 使用指南 | 生活管理 | 故障排查 | 社区支持</p>
-        <el-button type="light" size="large" @click="goTo('/patient')">进入患者中心 →</el-button>
-      </div>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="12" :md="6">
-          <el-card class="module-card green" @click="goTo('/patient')">
-            <div class="module-icon">🧠</div>
-            <h4>疾病认知</h4>
-            <p>OSA机制、风险因素、分级对比</p>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="12" :md="6">
-          <el-card class="module-card green" @click="goTo('/patient')">
-            <div class="module-icon">⚙️</div>
-            <h4>使用指南</h4>
-            <p>开箱检查、面罩选择、4周适应计划</p>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="12" :md="6">
-          <el-card class="module-card green" @click="goTo('/patient')">
-            <div class="module-icon">🏃</div>
-            <h4>生活管理</h4>
-            <p>睡眠环保、饮食、运动、体重管理</p>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="12" :md="6">
-          <el-card class="module-card green" @click="goTo('/patient')">
-            <div class="module-icon">💬</div>
-            <h4>社区支持</h4>
-            <p>患者故事、资源分享、心理支持</p>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- FAQ -->
-    <div class="content-section">
-      <h2>❓ 常见问题</h2>
-      <el-row :gutter="20">
-        <el-col :xs="24" :md="12" v-for="faq in faqs" :key="faq.id">
-          <el-card class="faq-card">
-            <h4 class="question">Q: {{ faq.question }}</h4>
-            <p class="answer">A: {{ faq.answer }}</p>
-            <div class="footer">
-              <el-button type="text" size="small">👍 有帮助 ({{ faq.helpful }})</el-button>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
+    <div class="home-footnote">
+      内容仅供学习参考，实际诊疗与参数调整需由专业医护评估。
     </div>
   </div>
 </template>
@@ -266,57 +73,17 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ProductCard from '@/components/ProductCard.vue'
-import { faqsData } from '@/data/comprehensive'
 import { clinicalGuides } from '@/data/clinical-guides'
 import { resourceCategories } from '@/data/resource-links'
-import { fetchProducts, fetchDiseases, fetchTutorials, fetchBrands } from '@/services/dataService'
-import type { Product, Disease, Tutorial, Brand } from '@/types'
+import { fetchDiseases, fetchTutorials } from '@/services/dataService'
 
 const router = useRouter()
 
-const products = ref<Product[]>([])
-const diseases = ref<Disease[]>([])
-const tutorials = ref<Tutorial[]>([])
-const brands = ref<Brand[]>([])
 const diseaseCount = ref(0)
 const tutorialCount = ref(0)
 const clinicalGuideCount = ref(clinicalGuides.length)
-const faqs = ref(faqsData.slice(0, 2))
 
-const hotProducts = computed(() => products.value.filter(p => p.tag).slice(0, 4))
 const resourceHighlights = computed(() => resourceCategories.flatMap(category => category.items).slice(0, 6))
-
-const roleEntries = ref([
-  {
-    id: 'doctor',
-    title: '医生',
-    description: '诊断标准、治疗指南、随访工具。',
-    icon: '👨‍⚕️',
-    path: '/doctor',
-  },
-  {
-    id: 'patient',
-    title: '患者',
-    description: '疾病认知、使用指南、生活管理。',
-    icon: '👤',
-    path: '/patient',
-  },
-  {
-    id: 'agent',
-    title: '代理商',
-    description: '品牌信息、产品对比、测评资料。',
-    icon: '🧰',
-    path: '/agent',
-  },
-  {
-    id: 'manufacturer',
-    title: '厂家',
-    description: '市场概况、竞品对标、需求洞察。',
-    icon: '🏭',
-    path: '/manufacturer',
-  },
-])
 
 const primaryNav = ref([
   {
@@ -344,9 +111,9 @@ const primaryNav = ref([
     path: '/diseases',
   },
   {
-    title: '教程与用户知识',
-    description: '入门、依从性与维护',
-    icon: '📚',
+    title: '公开教程',
+    description: '设备使用与护理实操',
+    icon: '🎓',
     path: '/tutorials',
   },
   {
@@ -361,41 +128,43 @@ const primaryNav = ref([
     icon: '🧪',
     path: '/products',
   },
+  {
+    title: '品牌库',
+    description: '主流品牌与产品线',
+    icon: '🏷️',
+    path: '/brands',
+  },
+  {
+    title: '对比',
+    description: '多机型参数对照报告',
+    icon: '⚖️',
+    path: '/compare',
+  },
+  {
+    title: '智能选机',
+    description: '适配推荐与场景匹配',
+    icon: '✨',
+    path: '/selector',
+  },
+  {
+    title: '医生中心',
+    description: '指南、证据与病例讨论',
+    icon: '👨‍⚕️',
+    path: '/doctor',
+  },
 ])
 
 onMounted(async () => {
-  const [productsRes, diseasesRes, tutorialsRes, brandsRes] = await Promise.all([
-    fetchProducts(),
+  const [diseasesRes, tutorialsRes] = await Promise.all([
     fetchDiseases(),
     fetchTutorials(),
-    fetchBrands(),
   ])
-  products.value = productsRes
   diseaseCount.value = diseasesRes.length
   tutorialCount.value = tutorialsRes.length
-  diseases.value = diseasesRes.slice(0, 3)
-  tutorials.value = tutorialsRes.slice(0, 3)
-  brands.value = brandsRes
 })
 
 const goTo = (path: string) => {
   router.push(path)
-}
-
-const goToProduct = (id: number) => {
-  router.push(`/product/${id}`)
-}
-
-const goToDisease = (id: number) => {
-  router.push(`/disease/${id}`)
-}
-
-const goToTutorial = (id: number) => {
-  router.push(`/tutorial/${id}`)
-}
-
-const goToBrand = (id: number) => {
-  router.push(`/brand/${id}`)
 }
 </script>
 
@@ -530,59 +299,8 @@ const goToBrand = (id: number) => {
   flex-shrink: 0;
 }
 
-.ranking-section ol {
-  padding-left: 18px;
-  margin: 12px 0 0;
-}
-
-.rank-card li {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.badge-card {
-  text-align: center;
-  min-height: 160px;
-}
-
-.badge-icon {
-  font-size: 32px;
-  margin-bottom: 10px;
-}
-
-.role-section .role-card {
-  text-align: center;
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.role-icon {
-  font-size: 40px;
-  margin-bottom: 12px;
-}
-
-.entry-col {
-  min-height: 200px;
-}
-
-.entry-col .el-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.entry-col .el-card .entry-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-
 .content-section {
-  margin-top: 40px;
+  margin-top: 32px;
   padding: 20px;
 }
 
@@ -592,150 +310,6 @@ const goToBrand = (id: number) => {
   color: #1f2937;
   border-left: 4px solid #1d4ed8;
   padding-left: 12px;
-}
-
-.disease-card {
-  cursor: pointer;
-  transition: all 0.3s;
-  height: 100%;
-}
-
-.disease-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
-}
-
-.disease-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: 12px;
-}
-
-.disease-header h4 {
-  flex: 1;
-  margin: 0;
-  color: #303133;
-}
-
-.disease-card .description {
-  color: #606266;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 12px;
-}
-
-.disease-card .symptoms {
-  margin-bottom: 12px;
-}
-
-.disease-card .el-tag {
-  margin-right: 5px;
-  margin-bottom: 5px;
-}
-
-.tutorial-card {
-  cursor: pointer;
-  transition: all 0.3s;
-  height: 100%;
-}
-
-.tutorial-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
-}
-
-.tutorial-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: 12px;
-}
-
-.tutorial-header h4 {
-  flex: 1;
-  margin: 0;
-  color: #303133;
-}
-
-.tutorial-card .meta {
-  display: flex;
-  gap: 15px;
-  font-size: 12px;
-  color: #909399;
-  margin-bottom: 8px;
-}
-
-.brand-card {
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.3s;
-  height: 100%;
-}
-
-.brand-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
-}
-
-.brand-logo {
-  width: 100%;
-  height: 80px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  margin-bottom: 12px;
-  font-weight: bold;
-}
-
-.brand-card h4 {
-  margin-bottom: 8px;
-  color: #303133;
-}
-
-.brand-card .origin {
-  font-size: 12px;
-  color: #909399;
-  margin-bottom: 8px;
-}
-
-.brand-card .description {
-  font-size: 12px;
-  color: #606266;
-  line-height: 1.5;
-  margin-bottom: 12px;
-}
-
-.stats {
-  margin-bottom: 12px;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.stat-item .label {
-  font-size: 12px;
-  color: #909399;
-}
-
-.stat-item .value {
-  font-size: 18px;
-  color: #409EFF;
-  font-weight: bold;
-}
-
-.view-btn {
-  width: 100%;
-}
-
-.faq-card {
-  height: 100%;
 }
 
 @media (max-width: 900px) {
@@ -750,70 +324,11 @@ const goToBrand = (id: number) => {
   }
 }
 
-.doctor-center {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 30px 20px !important;
-}
-
-.highlight-banner {
-  color: white;
-  padding: 30px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.doctor-banner {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.patient-banner {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-.patient-center {
-  background: #f0fdf4;
-  border-radius: 12px;
-  padding: 30px 20px !important;
-}
-
-.module-card {
+.home-footnote {
+  margin-top: 28px;
   text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  height: 100%;
-  border: 2px solid transparent;
-}
-
-.module-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
-  border-color: #409EFF;
-}
-
-.module-card.green:hover {
-  border-color: #10b981;
-}
-
-.module-icon {
-  font-size: 48px;
-  margin-bottom: 15px;
-}
-
-.module-card h4 {
-  margin-bottom: 8px;
-  color: #303133;
-  font-size: 16px;
-}
-
-.module-card p {
-  margin: 0;
-  color: #909399;
+  color: #94a3b8;
   font-size: 12px;
-  line-height: 1.5;
 }
 
 @media (max-width: 768px) {
@@ -847,23 +362,6 @@ const goToBrand = (id: number) => {
 
   .content-section {
     padding: 20px 0;
-  }
-
-  .highlight-banner {
-    padding: 18px;
-  }
-
-  .highlight-banner .el-button {
-    width: 100%;
-  }
-
-  .module-card {
-    padding: 16px 12px;
-  }
-
-  .module-icon {
-    font-size: 36px;
-    margin-bottom: 10px;
   }
 }
 </style>
