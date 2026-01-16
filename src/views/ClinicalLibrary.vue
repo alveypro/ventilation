@@ -4,13 +4,16 @@
       <div>
         <p class="guide-label">临床指南 · 专业手册</p>
         <h1>临床知识库</h1>
+        <p class="guide-subtitle">以知识条目为最小单元，聚焦定义、指标、评估与风险。临床路径请进入专题。</p>
       </div>
+      <el-button type="primary" @click="goGuides">进入临床专题</el-button>
     </header>
 
     <div class="guide-layout">
       <aside class="guide-nav">
         <div class="nav-block">
           <div class="nav-title">导航</div>
+          <a href="#guide-entry">专题入口</a>
           <a href="#clinical-zones">专业分区</a>
           <a v-for="zone in zoneGroups" :key="zone.key" :href="`#zone-${zone.key}`">
             {{ zone.label }}
@@ -20,6 +23,24 @@
       </aside>
 
       <main class="guide-content">
+        <section id="guide-entry" class="guide-section">
+          <div class="section-header">
+            <h2>专题路径入口</h2>
+          </div>
+          <div class="guide-entry-grid">
+            <el-card class="entry-card" shadow="hover" @click="goGuides">
+              <h3>临床专题库</h3>
+              <p>面向场景的诊疗路径与决策节点，适合实际执行与复盘。</p>
+              <span class="tag">路径专题</span>
+            </el-card>
+            <el-card class="entry-card" shadow="hover" @click="goGuides">
+              <h3>重点人群路径</h3>
+              <p>OSA/COPD/NIV 等常见人群的路径化处理合集。</p>
+              <span class="tag soft">场景合集</span>
+            </el-card>
+          </div>
+        </section>
+
         <section id="clinical-zones" class="guide-section">
           <div class="section-header">
             <h2>专业分区</h2>
@@ -170,6 +191,10 @@ const filteredItems = computed(() => {
 const goToItem = (id: number) => {
   router.push(`/clinical/${id}`)
 }
+
+const goGuides = () => {
+  router.push('/clinical-guides')
+}
 </script>
 
 <style scoped>
@@ -195,6 +220,10 @@ const goToItem = (id: number) => {
   text-transform: uppercase;
   color: #4b5563;
   margin-bottom: 8px;
+}
+
+.guide-subtitle {
+  color: #4b5563;
 }
 
 .guide-layout {
@@ -272,6 +301,28 @@ const goToItem = (id: number) => {
   display: grid;
   gap: 12px;
   margin-top: 10px;
+}
+
+.guide-entry-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.entry-card {
+  cursor: pointer;
+  border-radius: 14px;
+}
+
+.entry-card h3 {
+  margin-bottom: 6px;
+}
+
+.entry-card p {
+  color: #4b5563;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
 .guide-item {

@@ -60,6 +60,17 @@
               <li v-for="item in safetyWarnings" :key="item">{{ item }}</li>
             </ul>
           </div>
+
+          <div class="sidebar-block" v-if="relatedGuides.length">
+            <h4>关联专题</h4>
+            <ul>
+              <li v-for="item in relatedGuides" :key="item.id">
+                <a class="sidebar-link" @click.prevent="goGuide(item.id)" href="#">
+                  {{ item.title }}
+                </a>
+              </li>
+            </ul>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -68,12 +79,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { clinicalHandbookData } from '@/data/clinical-handbook'
 import { publicUserLibraryData } from '@/data/public-user-library'
+import { clinicalGuides } from '@/data/clinical-guides'
 import { renderMarkdown } from '@/utils/markdown'
 
 const route = useRoute()
+const router = useRouter()
 const isClinical = computed(() => route.path.startsWith('/clinical'))
 const scopeLabel = computed(() => (isClinical.value ? '临床知识库' : '用户知识库'))
 const scopePath = computed(() => (isClinical.value ? '/clinical' : '/user-knowledge'))
@@ -87,21 +100,20 @@ const article = computed(() => {
 const buildFallback = (item: any) => {
   if (!item) return '内容不存在。'
   return [
-    '## 一句话定义',
+    '## 定义与范围',
     item.summary || `${item.title}是呼吸治疗中的常见主题。`,
     '',
-    '## 适用人群与场景',
-    '- 面向需要了解呼吸治疗基础概念的读者。',
-    '- 适合复习临床路径与关键参数。',
+    '## 关键指标',
+    '- 常用指标与阈值需结合具体场景判断。',
+    '- 指标趋势比单次值更重要。',
     '',
-    '## 核心流程',
-    '1. 明确适应证或关注点。',
-    '2. 结合监测指标与症状评估。',
-    '3. 执行治疗/管理策略并随访。',
+    '## 评估要点',
+    '- 结合症状、检查结果与风险因素综合评估。',
+    '- 关注易被忽略的共病与诱因。',
     '',
-    '## 常见问题',
-    '- 参数或指标需结合临床背景解释。',
-    '- 如出现持续低氧或明显不适需就医。',
+    '## 风险提示',
+    '- 严重低氧、意识改变或呼吸困难需及时就医。',
+    '- 任何治疗调整应在专业人员指导下进行。',
     '',
     '## 合规提示',
     '- 仅用于教育目的，不替代医疗决策。',
@@ -127,6 +139,15 @@ const safetyWarnings = computed(() => {
   if (text.includes('低氧') || text.includes('呼衰')) warnings.push('严重低氧或呼衰请优先就医。')
   return warnings
 })
+
+const relatedGuides = computed(() => {
+  const ids = article.value?.relatedGuides || []
+  return clinicalGuides.filter(guide => ids.includes(guide.id))
+})
+
+const goGuide = (id: string) => {
+  router.push(`/clinical-guide/${id}`)
+}
 
 </script>
 
@@ -218,6 +239,15 @@ const safetyWarnings = computed(() => {
 .sidebar-block ul {
   padding-left: 18px;
   margin: 8px 0 0;
+}
+
+.sidebar-link {
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+.sidebar-link:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {

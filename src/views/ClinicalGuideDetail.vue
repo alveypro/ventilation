@@ -111,6 +111,22 @@
         </div>
       </section>
 
+      <section v-if="relatedKnowledge.length" class="guide-section">
+        <h2>关键知识条目</h2>
+        <div class="related-grid">
+          <el-card
+            v-for="item in relatedKnowledge"
+            :key="item.id"
+            shadow="hover"
+            class="related-card"
+            @click="goKnowledge(item.id)"
+          >
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.summary }}</p>
+          </el-card>
+        </div>
+      </section>
+
       <section class="guide-section">
         <h2>返回与下一步</h2>
         <div class="cta-row">
@@ -126,6 +142,7 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { clinicalGuides } from '@/data/clinical-guides'
+import { clinicalHandbookData } from '@/data/clinical-handbook'
 
 const route = useRoute()
 const router = useRouter()
@@ -136,6 +153,11 @@ const relatedGuides = computed(() => {
     return []
   }
   return clinicalGuides.filter(item => guide.value?.related?.includes(item.id))
+})
+
+const relatedKnowledge = computed(() => {
+  if (!guide.value?.id) return []
+  return clinicalHandbookData.filter(item => (item as any).relatedGuides?.includes(guide.value?.id))
 })
 
 const scrollTo = (id: string) => {
@@ -155,6 +177,10 @@ const goClinical = () => {
 
 const goGuide = (id: string) => {
   router.push(`/clinical-guide/${id}`)
+}
+
+const goKnowledge = (id: number) => {
+  router.push(`/clinical/${id}`)
 }
 </script>
 
