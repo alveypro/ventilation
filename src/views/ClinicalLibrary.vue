@@ -4,9 +4,6 @@
       <div>
         <p class="guide-label">临床指南 · 专业手册</p>
         <h1>临床知识库</h1>
-        <p class="guide-subtitle">
-          按疾病与技术双轨组织临床知识，统一呈现“定义 → 诊断 → 治疗 → 随访”的阅读路径。
-        </p>
       </div>
     </header>
 
@@ -28,58 +25,15 @@
       </aside>
 
       <main class="guide-content">
-        <section id="overview" class="guide-section">
-          <div class="section-header">
-            <h2>总览与使用说明</h2>
-          <p>内容基于公开指南与共识整理，已剔除隐私与机构内部资料。</p>
-          </div>
-          <div class="overview-grid">
-            <div class="overview-card">
-              <h3>阅读路径</h3>
-              <ol>
-                <li>先选疾病专题，了解标准诊断与治疗流程。</li>
-                <li>再看技术专题，理解设备模式与参数。</li>
-                <li>最后在条目库里检索细节与资料来源。</li>
-              </ol>
-            </div>
-            <div class="overview-card">
-              <h3>视图模式</h3>
-              <div class="mode-switch">
-                <el-radio-group v-model="viewMode" size="small">
-                  <el-radio-button label="pro">专业版</el-radio-button>
-                  <el-radio-button label="plain">通俗版</el-radio-button>
-                </el-radio-group>
-                <el-switch v-model="showSources" active-text="显示来源" inactive-text="隐藏来源" />
-              </div>
-              <p class="hint">通俗版会压缩文本，突出要点，适合快速浏览。</p>
-            </div>
-            <div class="overview-card">
-              <h3>专题课程</h3>
-              <p>三大专题已按统一模板整理，可直接上线。</p>
-              <el-button size="small" type="primary" @click="goGuides">进入专题课</el-button>
-            </div>
-            <div class="overview-card">
-              <h3>合规提示</h3>
-              <ul>
-                <li>不包含姓名、电话、身份证等隐私字段。</li>
-                <li>不展示原始病例表、登记表、试题题库。</li>
-                <li>内容仅作学习参考，临床请遵循最新指南。</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
         <section id="disease-track" class="guide-section">
           <div class="section-header">
             <h2>疾病线</h2>
-            <p>以疾病为主线，按“定义 → 诊断 → 治疗 → 随访”组织。</p>
           </div>
 
           <div v-for="disease in diseaseSections" :key="disease.id" :id="`disease-${disease.id}`" class="disease-block">
             <div class="disease-header">
               <div>
                 <h3>{{ disease.name }}</h3>
-                <p>{{ disease.description }}</p>
               </div>
               <div class="disease-tags">
                 <span class="tag">{{ disease.severity }}</span>
@@ -123,11 +77,12 @@
                     <h5>{{ item.title }}</h5>
                     <span class="tag soft">{{ item.docType || '资料' }}</span>
                   </div>
-                  <p>{{ viewMode === 'pro' ? item.summary : summarizePlain(item.summary) }}</p>
+                  <ul v-if="item.keyPoints?.length" class="guide-item-points">
+                    <li v-for="point in item.keyPoints.slice(0, 3)" :key="point">{{ point }}</li>
+                  </ul>
                   <div class="guide-item-meta">
                     <span v-if="item.level">{{ item.level }}</span>
                     <span v-if="item.category">{{ item.category }}</span>
-                    <span v-if="showSources && item.sourcePath">来源：{{ item.sourcePath }}</span>
                   </div>
                 </article>
               </div>
@@ -138,14 +93,12 @@
         <section id="tech-track" class="guide-section">
           <div class="section-header">
             <h2>技术线</h2>
-            <p>从治疗技术与参数入手，覆盖适应证、禁忌证与核心设置。</p>
           </div>
 
           <div v-for="track in techSections" :key="track.id" :id="`tech-${track.id}`" class="tech-block">
             <div class="tech-header">
               <div>
                 <h3>{{ track.title }}</h3>
-                <p>{{ track.description }}</p>
               </div>
               <div class="tech-tags">
                 <span class="tag">{{ track.scope }}</span>
@@ -182,11 +135,12 @@
                     <h5>{{ item.title }}</h5>
                     <span class="tag soft">{{ item.docType || '资料' }}</span>
                   </div>
-                  <p>{{ viewMode === 'pro' ? item.summary : summarizePlain(item.summary) }}</p>
+                  <ul v-if="item.keyPoints?.length" class="guide-item-points">
+                    <li v-for="point in item.keyPoints.slice(0, 3)" :key="point">{{ point }}</li>
+                  </ul>
                   <div class="guide-item-meta">
                     <span v-if="item.level">{{ item.level }}</span>
                     <span v-if="item.category">{{ item.category }}</span>
-                    <span v-if="showSources && item.sourcePath">来源：{{ item.sourcePath }}</span>
                   </div>
                 </article>
               </div>
@@ -197,7 +151,6 @@
         <section id="library" class="guide-section">
           <div class="section-header">
             <h2>条目库</h2>
-            <p>面向检索与深入阅读的完整条目列表。</p>
           </div>
 
           <el-card class="filters">
@@ -221,14 +174,12 @@
                 <h5>{{ item.title }}</h5>
                 <span class="tag soft">{{ item.docType || '资料' }}</span>
               </div>
-              <p>{{ viewMode === 'pro' ? item.summary : summarizePlain(item.summary) }}</p>
-              <ul v-if="item.keyPoints?.length">
-                <li v-for="point in item.keyPoints" :key="point">{{ point }}</li>
+              <ul v-if="item.keyPoints?.length" class="guide-item-points">
+                <li v-for="point in item.keyPoints.slice(0, 3)" :key="point">{{ point }}</li>
               </ul>
               <div class="guide-item-meta">
                 <span v-if="item.level">{{ item.level }}</span>
                 <span v-if="item.category">{{ item.category }}</span>
-                <span v-if="showSources && item.sourcePath">来源：{{ item.sourcePath }}</span>
               </div>
             </article>
           </div>
@@ -248,8 +199,6 @@ const query = ref('')
 const category = ref('')
 const level = ref('')
 const docType = ref('')
-const viewMode = ref<'pro' | 'plain'>('pro')
-const showSources = ref(false)
 const router = useRouter()
 
 const categoryOptions = Array.from(
@@ -374,17 +323,6 @@ const filteredItems = computed(() => {
   })
 })
 
-const summarizePlain = (text?: string) => {
-  if (!text) return ''
-  const compact = text.replace(/\s+/g, ' ').replace(/（.*?）/g, '')
-  if (compact.length <= 120) return compact
-  return `${compact.slice(0, 120)}...`
-}
-
-const goGuides = () => {
-  router.push('/clinical-guides')
-}
-
 const goToItem = (id: number) => {
   router.push(`/clinical/${id}`)
 }
@@ -413,17 +351,6 @@ const goToItem = (id: number) => {
   text-transform: uppercase;
   color: #4b5563;
   margin-bottom: 8px;
-}
-
-.guide-subtitle {
-  color: #4b5563;
-  margin-top: 8px;
-}
-
-.guide-meta {
-  display: grid;
-  gap: 12px;
-  min-width: 220px;
 }
 
 .guide-layout {
@@ -479,48 +406,6 @@ const goToItem = (id: number) => {
   margin-bottom: 4px;
 }
 
-.section-header p {
-  color: #6b7280;
-  font-size: 14px;
-}
-
-.overview-grid {
-  display: grid;
-  gap: 16px;
-  margin-top: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-}
-
-.overview-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 14px 16px;
-  background: #f9fafb;
-}
-
-.overview-card h3 {
-  margin-bottom: 8px;
-}
-
-.overview-card ol,
-.overview-card ul {
-  margin: 0;
-  padding-left: 18px;
-  color: #374151;
-}
-
-.mode-switch {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 8px 0 6px;
-}
-
-.hint {
-  color: #6b7280;
-  font-size: 12px;
-}
-
 .disease-block,
 .tech-block {
   margin-top: 18px;
@@ -533,12 +418,6 @@ const goToItem = (id: number) => {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-}
-
-.disease-header p,
-.tech-header p {
-  color: #4b5563;
-  margin-top: 6px;
 }
 
 .disease-grid,
@@ -605,17 +484,15 @@ const goToItem = (id: number) => {
   color: #111827;
 }
 
-.guide-item p {
-  color: #4b5563;
-  font-size: 13px;
-  margin: 8px 0 6px;
-}
-
 .guide-item ul {
   margin: 6px 0 0;
   padding-left: 18px;
   color: #374151;
   font-size: 13px;
+}
+
+.guide-item-points {
+  margin-top: 6px;
 }
 
 .guide-item-meta {
