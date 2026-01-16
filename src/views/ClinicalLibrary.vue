@@ -11,139 +11,39 @@
       <aside class="guide-nav">
         <div class="nav-block">
           <div class="nav-title">导航</div>
-          <a href="#overview">总览</a>
-          <a href="#disease-track">疾病线</a>
-          <a v-for="item in diseaseSections" :key="item.id" :href="`#disease-${item.id}`">
-            {{ item.name }}
-          </a>
-          <a href="#tech-track">技术线</a>
-          <a v-for="item in techSections" :key="item.id" :href="`#tech-${item.id}`">
-            {{ item.title }}
+          <a href="#clinical-zones">专业分区</a>
+          <a v-for="zone in zoneGroups" :key="zone.key" :href="`#zone-${zone.key}`">
+            {{ zone.label }}
           </a>
           <a href="#library">条目库</a>
         </div>
       </aside>
 
       <main class="guide-content">
-        <section id="disease-track" class="guide-section">
+        <section id="clinical-zones" class="guide-section">
           <div class="section-header">
-            <h2>疾病线</h2>
+            <h2>专业分区</h2>
           </div>
 
-          <div v-for="disease in diseaseSections" :key="disease.id" :id="`disease-${disease.id}`" class="disease-block">
-            <div class="disease-header">
-              <div>
-                <h3>{{ disease.name }}</h3>
-              </div>
-              <div class="disease-tags">
-                <span class="tag">{{ disease.severity }}</span>
-                <span class="tag">{{ disease.prevalence }}</span>
-              </div>
+          <div v-for="zone in zoneGroups" :key="zone.key" :id="`zone-${zone.key}`" class="zone-block">
+            <div class="zone-header">
+              <h3>{{ zone.label }}</h3>
+              <span class="tag soft">条目 {{ zone.items.length }}</span>
             </div>
-
-            <div class="disease-grid">
-              <div class="disease-card">
-                <h4>临床表现</h4>
-                <ul>
-                  <li v-for="item in disease.symptoms" :key="item">{{ item }}</li>
+            <div class="guide-list">
+              <article v-for="item in zone.items" :key="item.id" class="guide-item clickable" @click="goToItem(item.id)">
+                <div class="guide-item-header">
+                  <h5>{{ item.title }}</h5>
+                  <span class="tag soft">{{ item.docType || '资料' }}</span>
+                </div>
+                <ul v-if="item.keyPoints?.length" class="guide-item-points">
+                  <li v-for="point in item.keyPoints.slice(0, 3)" :key="point">{{ point }}</li>
                 </ul>
-              </div>
-              <div class="disease-card">
-                <h4>诊断要点</h4>
-                <ul>
-                  <li v-for="item in disease.diagnosis" :key="item">{{ item }}</li>
-                </ul>
-              </div>
-              <div class="disease-card">
-                <h4>治疗策略</h4>
-                <ul>
-                  <li v-for="item in disease.treatment" :key="item">{{ item }}</li>
-                </ul>
-              </div>
-              <div class="disease-card">
-                <h4>随访与结局</h4>
-                <ul>
-                  <li>{{ disease.prognosis }}</li>
-                  <li v-for="item in disease.complications" :key="item">并发风险：{{ item }}</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="related-block" v-if="disease.items.length">
-              <h4>相关临床条目</h4>
-              <div class="guide-list">
-                <article v-for="item in disease.items.slice(0, 6)" :key="item.id" class="guide-item clickable" @click="goToItem(item.id)">
-                  <div class="guide-item-header">
-                    <h5>{{ item.title }}</h5>
-                    <span class="tag soft">{{ item.docType || '资料' }}</span>
-                  </div>
-                  <ul v-if="item.keyPoints?.length" class="guide-item-points">
-                    <li v-for="point in item.keyPoints.slice(0, 3)" :key="point">{{ point }}</li>
-                  </ul>
-                  <div class="guide-item-meta">
-                    <span v-if="item.level">{{ item.level }}</span>
-                    <span v-if="item.category">{{ item.category }}</span>
-                  </div>
-                </article>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="tech-track" class="guide-section">
-          <div class="section-header">
-            <h2>技术线</h2>
-          </div>
-
-          <div v-for="track in techSections" :key="track.id" :id="`tech-${track.id}`" class="tech-block">
-            <div class="tech-header">
-              <div>
-                <h3>{{ track.title }}</h3>
-              </div>
-              <div class="tech-tags">
-                <span class="tag">{{ track.scope }}</span>
-                <span class="tag soft">{{ track.focus }}</span>
-              </div>
-            </div>
-
-            <div class="tech-grid">
-              <div class="tech-card">
-                <h4>适用场景</h4>
-                <ul>
-                  <li v-for="item in track.indications" :key="item">{{ item }}</li>
-                </ul>
-              </div>
-              <div class="tech-card">
-                <h4>核心参数</h4>
-                <ul>
-                  <li v-for="item in track.parameters" :key="item">{{ item }}</li>
-                </ul>
-              </div>
-              <div class="tech-card">
-                <h4>风险提示</h4>
-                <ul>
-                  <li v-for="item in track.risks" :key="item">{{ item }}</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="related-block" v-if="track.items.length">
-              <h4>相关临床条目</h4>
-              <div class="guide-list">
-                <article v-for="item in track.items.slice(0, 6)" :key="item.id" class="guide-item clickable" @click="goToItem(item.id)">
-                  <div class="guide-item-header">
-                    <h5>{{ item.title }}</h5>
-                    <span class="tag soft">{{ item.docType || '资料' }}</span>
-                  </div>
-                  <ul v-if="item.keyPoints?.length" class="guide-item-points">
-                    <li v-for="point in item.keyPoints.slice(0, 3)" :key="point">{{ point }}</li>
-                  </ul>
-                  <div class="guide-item-meta">
-                    <span v-if="item.level">{{ item.level }}</span>
-                    <span v-if="item.category">{{ item.category }}</span>
-                  </div>
-                </article>
-              </div>
+                <div class="guide-item-meta">
+                  <span v-if="item.level">{{ item.level }}</span>
+                  <span v-if="item.category">{{ item.category }}</span>
+                </div>
+              </article>
             </div>
           </div>
         </section>
@@ -192,7 +92,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { publicDiseasesData } from '@/data/public-diseases'
 import { clinicalHandbookData } from '@/data/clinical-handbook'
 
 const query = ref('')
@@ -211,105 +110,50 @@ const docTypeOptions = Array.from(
   new Set(clinicalHandbookData.map(item => item.docType).filter(Boolean))
 ) as string[]
 
-const normalize = (value: string) => value.toLowerCase()
-
-const hasKeyword = (content: string, keyword: string) =>
-  normalize(content).includes(normalize(keyword))
-
-const matchesKeywords = (item: any, keywords: string[]) => {
-  const content = `${item.title || ''} ${item.summary || ''} ${(item.keywords || []).join(' ')}`
-  return keywords.some(keyword => hasKeyword(content, keyword))
-}
-
-const diseaseKeywordMap: Record<string, string[]> = {
-  sleep_apnea: ['OSA', '睡眠呼吸暂停', '睡眠呼吸暂停综合征', 'sleep apnea', 'SDB'],
-  copd: ['COPD', '慢阻肺', '慢性阻塞性肺疾病', 'AECOPD'],
-  neuromuscular: ['神经肌肉', 'ALS', '肌营养不良', 'SMA', '重症肌无力'],
-}
-
-const diseaseSections = computed(() =>
-  publicDiseasesData.map(disease => {
-    const keywords = diseaseKeywordMap[disease.classification] || [disease.name]
-    const items = clinicalHandbookData.filter(item => matchesKeywords(item, keywords))
-    return { ...disease, items }
-  })
-)
-
-const techTracks = [
-  {
-    id: 'pap',
-    title: '睡眠PAP治疗',
-    description: '以OSA为核心的睡眠相关呼吸障碍治疗路径。',
-    scope: '睡眠相关',
-    focus: 'CPAP / APAP / BiPAP',
-    indications: ['OSA与SDB的长期治疗', '呼吸暂停、低通气明显的患者', '夜间低氧与白天嗜睡人群'],
-    parameters: ['EPAP/CPAP范围', '漏气控制', '舒适度与加湿'],
-    risks: ['依从性下降', '不适导致中断治疗', '面罩漏气'],
-    keywords: ['OSA', '睡眠', 'CPAP', 'APAP', 'BiPAP', 'SDB', '面罩'],
-  },
-  {
-    id: 'niv',
-    title: 'NIV无创通气',
-    description: '面向呼吸衰竭与慢病管理的通气支持策略。',
-    scope: '急性/慢病',
-    focus: 'S / ST / AVAPS / iVAPS',
-    indications: ['AECOPD与稳定期COPD', '神经肌肉疾病', '术后或急性呼衰支持'],
-    parameters: ['IPAP/EPAP设定', '备份频率', '潮气量或目标通气'],
-    risks: ['CO2潴留', '血氧改善不足', '参数不匹配导致不耐受'],
-    keywords: ['无创通气', 'NIV', 'S/T', 'ST', 'iVAPS', 'AVAPS', '呼吸衰竭', 'COPD'],
-  },
-  {
-    id: 'hfnc',
-    title: '高流量氧疗 (HFNC)',
-    description: '以湿化高流量改善氧合与呼吸功。',
-    scope: '氧疗',
-    focus: '湿化与流量',
-    indications: ['轻中度I型呼吸衰竭', '气道分泌物多', '术后呼吸支持'],
-    parameters: ['流量与FiO2', '温度与湿化', '鼻导管选择'],
-    risks: ['延误升级治疗', '流量设置不当', '面部不适'],
-    keywords: ['HFNC', '高流量', '氧疗'],
-  },
-  {
-    id: 'psg',
-    title: '睡眠监测与PSG',
-    description: '睡眠分期、呼吸事件与多导监测技术。',
-    scope: '诊断评估',
-    focus: 'AASM / PSG',
-    indications: ['睡眠呼吸障碍评估', '复杂睡眠问题', '治疗前后复评'],
-    parameters: ['传感器安装', '事件判读', '分期与评分'],
-    risks: ['数据采集伪迹', '判读标准不一致', '传感器脱落'],
-    keywords: ['PSG', '睡眠监测', 'AASM', '分期', '判读'],
-  },
-  {
-    id: 'airway',
-    title: '气道与面罩管理',
-    description: '覆盖面罩适配、气道管理与舒适度提升。',
-    scope: '设备适配',
-    focus: '面罩/漏气',
-    indications: ['依从性不佳', '漏气严重', '皮肤不适'],
-    parameters: ['面罩尺寸与材质', '头带张力', '漏气与压疮评估'],
-    risks: ['皮肤压伤', '持续漏气', '睡眠碎片化'],
-    keywords: ['面罩', '漏气', '气道', '舒适', '压疮'],
-  },
-  {
-    id: 'cleaning',
-    title: '消毒与维护',
-    description: '围绕设备清洁、消毒与长期维护流程。',
-    scope: '安全维护',
-    focus: '消毒/清洁',
-    indications: ['居家长期使用', '医院复用环境', '感染控制需求'],
-    parameters: ['清洁频次', '消毒剂选择', '部件更换周期'],
-    risks: ['交叉感染', '材料损伤', '过滤器堵塞'],
-    keywords: ['消毒', '清洁', '维护', '感染', '滤芯'],
-  },
+const zoneOrder = [
+  { key: 'critical', label: '急性/重症' },
+  { key: 'sleep', label: '睡眠医学' },
+  { key: 'chronic', label: '慢病管理' },
+  { key: 'therapy', label: '通气治疗' },
+  { key: 'equipment', label: '设备管理' },
+  { key: 'followup', label: '随访与沟通' },
+  { key: 'labs', label: '基础检验' },
+  { key: 'infection', label: '感染与安全' },
+  { key: 'periop', label: '围术期管理' },
+  { key: 'evidence', label: '科研与指南' },
+  { key: 'other', label: '其他' },
 ]
 
-const techSections = computed(() =>
-  techTracks.map(track => ({
-    ...track,
-    items: clinicalHandbookData.filter(item => matchesKeywords(item, track.keywords)),
-  }))
-)
+const zoneMap: Record<string, string[]> = {
+  critical: ['急性护理', '重症通气'],
+  sleep: ['睡眠医学', '睡眠诊断'],
+  chronic: ['慢病管理', '呼吸治疗', '呼吸康复'],
+  therapy: ['通气治疗'],
+  equipment: ['设备管理'],
+  followup: ['随访管理', '临床沟通'],
+  labs: ['基础检验'],
+  infection: ['感染防控', '安全与风险'],
+  periop: ['围术期管理'],
+  evidence: ['科研与证据', '学术与指南', '患者教育'],
+}
+
+const zoneGroups = computed(() => {
+  const zoneItems: Record<string, any[]> = Object.fromEntries(zoneOrder.map(zone => [zone.key, []]))
+  const other: any[] = []
+  for (const item of clinicalHandbookData) {
+    const category = item.category || ''
+    const zoneKey = Object.keys(zoneMap).find(key => zoneMap[key].includes(category))
+    if (zoneKey) {
+      zoneItems[zoneKey].push(item)
+    } else {
+      other.push(item)
+    }
+  }
+  if (other.length) zoneItems.other = other
+  return zoneOrder
+    .filter(zone => zoneItems[zone.key]?.length)
+    .map(zone => ({ ...zone, items: zoneItems[zone.key] }))
+})
 
 const filteredItems = computed(() => {
   const keyword = query.value.trim().toLowerCase()
@@ -406,52 +250,22 @@ const goToItem = (id: number) => {
   margin-bottom: 4px;
 }
 
-.disease-block,
-.tech-block {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px dashed #e5e7eb;
-}
-
-.disease-header,
-.tech-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.disease-grid,
-.tech-grid {
-  display: grid;
-  gap: 12px;
-  margin-top: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.disease-card,
-.tech-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 12px 14px;
-  background: #f8fafc;
-}
-
-.disease-card h4,
-.tech-card h4 {
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.disease-card ul,
-.tech-card ul {
-  margin: 0;
-  padding-left: 18px;
-  color: #374151;
-  font-size: 13px;
-}
-
 .related-block {
   margin-top: 16px;
+}
+
+.zone-block {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.zone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .guide-list {
