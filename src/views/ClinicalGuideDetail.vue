@@ -71,6 +71,46 @@
       </div>
     </section>
 
+      <section v-if="guide?.clinicalNotes" class="guide-section">
+        <h2>临床补充</h2>
+        <div class="note-grid">
+          <div class="note-card">
+            <h3>参考指标</h3>
+            <ul>
+              <li v-for="item in guide?.clinicalNotes.metrics" :key="item">{{ item }}</li>
+            </ul>
+          </div>
+          <div class="note-card">
+            <h3>证据等级</h3>
+            <ul>
+              <li v-for="item in guide?.clinicalNotes.evidence" :key="item">{{ item }}</li>
+            </ul>
+          </div>
+          <div class="note-card">
+            <h3>禁忌与警示</h3>
+            <ul>
+              <li v-for="item in guide?.clinicalNotes.contraindications" :key="item">{{ item }}</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section v-if="relatedGuides.length" class="guide-section">
+        <h2>延伸专题</h2>
+        <div class="related-grid">
+          <el-card
+            v-for="item in relatedGuides"
+            :key="item.id"
+            shadow="hover"
+            class="related-card"
+            @click="goGuide(item.id)"
+          >
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.subtitle }}</p>
+          </el-card>
+        </div>
+      </section>
+
       <section class="guide-section">
         <h2>返回与下一步</h2>
         <div class="cta-row">
@@ -91,6 +131,12 @@ const route = useRoute()
 const router = useRouter()
 
 const guide = computed(() => clinicalGuides.find(item => item.id === route.params.id))
+const relatedGuides = computed(() => {
+  if (!guide.value?.related?.length) {
+    return []
+  }
+  return clinicalGuides.filter(item => guide.value?.related?.includes(item.id))
+})
 
 const scrollTo = (id: string) => {
   const target = document.getElementById(id)
@@ -105,6 +151,10 @@ const goList = () => {
 
 const goClinical = () => {
   router.push('/clinical')
+}
+
+const goGuide = (id: string) => {
+  router.push(`/clinical-guide/${id}`)
 }
 </script>
 
@@ -172,6 +222,52 @@ const goClinical = () => {
   color: #374151;
   font-size: 14px;
   line-height: 1.7;
+}
+
+.note-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.note-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #f9fafb;
+}
+
+.note-card h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.note-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #374151;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.related-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.related-card {
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.related-card h3 {
+  margin-bottom: 4px;
+}
+
+.related-card p {
+  color: #4b5563;
+  font-size: 13px;
 }
 
 .guide-table {
