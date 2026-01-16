@@ -219,4 +219,19 @@ const safetyWarnings = computed(() => {
   padding-left: 18px;
   margin: 8px 0 0;
 }
+
+@media (max-width: 768px) {
+  .sidebar-card {
+    margin-top: 12px;
+  }
+
+  .sidebar-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sidebar-item .value {
+    text-align: left;
+  }
+}
 </style>

@@ -550,4 +550,19 @@ const goToDisease = (id: number) => {
     top: 0;
   }
 }
+
+@media (max-width: 768px) {
+  .tutorial-header h1 {
+    font-size: 20px;
+  }
+
+  .tutorial-meta {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .sidebar-card {
+    margin-top: 12px;
+  }
+}
 </style>

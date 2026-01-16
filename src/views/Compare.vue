@@ -597,6 +597,21 @@ const gotoProduct = (productId: number) => {
 }
 
 @media (max-width: 768px) {
+  .clear-btn {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .report-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .report-actions .el-button {
+    width: 100%;
+  }
+
   .comparison-table {
     font-size: 12px;
   }

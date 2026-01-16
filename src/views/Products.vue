@@ -6,37 +6,6 @@
       <p>以模式、参数、适用人群为核心进行筛选与对比。</p>
     </div>
 
-    <el-row :gutter="16" class="overview">
-      <el-col :xs="24" :sm="12" :md="6">
-        <el-card class="overview-card">
-          <p class="overview-label">产品总量</p>
-          <h3>{{ products.length }}</h3>
-          <span class="overview-note">去重后有效型号</span>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="6">
-        <el-card class="overview-card">
-          <p class="overview-label">官方图覆盖</p>
-          <h3>{{ officialImageCount }}</h3>
-          <span class="overview-note">含官方展示图</span>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="6">
-        <el-card class="overview-card">
-          <p class="overview-label">官方页面</p>
-          <h3>{{ officialPageCount }}</h3>
-          <span class="overview-note">含官方页面链接</span>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="6">
-        <el-card class="overview-card">
-          <p class="overview-label">平均完整度</p>
-          <h3>{{ averageCompleteness }}%</h3>
-          <span class="overview-note">参数/图/来源综合</span>
-        </el-card>
-      </el-col>
-    </el-row>
-
     <el-card class="filters">
       <el-row :gutter="20">
         <el-col :xs="24" :sm="12" :md="6">
@@ -225,20 +194,6 @@ const seriesOptions = computed(() => {
 const modeOptions = computed(() => {
   const modes = products.value.flatMap(product => product.modeTags || [])
   return Array.from(new Set(modes)).sort()
-})
-
-const officialImageCount = computed(() => {
-  return products.value.filter(product => Boolean(product.image && product.image.startsWith('http'))).length
-})
-
-const officialPageCount = computed(() => {
-  return products.value.filter(product => Boolean(product.specs && product.specs['官方页面'])).length
-})
-
-const averageCompleteness = computed(() => {
-  if (!products.value.length) return 0
-  const total = products.value.reduce((sum, item) => sum + (item.dataCompleteness || 0), 0)
-  return Math.round(total / products.value.length)
 })
 
 const filterWith = (filters: ReturnType<typeof createDefaultFilters>) => {
@@ -496,31 +451,6 @@ const cancelPreview = () => {
   flex-wrap: wrap;
 }
 
-.overview {
-  margin-bottom: 20px;
-}
-
-.overview-card {
-  text-align: left;
-}
-
-.overview-label {
-  font-size: 12px;
-  color: #64748b;
-  margin-bottom: 6px;
-}
-
-.overview-card h3 {
-  font-size: 24px;
-  color: #1f2937;
-  margin-bottom: 4px;
-}
-
-.overview-note {
-  font-size: 12px;
-  color: #94a3b8;
-}
-
 .filter-actions {
   display: flex;
   align-items: center;
@@ -552,5 +482,30 @@ const cancelPreview = () => {
 
 .products-grid {
   margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .filter-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .filter-right {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .summary-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
 }
 </style>

@@ -12,20 +12,6 @@
           <el-button plain @click="goTo('/selector')">智能选机</el-button>
         </div>
       </div>
-      <div class="hero-metrics">
-        <div class="metric-card">
-          <span>公开指南条目</span>
-          <strong>{{ diseaseCount }}</strong>
-        </div>
-        <div class="metric-card">
-          <span>临床专题</span>
-          <strong>{{ clinicalGuideCount }}</strong>
-        </div>
-        <div class="metric-card">
-          <span>公开教程</span>
-          <strong>{{ tutorialCount }}</strong>
-        </div>
-      </div>
     </section>
 
     <section class="guide-nav">
@@ -71,17 +57,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { clinicalGuides } from '@/data/clinical-guides'
 import { resourceCategories } from '@/data/resource-links'
-import { fetchDiseases, fetchTutorials } from '@/services/dataService'
 
 const router = useRouter()
-
-const diseaseCount = ref(0)
-const tutorialCount = ref(0)
-const clinicalGuideCount = ref(clinicalGuides.length)
 
 const resourceHighlights = computed(() => resourceCategories.flatMap(category => category.items).slice(0, 6))
 
@@ -153,15 +133,6 @@ const primaryNav = ref([
     path: '/doctor',
   },
 ])
-
-onMounted(async () => {
-  const [diseasesRes, tutorialsRes] = await Promise.all([
-    fetchDiseases(),
-    fetchTutorials(),
-  ])
-  diseaseCount.value = diseasesRes.length
-  tutorialCount.value = tutorialsRes.length
-})
 
 const goTo = (path: string) => {
   router.push(path)
@@ -242,28 +213,6 @@ const goTo = (path: string) => {
   padding: 10px 18px;
 }
 
-.hero-metrics {
-  display: grid;
-  gap: 12px;
-  min-width: 180px;
-}
-
-.metric-card {
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  padding: 12px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #475569;
-  box-shadow: 0 10px 18px rgba(15, 23, 42, 0.06);
-}
-
-.metric-card strong {
-  font-size: 20px;
-  color: #1d4ed8;
-}
 
 .guide-nav {
   margin-top: 24px;
@@ -379,11 +328,6 @@ const goTo = (path: string) => {
     flex-direction: column;
     align-items: flex-start;
   }
-
-  .hero-metrics {
-    width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
 }
 
 .home-footnote {
@@ -408,10 +352,6 @@ const goTo = (path: string) => {
 
   .hero-actions .el-button {
     width: 100%;
-  }
-
-  .hero-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .nav-grid {

@@ -8,20 +8,6 @@
           按疾病与技术双轨组织临床知识，统一呈现“定义 → 诊断 → 治疗 → 随访”的阅读路径。
         </p>
       </div>
-      <div class="guide-meta">
-        <div class="meta-card">
-          <span class="meta-label">收录条目</span>
-          <strong>{{ clinicalHandbookData.length }}</strong>
-        </div>
-        <div class="meta-card">
-          <span class="meta-label">疾病专题</span>
-          <strong>{{ diseaseSections.length }}</strong>
-        </div>
-        <div class="meta-card">
-          <span class="meta-label">技术专题</span>
-          <strong>{{ techSections.length }}</strong>
-        </div>
-      </div>
     </header>
 
     <div class="guide-layout">
@@ -440,21 +426,6 @@ const goToItem = (id: number) => {
   min-width: 220px;
 }
 
-.meta-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 12px 16px;
-  border: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.meta-label {
-  color: #6b7280;
-  font-size: 12px;
-}
-
 .guide-layout {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
@@ -689,6 +660,33 @@ const goToItem = (id: number) => {
 
   .guide-hero {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .guide-hero {
+    padding: 20px;
+  }
+
+  .guide-section {
+    padding: 16px;
+  }
+
+  .guide-nav {
+    padding: 12px;
+  }
+
+  .nav-block a {
+    font-size: 12px;
+  }
+
+  .guide-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr;
   }
 }
 </style>
