@@ -11,14 +11,7 @@
       <h1>{{ guide?.title }}</h1>
       <p class="guide-subtitle">{{ guide?.subtitle }}</p>
       <div class="guide-actions">
-        <el-radio-group v-model="viewMode" size="small">
-          <el-radio-button label="pro">专业版</el-radio-button>
-          <el-radio-button label="plain">通俗版</el-radio-button>
-        </el-radio-group>
         <el-button size="small" plain @click="scrollTo('toc')">目录</el-button>
-      </div>
-      <div class="guide-disclaimer">
-        {{ guide?.disclaimer }}
       </div>
     </header>
 
@@ -44,7 +37,10 @@
       class="guide-section"
     >
       <h2>{{ section.title }}</h2>
-      <p>{{ viewMode === 'pro' ? section.pro : section.plain }}</p>
+      <p class="guide-summary">{{ section.summary }}</p>
+      <ul v-if="section.points?.length" class="guide-points">
+        <li v-for="point in section.points" :key="point">{{ point }}</li>
+      </ul>
 
       <div v-if="section.diagram" class="guide-diagram">
         <h3>{{ section.diagram.title }}</h3>
@@ -87,13 +83,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { clinicalGuides } from '@/data/clinical-guides'
 
 const route = useRoute()
 const router = useRouter()
-const viewMode = ref<'pro' | 'plain'>('pro')
 
 const guide = computed(() => clinicalGuides.find(item => item.id === route.params.id))
 
@@ -153,16 +148,6 @@ const goClinical = () => {
   flex-wrap: wrap;
 }
 
-.guide-disclaimer {
-  margin-top: 12px;
-  font-size: 12px;
-  color: #6b7280;
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  padding: 8px 12px;
-  border-radius: 10px;
-}
-
 .guide-section {
   margin-top: 20px;
   border: 1px solid #e5e7eb;
@@ -175,10 +160,18 @@ const goClinical = () => {
   margin-bottom: 8px;
 }
 
-.guide-section p {
+.guide-summary {
   color: #4b5563;
   line-height: 1.7;
   margin: 0;
+}
+
+.guide-points {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.7;
 }
 
 .guide-table {

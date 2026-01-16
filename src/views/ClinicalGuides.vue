@@ -4,7 +4,7 @@
       <div>
         <p class="hero-label">临床专题课</p>
         <h1>睡眠诊断与呼吸治疗体系</h1>
-        <p class="hero-subtitle">基于标准化表达方式，形成可直接上线的专题页面。</p>
+        <p class="hero-subtitle">面向临床沟通与执行路径的专题化内容，突出关键流程与决策节点。</p>
       </div>
       <el-button type="primary" @click="goClinical">返回临床知识库</el-button>
     </header>
@@ -20,15 +20,10 @@
         <h3>{{ guide.title }}</h3>
         <p>{{ guide.subtitle }}</p>
         <div class="guide-tags">
-          <span class="tag">标准模板</span>
-          <span class="tag soft">专业/通俗双版本</span>
+          <span class="tag">临床路径</span>
+          <span class="tag soft">结构化要点</span>
         </div>
       </el-card>
-    </section>
-
-    <section class="guides-note">
-      <h2>页面结构说明</h2>
-      <p>每个专题采用统一结构：一句话定义 → 通俗比喻 → 临床用途 → 关键参数 → 波形怎么看 → 常见坑 → FAQ。</p>
     </section>
   </div>
 </template>
@@ -114,15 +109,6 @@ const goClinical = () => {
 
 .tag.soft {
   background: #f3f4f6;
-  color: #4b5563;
-}
-
-.guides-note {
-  margin-top: 24px;
-  border: 1px dashed #c7d2fe;
-  padding: 16px;
-  border-radius: 12px;
-  background: #f8fafc;
   color: #4b5563;
 }
 
