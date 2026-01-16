@@ -204,7 +204,7 @@ const goTo = (path: string) => {
 
 .hero-label {
   font-size: 12px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #64748b;
   margin-bottom: 8px;
@@ -215,12 +215,14 @@ const goTo = (path: string) => {
 }
 
 .hero-content h1 {
-  font-size: 30px;
-  line-height: 1.25;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
 }
 
 .hero-subtitle {
-  color: #4b5563;
+  color: #475569;
+  max-width: 520px;
   margin: 10px 0 0;
 }
 
@@ -229,6 +231,15 @@ const goTo = (path: string) => {
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 16px;
+}
+
+.hero-actions :deep(.el-button--primary) {
+  box-shadow: 0 12px 24px rgba(30, 90, 166, 0.2);
+}
+
+.hero-actions :deep(.el-button) {
+  border-radius: 12px;
+  padding: 10px 18px;
 }
 
 .hero-metrics {
@@ -293,19 +304,21 @@ const goTo = (path: string) => {
 }
 
 .nav-card {
+  position: relative;
   display: flex;
   gap: 12px;
   align-items: flex-start;
   cursor: pointer;
   border-radius: 14px;
   border: 1px solid rgba(148, 163, 184, 0.4);
-  background: #fff;
+  background: linear-gradient(140deg, #ffffff 0%, #f8fafc 100%);
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .nav-card h3 {
   margin: 0 0 6px;
   font-size: 16px;
+  letter-spacing: 0.01em;
 }
 
 .nav-card p {
@@ -325,6 +338,21 @@ const goTo = (path: string) => {
   font-size: 20px;
   color: #1d4ed8;
   flex-shrink: 0;
+}
+
+.nav-card p {
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.nav-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  transition: border-color 0.25s ease;
+  pointer-events: none;
 }
 
 .nav-card:hover {
@@ -391,7 +419,7 @@ const goTo = (path: string) => {
   }
 
   .nav-card {
-    padding: 2px;
+    padding: 6px;
   }
 
   .banner-item h2 {
