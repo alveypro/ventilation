@@ -251,6 +251,24 @@ const goGuide = (id: string) => {
 }
 
 @media (max-width: 768px) {
+  .knowledge-detail-page {
+    padding: 12px 0 20px;
+  }
+
+  .page-header.handbook {
+    padding: 16px;
+  }
+
+  .article-content :deep(h3) {
+    font-size: 16px;
+  }
+
+  .article-content :deep(table) {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
   .sidebar-card {
     margin-top: 12px;
   }

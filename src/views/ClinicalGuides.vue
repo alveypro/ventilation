@@ -118,4 +118,22 @@ const goClinical = () => {
     align-items: flex-start;
   }
 }
+
+@media (max-width: 768px) {
+  .guides-page {
+    padding: 12px 0 24px;
+  }
+
+  .guides-hero {
+    padding: 18px;
+  }
+
+  .guides-hero .el-button {
+    width: 100%;
+  }
+
+  .guides-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

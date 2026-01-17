@@ -1810,4 +1810,64 @@ const goToBrand = () => {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  .product-detail-page {
+    padding: 12px;
+  }
+
+  .detail-container {
+    gap: 18px;
+  }
+
+  .left-section {
+    position: relative;
+    top: 0;
+  }
+
+  .product-image {
+    aspect-ratio: 4 / 3;
+  }
+
+  .right-section h1 {
+    display: none;
+  }
+
+  .description {
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+
+  .one-liner {
+    font-size: 13px;
+  }
+
+  .knowledge-tags {
+    gap: 6px;
+  }
+
+  .summary-card {
+    min-height: auto;
+  }
+
+  .key-specs-grid,
+  .block-row,
+  .structured-grid,
+  .channel-grid,
+  .platform-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .selling-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-item {
+    height: 96px;
+  }
+
+  .related-card {
+    min-height: 0;
+  }
+}
 </style>

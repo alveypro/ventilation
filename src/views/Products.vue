@@ -507,5 +507,13 @@ const cancelPreview = () => {
     align-items: flex-start;
     gap: 6px;
   }
+
+  .filters {
+    margin-bottom: 20px;
+  }
+
+  .products-grid {
+    margin-top: 20px;
+  }
 }
 </style>

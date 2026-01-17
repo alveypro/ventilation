@@ -421,8 +421,12 @@ const goGuides = () => {
 }
 
 @media (max-width: 768px) {
+  .clinical-guide {
+    padding: 12px 0 24px;
+  }
+
   .guide-hero {
-    padding: 20px;
+    padding: 16px;
   }
 
   .guide-section {
@@ -444,6 +448,19 @@ const goGuides = () => {
 
   .filter-row {
     grid-template-columns: 1fr;
+  }
+
+  .guide-entry-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-item {
+    padding: 12px;
+  }
+
+  .zone-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 </style>

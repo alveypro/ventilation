@@ -967,6 +967,41 @@ const goToProduct = (id: number) => {
   }
 }
 
+@media (max-width: 768px) {
+  .brand-detail-page {
+    padding: 12px 0 20px;
+  }
+
+  .brand-header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 12px 0 20px;
+  }
+
+  .brand-logo {
+    width: 120px;
+    height: 80px;
+  }
+
+  .brand-info h2 {
+    font-size: 20px;
+  }
+
+  .profile-grid,
+  .portrait-grid,
+  .compare-grid,
+  .brand-visuals,
+  .resource-images {
+    grid-template-columns: 1fr;
+  }
+
+  .report-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
 .brand-products h2 {
   font-size: 20px;
   margin-bottom: 20px;

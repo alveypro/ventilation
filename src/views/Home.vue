@@ -338,8 +338,21 @@ const goTo = (path: string) => {
 }
 
 @media (max-width: 768px) {
+  .home-page {
+    padding: 10px 0 28px;
+  }
+
   .guide-hero h1 {
     font-size: 22px;
+  }
+
+  .guide-hero {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .hero-label {
+    letter-spacing: 0.18em;
   }
 
   .hero-subtitle {
@@ -359,7 +372,21 @@ const goTo = (path: string) => {
   }
 
   .nav-card {
-    padding: 6px;
+    padding: 2px;
+  }
+
+  .nav-card h3 {
+    font-size: 15px;
+  }
+
+  .nav-card p {
+    font-size: 12px;
+  }
+
+  .nav-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
   }
 
   .banner-item h2 {
@@ -371,7 +398,12 @@ const goTo = (path: string) => {
   }
 
   .content-section {
-    padding: 20px 0;
+    padding: 12px 0;
+  }
+
+  .guide-nav h2,
+  .content-section h2 {
+    font-size: 18px;
   }
 }
 </style>

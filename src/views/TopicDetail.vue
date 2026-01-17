@@ -384,5 +384,13 @@ onMounted(async () => {
   .summary-grid {
     grid-template-columns: 1fr;
   }
+
+  .content-section {
+    margin-top: 18px;
+  }
+
+  .info-card {
+    min-height: 0;
+  }
 }
 </style>

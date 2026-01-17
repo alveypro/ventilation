@@ -552,6 +552,10 @@ const goToDisease = (id: number) => {
 }
 
 @media (max-width: 768px) {
+  .tutorial-detail-page {
+    padding: 12px;
+  }
+
   .tutorial-header h1 {
     font-size: 20px;
   }
@@ -563,6 +567,14 @@ const goToDisease = (id: number) => {
 
   .sidebar-card {
     margin-top: 12px;
+  }
+
+  .tutorial-content h3 {
+    font-size: 16px;
+  }
+
+  .tutorial-content h4 {
+    font-size: 14px;
   }
 }
 </style>

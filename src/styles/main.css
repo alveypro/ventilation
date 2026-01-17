@@ -158,6 +158,41 @@ h1, h2, h3, h4, h5 {
   .el-breadcrumb {
     font-size: 12px;
   }
+
+  .el-breadcrumb__inner {
+    white-space: nowrap;
+  }
+
+  .el-breadcrumb__separator {
+    padding: 0 6px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 14.5px;
+  }
+
+  .page-header {
+    padding: 16px 12px !important;
+  }
+
+  .page-header h1 {
+    font-size: 20px !important;
+  }
+
+  .page-header p {
+    font-size: 12px !important;
+  }
+
+  .el-card__body {
+    padding: 12px !important;
+  }
+
+  .el-button--large {
+    min-height: 40px;
+    font-size: 14px;
+  }
 }
 
 /* 平滑过渡 */

@@ -790,4 +790,22 @@ const getDeviceTypesForDisease = (cls: string) => {
     top: 0;
   }
 }
+
+@media (max-width: 768px) {
+  .disease-detail-page {
+    padding: 12px 0 24px;
+  }
+
+  .disease-header {
+    padding: 16px;
+  }
+
+  .related-card {
+    min-height: 0;
+  }
+
+  .diagram-frame {
+    padding: 10px;
+  }
+}
 </style>
