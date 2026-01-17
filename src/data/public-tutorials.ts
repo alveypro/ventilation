@@ -10,14 +10,10 @@ export const publicTutorialsData = [
     sources: [
       {
         title: 'CPAP',
-        org: 'Sleep Education by AASM',
-        url: 'https://sleepeducation.org/patients/cpap/',
         date: '持续更新',
       },
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
     ],
@@ -61,14 +57,10 @@ export const publicTutorialsData = [
     sources: [
       {
         title: 'CPAP',
-        org: 'Sleep Education by AASM',
-        url: 'https://sleepeducation.org/patients/cpap/',
         date: '持续更新',
       },
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
     ],
@@ -108,14 +100,10 @@ export const publicTutorialsData = [
     sources: [
       {
         title: 'Scoring Manual',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/scoring-manual/',
         date: '持续更新',
       },
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
     ],
@@ -150,14 +138,10 @@ export const publicTutorialsData = [
     sources: [
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
       {
         title: 'Scoring Manual',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/scoring-manual/',
         date: '持续更新',
       },
     ],
@@ -187,14 +171,10 @@ export const publicTutorialsData = [
     sources: [
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
       {
         title: 'CPAP',
-        org: 'Sleep Education by AASM',
-        url: 'https://sleepeducation.org/patients/cpap/',
         date: '持续更新',
       },
     ],
@@ -223,14 +203,10 @@ export const publicTutorialsData = [
     sources: [
       {
         title: 'Statements & Guidelines',
-        org: 'American Thoracic Society',
-        url: 'https://www.thoracic.org/statements/',
         date: '持续更新',
       },
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
     ],
@@ -260,14 +236,10 @@ export const publicTutorialsData = [
     sources: [
       {
         title: 'CPAP',
-        org: 'Sleep Education by AASM',
-        url: 'https://sleepeducation.org/patients/cpap/',
         date: '持续更新',
       },
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
     ],
@@ -296,14 +268,10 @@ export const publicTutorialsData = [
     sources: [
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
       {
         title: 'CPAP',
-        org: 'Sleep Education by AASM',
-        url: 'https://sleepeducation.org/patients/cpap/',
         date: '持续更新',
       },
     ],

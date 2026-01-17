@@ -32,14 +32,10 @@ export const publicDiseasesData = [
     sources: [
       {
         title: 'Sleep Apnea',
-        org: 'Sleep Education by AASM',
-        url: 'https://sleepeducation.org/sleep-disorders/sleep-apnea/',
         date: '持续更新',
       },
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
     ],
@@ -95,14 +91,10 @@ OSA 是睡眠期间因上气道塌陷导致反复呼吸暂停或低通气的常�
     sources: [
       {
         title: 'Global Strategy for the Diagnosis, Management, and Prevention of COPD (2024 Report)',
-        org: 'GOLD',
-        url: 'https://goldcopd.org/2024-gold-report-2/',
         date: '2024',
       },
       {
         title: 'Chronic obstructive pulmonary disease (COPD)',
-        org: 'World Health Organization',
-        url: 'https://www.who.int/news-room/fact-sheets/detail/chronic-obstructive-pulmonary-disease-(copd)',
         date: '持续更新',
       },
     ],
@@ -151,14 +143,10 @@ COPD 是以不可逆气流受限为特征的慢性呼吸系统疾病。
     sources: [
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
       {
         title: 'Statements & Guidelines',
-        org: 'American Thoracic Society',
-        url: 'https://www.thoracic.org/statements/',
         date: '持续更新',
       },
     ],
@@ -202,14 +190,10 @@ OHS 是肥胖相关的慢性低通气综合征，常伴高碳酸血症与睡眠�
     sources: [
       {
         title: 'Statements & Guidelines',
-        org: 'American Thoracic Society',
-        url: 'https://www.thoracic.org/statements/',
         date: '持续更新',
       },
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
     ],
@@ -252,14 +236,10 @@ OHS 是肥胖相关的慢性低通气综合征，常伴高碳酸血症与睡眠�
     sources: [
       {
         title: 'Scoring Manual',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/scoring-manual/',
         date: '持续更新',
       },
       {
         title: 'Clinical Practice Guidelines',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/practice-standards/practice-guidelines/',
         date: '持续更新',
       },
     ],
@@ -302,14 +282,10 @@ CSA 由中枢驱动不足引起呼吸暂停，需先寻找并处理原发原因�
     sources: [
       {
         title: 'Scoring Manual',
-        org: 'AASM',
-        url: 'https://aasm.org/clinical-resources/scoring-manual/',
         date: '持续更新',
       },
       {
         title: 'Sleep Apnea',
-        org: 'Sleep Education by AASM',
-        url: 'https://sleepeducation.org/sleep-disorders/sleep-apnea/',
         date: '持续更新',
       },
     ],

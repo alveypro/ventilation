@@ -179,10 +179,10 @@ const relatedKnowledge = computed(() => {
 })
 
 const referenceLinks = [
-  { title: 'AARC 临床实践指南', url: 'https://www.aarc.org' },
-  { title: 'ERS 国际指南与科学声明', url: 'https://www.ersnet.org' },
-  { title: 'ATS 临床实践指南与患者教育', url: 'https://www.thoracic.org' },
-  { title: 'PubMed 证据检索', url: 'https://pubmed.ncbi.nlm.nih.gov' },
+  { title: '权威指南与共识汇总', url: '#' },
+  { title: '临床教育与继续学习资源', url: '#' },
+  { title: '循证研究检索入口', url: '#' },
+  { title: '患者教育参考资料', url: '#' },
 ]
 
 const scrollTo = (id: string) => {
