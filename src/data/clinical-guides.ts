@@ -110,7 +110,7 @@ export const clinicalGuides = [
       evidence: ['NIV 对 COPD 急性加重有明确获益', '早期评估窗口内反应决定是否升级', '无创失败会增加并发症风险'],
       contraindications: ['意识障碍或无法保护气道', '大量分泌物或频繁误吸', '血流动力学不稳定'],
     },
-    related: ['oxygen-hfnc', 'ards-weaning', 'airway-infection'],
+    related: ['oxygen-hfnc', 'ards-weaning', 'airway-infection', 'copd-exacerbation'],
     sections: [
       {
         id: 'assessment',
@@ -147,7 +147,7 @@ export const clinicalGuides = [
       evidence: ['长期 NIV 可改善高碳酸血症与住院率', '合并肺康复可提升功能', '随访依从性影响疗效'],
       contraindications: ['无法耐受面罩或严重漏气', '未控制的严重分泌物', '合并严重认知障碍'],
     },
-    related: ['niv-acute', 'oxygen-hfnc', 'followup-adherence'],
+    related: ['niv-acute', 'oxygen-hfnc', 'followup-adherence', 'pulmonary-rehab'],
     sections: [
       {
         id: 'indications',
@@ -178,7 +178,7 @@ export const clinicalGuides = [
       evidence: ['HFNC 可降低部分低氧性呼衰插管率', 'COPD 需谨慎氧疗避免 CO2 潴留', '监测趋势比单点值更关键'],
       contraindications: ['进展性呼吸衰竭需及时升级', '血流动力学不稳定需谨慎', '持续低氧不应延误插管'],
     },
-    related: ['niv-acute', 'ards-weaning', 'post-op-support'],
+    related: ['niv-acute', 'ards-weaning', 'post-op-support', 'copd-exacerbation'],
     sections: [
       {
         id: 'targets',
@@ -209,7 +209,7 @@ export const clinicalGuides = [
       evidence: ['保护性通气降低死亡率', '撤机成功取决于呼吸功与气道保护', '拔管后早期监测降低再插管风险'],
       contraindications: ['未稳定的循环状态', '高风险气道保护不足', '分泌物负荷过高'],
     },
-    related: ['oxygen-hfnc', 'airway-infection', 'tracheostomy-care'],
+    related: ['oxygen-hfnc', 'airway-infection', 'tracheostomy-care', 'weaning-failure'],
     sections: [
       {
         id: 'protective',
@@ -271,7 +271,7 @@ export const clinicalGuides = [
       evidence: ['早期随访可显著提升依从性', '问题定位越具体越易提升长期使用', '教育干预可降低弃疗率'],
       contraindications: ['严重不耐受需重新评估方案', '持续低氧或胸闷需复诊', '心理障碍需多学科支持'],
     },
-    related: ['pap-path', 'osa-education', 'copd-longterm'],
+    related: ['pap-path', 'osa-education', 'copd-longterm', 'home-remote'],
     sections: [
       {
         id: 'metrics',
@@ -460,7 +460,7 @@ export const clinicalGuides = [
       evidence: ['规范治疗可降低心血管风险', '早期教育提升长期依从性', '设备选择需结合个人结构与耐受'],
       contraindications: ['症状快速恶化需复诊评估', '严重鼻阻塞需先处理', '对治疗不耐受需调整方案'],
     },
-    related: ['pap-path', 'psg-diagnosis', 'followup-adherence'],
+    related: ['pap-path', 'psg-diagnosis', 'followup-adherence', 'home-remote'],
     sections: [
       {
         id: 'report',
@@ -485,6 +485,198 @@ export const clinicalGuides = [
         title: '用不好怎么办',
         summary: '问题多在适配与漏气，需及时调整。',
         points: ['先解决不适与漏气再谈时长。', '不适持续需复诊优化参数。'],
+      },
+    ],
+  },
+  {
+    id: 'copd-exacerbation',
+    title: 'COPD 急性加重通气路径',
+    subtitle: '急性加重 NIV 启动、监测与升级策略。',
+    clinicalNotes: {
+      metrics: ['pH 与 PaCO2 动态变化', '呼吸频率与呼吸功', '意识状态与分泌物负担'],
+      evidence: ['NIV 可降低插管率与死亡率', '1-2 小时内反应决定去留', '早期评估可减少失败'],
+      contraindications: ['意识障碍无法保护气道', '血流动力学不稳定', '大量分泌物或频繁误吸'],
+    },
+    related: ['niv-acute', 'oxygen-hfnc', 'airway-infection', 'followup-adherence'],
+    sections: [
+      {
+        id: 'triage',
+        title: '入院分层',
+        summary: '先区分轻重与通气不足，再决定支持等级。',
+        points: ['评估 pH、PaCO2 与呼吸功。', '合并感染与心衰需并行处理。'],
+      },
+      {
+        id: 'initiation',
+        title: 'NIV 启动',
+        summary: '先稳氧合，再优化通气与同步。',
+        points: ['EPAP 控阻塞，IPAP 改善通气。', '漏气与不同步是失败主因。'],
+      },
+      {
+        id: 'monitoring',
+        title: '早期监测',
+        summary: '1-2 小时内评估效果，避免拖延。',
+        points: ['pH 回升与呼吸频率下降是正向信号。', '无改善需及时升级。'],
+      },
+      {
+        id: 'disposition',
+        title: '转归与出院',
+        summary: '稳定期需评估长期管理方案。',
+        points: ['复盘诱因与随访计划。', '高碳酸血症可考虑长期 NIV。'],
+      },
+    ],
+  },
+  {
+    id: 'weaning-failure',
+    title: '撤机失败与再插管风险管理',
+    subtitle: '高风险识别、拔管前准备与挽救策略。',
+    clinicalNotes: {
+      metrics: ['SBT 耐受与 RSBI', '咳嗽能力与分泌物量', '氧合与血流动力学稳定性'],
+      evidence: ['拔管失败显著增加死亡率', '高风险人群可预防性使用 NIV/HFNC', '气道保护能力是决定性因素'],
+      contraindications: ['意识不清无法保护气道', '大量分泌物或咳嗽无力', '持续血流动力学不稳'],
+    },
+    related: ['ards-weaning', 'oxygen-hfnc', 'airway-infection'],
+    sections: [
+      {
+        id: 'risk',
+        title: '高风险识别',
+        summary: '高风险人群需更严格拔管评估。',
+        points: ['反复失败史或重症基础病需警惕。', '分泌物负担和咳嗽能力是关键。'],
+      },
+      {
+        id: 'prep',
+        title: '拔管前准备',
+        summary: '气道评估与支持方案需提前规划。',
+        points: ['评估气囊漏气与上气道通畅。', '规划拔管后支持方式。'],
+      },
+      {
+        id: 'rescue',
+        title: '失败挽救',
+        summary: '早期识别失败并快速响应。',
+        points: ['出现呼吸疲劳及时升级。', '高风险人群可早期使用 NIV/HFNC。'],
+      },
+    ],
+  },
+  {
+    id: 'alarm-safety',
+    title: '呼吸机报警与安全事件处置',
+    subtitle: '报警分类、快速排查与风险预防。',
+    clinicalNotes: {
+      metrics: ['高压/低压/窒息报警频次', '报警响应时间', '漏气与管路阻塞率'],
+      evidence: ['报警疲劳可导致漏报风险', '标准化排查路径可减少并发症', '日常检查可降低故障率'],
+      contraindications: ['禁止屏蔽持续报警', '未排查原因不得继续通气', '警报异常需立即切换备用方案'],
+    },
+    related: ['airway-infection', 'tracheostomy-care', 'niv-acute'],
+    sections: [
+      {
+        id: 'types',
+        title: '报警分类',
+        summary: '先分压力类、通气类与设备类。',
+        points: ['高压多与阻塞/咳嗽/分泌物相关。', '低压多与漏气或脱管有关。'],
+      },
+      {
+        id: 'response',
+        title: '快速排查',
+        summary: '先看患者，再查管路与设备。',
+        points: ['评估意识、氧合与呼吸功。', '检查气道通畅与管路连接。'],
+      },
+      {
+        id: 'prevention',
+        title: '预防策略',
+        summary: '日常检查与标准流程降低风险。',
+        points: ['建立报警分级与响应标准。', '定期培训降低误操作。'],
+      },
+    ],
+  },
+  {
+    id: 'pulmonary-rehab',
+    title: '肺康复与运动处方路径',
+    subtitle: '评估、处方设计与随访优化流程。',
+    clinicalNotes: {
+      metrics: ['6MWT、mMRC、CAT 评分', '运动耐量与症状变化', '急性加重频率'],
+      evidence: ['肺康复改善生活质量与运动耐量', '规范评估可降低风险', '随访与教育提升长期效果'],
+      contraindications: ['不稳定心血管状态', '急性加重期需先稳定', '严重低氧需评估支持'],
+    },
+    related: ['copd-longterm', 'followup-adherence', 'oxygen-hfnc'],
+    sections: [
+      {
+        id: 'assessment',
+        title: '入组评估',
+        summary: '评估耐量与风险决定处方强度。',
+        points: ['6MWT 与症状评分是基础指标。', '合并心血管疾病需谨慎评估。'],
+      },
+      {
+        id: 'prescription',
+        title: '运动处方',
+        summary: '有氧 + 肌力 + 呼吸训练组合。',
+        points: ['从低强度逐步递增。', '结合家庭训练计划。'],
+      },
+      {
+        id: 'followup',
+        title: '随访优化',
+        summary: '定期复盘并调整处方。',
+        points: ['根据耐量与症状调整负荷。', '强化教育与依从性。'],
+      },
+    ],
+  },
+  {
+    id: 'home-remote',
+    title: '居家 PAP 远程管理路径',
+    subtitle: '数据闭环、问题分级与依从性提升。',
+    clinicalNotes: {
+      metrics: ['使用时长、漏气、残余 AHI', '症状评分与主观睡眠质量', '问题响应时间'],
+      evidence: ['远程管理可提升早期依从性', '问题分级可提高处理效率', '持续反馈降低弃疗率'],
+      contraindications: ['隐私与数据授权不足', '严重不适需线下评估', '设备故障需线下处理'],
+    },
+    related: ['followup-adherence', 'pap-path', 'osa-education'],
+    sections: [
+      {
+        id: 'pipeline',
+        title: '数据管线',
+        summary: '数据采集、告警与回访形成闭环。',
+        points: ['设置关键指标阈值。', '建立每日与周度监测节奏。'],
+      },
+      {
+        id: 'triage',
+        title: '问题分级',
+        summary: '舒适度问题与疗效问题要分开处理。',
+        points: ['漏气与面罩问题优先处理。', '残余 AHI 升高需复评参数。'],
+      },
+      {
+        id: 'escalation',
+        title: '升级与转诊',
+        summary: '严重低氧或症状恶化必须线下复诊。',
+        points: ['持续胸闷/低氧需及时就医。', '疑似中枢事件需专科评估。'],
+      },
+    ],
+  },
+  {
+    id: 'sleep-clinic',
+    title: '睡眠门诊筛查与诊疗流程',
+    subtitle: '筛查、监测选择与治疗决策的门诊路径。',
+    clinicalNotes: {
+      metrics: ['STOP-Bang/ESS 评分', 'AHI/ODI/T90 结果', '症状与共病负荷'],
+      evidence: ['结构化门诊流程提升诊断效率', '筛查量表有助于分层管理', '路径化随访可提升疗效'],
+      contraindications: ['重症合并症需先院内处理', '疑似中枢事件需扩展评估', '严重失眠需综合评估'],
+    },
+    related: ['psg-diagnosis', 'pap-path', 'osa-education'],
+    sections: [
+      {
+        id: 'screening',
+        title: '初筛与分诊',
+        summary: '量表 + 症状决定监测类型。',
+        points: ['中高风险优先进入 PSG/HSAT。', '低风险可先生活干预与随访。'],
+      },
+      {
+        id: 'testing',
+        title: '监测选择',
+        summary: '根据风险与资源选择 PSG 或 HSAT。',
+        points: ['合并复杂疾病优先 PSG。', '资源受限可先 HSAT。'],
+      },
+      {
+        id: 'decision',
+        title: '治疗决策',
+        summary: '分层后进入 PAP/NIV 或其他方案。',
+        points: ['轻中度以 PAP 为主。', '合并通气不足需评估 NIV。'],
       },
     ],
   },

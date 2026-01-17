@@ -86,6 +86,9 @@
               <el-select v-model="docType" placeholder="类型" clearable>
                 <el-option v-for="item in docTypeOptions" :key="item" :label="item" :value="item" />
               </el-select>
+              <el-select v-model="entryType" placeholder="条目类型" clearable>
+                <el-option v-for="item in entryTypeOptions" :key="item" :label="item" :value="item" />
+              </el-select>
             </div>
           </el-card>
 
@@ -120,6 +123,7 @@ const category = ref('')
 const level = ref('')
 const docType = ref('')
 const router = useRouter()
+const entryType = ref('')
 
 const categoryOptions = Array.from(
   new Set(clinicalHandbookData.map(item => item.category).filter(Boolean))
@@ -130,6 +134,16 @@ const levelOptions = Array.from(
 const docTypeOptions = Array.from(
   new Set(clinicalHandbookData.map(item => item.docType).filter(Boolean))
 ) as string[]
+const entryTypeOptions = ['概念', '指标', '评估', '设备', '风险']
+
+const getEntryType = (item: any) => {
+  const text = `${item.title || ''} ${item.summary || ''} ${(item.keywords || []).join(' ')}`.toLowerCase()
+  if (/(指标|参数|评分|指数|血气|氧合|潮气量|平台压|peep|fio2)/.test(text)) return '指标'
+  if (/(评估|诊断|判读|筛查|分层|解读|报告)/.test(text)) return '评估'
+  if (/(设备|呼吸机|面罩|加湿|管路|耗材|气切|报警)/.test(text)) return '设备'
+  if (/(风险|禁忌|警示|红线|安全)/.test(text)) return '风险'
+  return '概念'
+}
 
 const zoneOrder = [
   { key: 'critical', label: '急性/重症' },
@@ -184,7 +198,8 @@ const filteredItems = computed(() => {
     const matchesCategory = !category.value || item.category === category.value
     const matchesLevel = !level.value || item.level === level.value
     const matchesDocType = !docType.value || item.docType === docType.value
-    return matchesKeyword && matchesCategory && matchesLevel && matchesDocType
+    const matchesEntryType = !entryType.value || getEntryType(item) === entryType.value
+    return matchesKeyword && matchesCategory && matchesLevel && matchesDocType && matchesEntryType
   })
 })
 
@@ -374,7 +389,7 @@ const goGuides = () => {
 
 .filter-row {
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) repeat(3, minmax(140px, 200px));
+  grid-template-columns: minmax(240px, 1fr) repeat(4, minmax(140px, 200px));
   gap: 12px;
 }
 

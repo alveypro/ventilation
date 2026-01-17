@@ -128,6 +128,24 @@
       </section>
 
       <section class="guide-section">
+        <h2>参考指南与资源</h2>
+        <div class="reference-list">
+          <a
+            v-for="item in referenceLinks"
+            :key="item.title"
+            class="reference-item"
+            :href="item.url"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div class="reference-title">{{ item.title }}</div>
+            <div class="reference-url">{{ item.url }}</div>
+          </a>
+        </div>
+        <p class="reference-note">参考内容用于临床学习与流程对照，具体执行需结合本地指南与专科评估。</p>
+      </section>
+
+      <section class="guide-section">
         <h2>返回与下一步</h2>
         <div class="cta-row">
           <el-button type="primary" @click="goList">返回专题列表</el-button>
@@ -159,6 +177,13 @@ const relatedKnowledge = computed(() => {
   if (!guide.value?.id) return []
   return clinicalHandbookData.filter(item => (item as any).relatedGuides?.includes(guide.value?.id))
 })
+
+const referenceLinks = [
+  { title: 'AARC 临床实践指南', url: 'https://www.aarc.org' },
+  { title: 'ERS 国际指南与科学声明', url: 'https://www.ersnet.org' },
+  { title: 'ATS 临床实践指南与患者教育', url: 'https://www.thoracic.org' },
+  { title: 'PubMed 证据检索', url: 'https://pubmed.ncbi.nlm.nih.gov' },
+]
 
 const scrollTo = (id: string) => {
   const target = document.getElementById(id)
@@ -294,6 +319,37 @@ const goKnowledge = (id: number) => {
 .related-card p {
   color: #4b5563;
   font-size: 13px;
+}
+
+.reference-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.reference-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 14px;
+  text-decoration: none;
+  background: #f9fafb;
+}
+
+.reference-title {
+  font-weight: 600;
+  color: #111827;
+}
+
+.reference-url {
+  color: #6b7280;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.reference-note {
+  margin: 10px 0 0;
+  color: #6b7280;
+  font-size: 12px;
 }
 
 .guide-table {

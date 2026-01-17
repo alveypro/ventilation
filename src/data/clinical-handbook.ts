@@ -21,7 +21,10 @@ export const clinicalHandbookData = [
     ],
     "content": "# 睡眠呼吸障碍（SDB）概览\n\n## 临床要点\n- SDB 是疾病谱，不同类型机制不同。\n- 诊断需要事件类型 + 低氧负荷评估。\n- 治疗选择与随访必须分层。\n\n## 疾病分类\n- OSA：上气道塌陷导致阻塞事件。\n- CSA：中枢驱动不足导致呼吸暂停。\n- UARS：气道阻力增加、觉醒增多。\n- 睡眠低通气：通气不足与 CO2 潴留。\n\n## 诊断要点\n- 风险筛查（STOP-Bang/ESS）。\n- PSG/HSAT 评估事件类型与低氧负荷。\n- 结合症状、AHI/ODI/T90 分层。\n\n## 治疗概览\n- PAP 为 OSA 一线治疗。\n- NIV 适用于通气不足与慢性呼衰。\n- 随访重点：依从性、漏气、低氧改善。\n\n## 评估要点\n- AHI/ODI/T90 与症状结合\n- 体位/REM 期差异\n- 合并症与风险评估\n\n## 治疗策略\n- 按适应证选择 PAP 模式\n- 面罩与漏气管理\n- 必要时复评与滴定\n\n## 随访指标\n- AHI 与漏气趋势\n- 使用时长与主观症状\n- 合并症控制情况\n",
     "relatedGuides": [
-      "osa-education"
+      "psg-diagnosis",
+      "pap-path",
+      "osa-education",
+      "sleep-clinic"
     ]
   },
   {
@@ -46,8 +49,10 @@ export const clinicalHandbookData = [
     ],
     "content": "# OSA诊断流程与分层\n\n## 临床要点\n- 分层需结合 AHI、ODI、T90 与症状。\n- 体位/REM 期差异需记录。\n- 合并症决定治疗优先级。\n\n## 诊断要点\n- 量表筛查与症状评估。\n- PSG 或 HSAT 确认事件。\n- 结合 AHI、ODI、T90 与合并症分层。\n\n## 分层要点\n- 轻度：AHI 5–14。\n- 中度：AHI 15–29。\n- 重度：AHI ≥30。\n\n## 评估要点\n- AHI/ODI/T90 与症状结合\n- 体位/REM 期差异\n- 合并症与风险评估\n\n## 治疗策略\n- 按适应证选择 PAP 模式\n- 面罩与漏气管理\n- 必要时复评与滴定\n\n## 随访指标\n- AHI 与漏气趋势\n- 使用时长与主观症状\n- 合并症控制情况\n",
     "relatedGuides": [
+      "psg-diagnosis",
+      "pap-path",
       "osa-education",
-      "psg-diagnosis"
+      "sleep-clinic"
     ]
   },
   {
@@ -71,7 +76,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# PSG通道与报告速读\n\n## 临床要点\n- PSG 是睡眠障碍诊断金标准。\n- 通道判读决定事件类型判断。\n- 报告速读应先结构后事件。\n\n## 关键通道\n- EEG/EOG/EMG：睡眠分期与觉醒。\n- 气流/胸腹带：阻塞 vs 中枢。\n- SpO2：低氧负荷。\n- 体位/鼾声/ECG：辅助判断。\n\n## 报告解读要点\n- 睡眠结构与效率。\n- AHI/RDI/ODI/T90。\n- 体位与 REM 期事件。\n\n## 评估要点\n- AHI/ODI/T90 与症状结合\n- 体位/REM 期差异\n- 合并症与风险评估\n\n## 治疗策略\n- 按适应证选择 PAP 模式\n- 面罩与漏气管理\n- 必要时复评与滴定\n\n## 随访指标\n- AHI 与漏气趋势\n- 使用时长与主观症状\n- 合并症控制情况\n",
     "relatedGuides": [
-      "psg-diagnosis"
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -95,6 +101,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# 呼吸事件判读要点\n\n## 临床要点\n- 胸腹带决定阻塞/中枢判断。\n- 低通气需结合低氧或觉醒。\n- 体位与REM期是关键背景。\n\n## 判读关键\n- 阻塞性：气流下降 + 胸腹努力仍在。\n- 中枢性：气流下降 + 胸腹努力消失。\n- 低通气：气流下降并伴低氧/觉醒。\n\n## 评估要点\n- AHI/ODI/T90 与症状结合\n- 体位/REM 期差异\n- 合并症与风险评估\n\n## 治疗策略\n- 按适应证选择 PAP 模式\n- 面罩与漏气管理\n- 必要时复评与滴定\n\n## 随访指标\n- AHI 与漏气趋势\n- 使用时长与主观症状\n- 合并症控制情况\n",
     "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic",
       "csa-asv"
     ]
   },
@@ -119,7 +127,9 @@ export const clinicalHandbookData = [
     ],
     "content": "# PAP模式选择原则\n\n## 临床要点\n- 模式选择以适应证为先。\n- 体位/REM波动适合APAP。\n- 高压不耐受可考虑BiPAP。\n\n## 选择逻辑\n- CPAP：压力需求稳定。\n- APAP：体位或 REM 波动明显。\n- BiPAP：高压不耐受或通气不足。\n\n## 评估要点\n- 结合症状与数据\n- 重视趋势与变化\n- 个体化评估\n\n## 治疗策略\n- 分层干预\n- 动态调整\n- 随访复评\n",
     "relatedGuides": [
-      "pap-path"
+      "pap-path",
+      "niv-acute",
+      "home-remote"
     ]
   },
   {
@@ -143,7 +153,9 @@ export const clinicalHandbookData = [
     ],
     "content": "# NIV适应证与禁忌证\n\n## 临床要点\n- 适应证以通气不足与高碳酸血症为主。\n- 禁忌证包括气道保护障碍。\n- 专业评估后再启动。\n\n## 常见适应证\n- COPD 高碳酸血症。\n- OHS 与神经肌肉病。\n- 夜间低通气。\n\n## 禁忌提示\n- 意识障碍或无法保护气道。\n- 严重呕吐或面罩无法耐受。\n\n## 评估要点\n- 结合症状与数据\n- 重视趋势与变化\n- 个体化评估\n\n## 治疗策略\n- 分层干预\n- 动态调整\n- 随访复评\n",
     "relatedGuides": [
+      "pap-path",
       "niv-acute",
+      "home-remote",
       "copd-longterm",
       "ohs-ventilation",
       "neuromuscular-niv"
@@ -170,6 +182,9 @@ export const clinicalHandbookData = [
       "最大/最小压力限制。"
     ],
     "relatedGuides": [
+      "pap-path",
+      "niv-acute",
+      "home-remote",
       "airway-infection"
     ]
   },
@@ -195,7 +210,9 @@ export const clinicalHandbookData = [
       "随访保障疗效"
     ],
     "relatedGuides": [
-      "pap-path"
+      "pap-path",
+      "niv-acute",
+      "home-remote"
     ]
   },
   {
@@ -219,6 +236,8 @@ export const clinicalHandbookData = [
       "随访关注依从性"
     ],
     "relatedGuides": [
+      "alarm-safety",
+      "tracheostomy-care",
       "followup-adherence"
     ]
   },
@@ -241,6 +260,10 @@ export const clinicalHandbookData = [
       "优先解决漏气与舒适度",
       "参数调整需循序渐进",
       "随访关注依从性"
+    ],
+    "relatedGuides": [
+      "alarm-safety",
+      "tracheostomy-care"
     ]
   },
   {
@@ -261,6 +284,10 @@ export const clinicalHandbookData = [
       "冬季可适当提高湿化。",
       "使用加温管路减少结露。",
       "水箱每日清洁晾干。"
+    ],
+    "relatedGuides": [
+      "alarm-safety",
+      "tracheostomy-care"
     ]
   },
   {
@@ -283,7 +310,8 @@ export const clinicalHandbookData = [
       "随访保障疗效"
     ],
     "relatedGuides": [
-      "followup-adherence"
+      "followup-adherence",
+      "home-remote"
     ]
   },
   {
@@ -305,6 +333,10 @@ export const clinicalHandbookData = [
       "强调评估与监测",
       "治疗策略需分层",
       "随访保障疗效"
+    ],
+    "relatedGuides": [
+      "followup-adherence",
+      "home-remote"
     ]
   },
   {
@@ -325,7 +357,12 @@ export const clinicalHandbookData = [
       "出现红线症状不得自行调参。",
       "强调先救治后调整。"
     ],
-    "content": "# 安全红线与就医提示\n\n## 临床要点\n- 持续低氧、胸痛、意识改变需立即就医。\n- 出现红线症状不得自行调参。\n- 强调先救治后调整。\n\n## 就医红线\n- 持续低氧或呼吸困难。\n- 胸痛、咯血或意识改变。\n- 明显意识障碍或极度嗜睡。\n\n## 处置原则\n- 先就医评估，再讨论设备调整。\n- 不以报警代替临床判断。\n\n## 评估要点\n- 结合症状与数据\n- 重视趋势与变化\n- 个体化评估\n\n## 治疗策略\n- 分层干预\n- 动态调整\n- 随访复评\n"
+    "content": "# 安全红线与就医提示\n\n## 临床要点\n- 持续低氧、胸痛、意识改变需立即就医。\n- 出现红线症状不得自行调参。\n- 强调先救治后调整。\n\n## 就医红线\n- 持续低氧或呼吸困难。\n- 胸痛、咯血或意识改变。\n- 明显意识障碍或极度嗜睡。\n\n## 处置原则\n- 先就医评估，再讨论设备调整。\n- 不以报警代替临床判断。\n\n## 评估要点\n- 结合症状与数据\n- 重视趋势与变化\n- 个体化评估\n\n## 治疗策略\n- 分层干预\n- 动态调整\n- 随访复评\n",
+    "relatedGuides": [
+      "alarm-safety",
+      "airway-infection",
+      "niv-acute"
+    ]
   },
   {
     "id": 9015,
@@ -347,6 +384,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# ASV相关风险提示\n\n## 临床要点\n- ASV 适应证严格，需评估心功能。\n- 不作为常规模式，需专科评估。\n- 禁止自行切换。\n\n## 风险要点\n- 需评估心功能与中枢事件比例。\n- 不作为常规推荐模式。\n\n## 评估要点\n- 结合症状与数据\n- 重视趋势与变化\n- 个体化评估\n\n## 治疗策略\n- 分层干预\n- 动态调整\n- 随访复评\n",
     "relatedGuides": [
+      "alarm-safety",
+      "airway-infection",
       "csa-asv"
     ]
   },
@@ -391,7 +430,10 @@ export const clinicalHandbookData = [
       "清洁不规范会增加感染风险。",
       "需按规范流程连接设备。"
     ],
-    "content": "# 雾化与吸入治疗要点\n\n## 临床要点\n- 粒径与接口决定药物沉积效率。\n- 清洁不规范会增加感染风险。\n- 需按规范流程连接设备。\n\n## 注意事项\n- 粒径与接口影响沉积效率。\n- 注意清洁与交叉感染。\n- 需按规范流程连接设备。\n\n## 评估要点\n- 氧合与通气趋势\n- 症状负担与耐量\n- 风险分层\n\n## 治疗策略\n- 分层干预与动态评估\n- 个体化方案\n- 随访与教育并行\n"
+    "content": "# 雾化与吸入治疗要点\n\n## 临床要点\n- 粒径与接口决定药物沉积效率。\n- 清洁不规范会增加感染风险。\n- 需按规范流程连接设备。\n\n## 注意事项\n- 粒径与接口影响沉积效率。\n- 注意清洁与交叉感染。\n- 需按规范流程连接设备。\n\n## 评估要点\n- 氧合与通气趋势\n- 症状负担与耐量\n- 风险分层\n\n## 治疗策略\n- 分层干预与动态评估\n- 个体化方案\n- 随访与教育并行\n",
+    "relatedGuides": [
+      "airway-infection"
+    ]
   },
   {
     "id": 9018,
@@ -436,8 +478,9 @@ export const clinicalHandbookData = [
     ],
     "content": "# COPD无创通气核心要点\n\n## 临床要点\n- 稳定期高碳酸血症患者可考虑长期 NIV。\n- 目标是改善通气与症状，降低再入院风险。\n\n## 随访要点\n- 血气改善与症状变化。\n- 依从性与漏气监测。\n\n## 评估要点\n- 症状负担与耐量\n- 肺功能与血气趋势\n- 急性加重史\n\n## 治疗策略\n- 通气支持与康复并行\n- 个体化长期管理\n- 教育与依从性支持\n\n## 随访指标\n- 症状与耐量变化\n- 急性加重风险\n- 依从性与数据趋势\n",
     "relatedGuides": [
-      "niv-acute",
       "copd-longterm",
+      "pulmonary-rehab",
+      "niv-acute",
       "followup-adherence"
     ]
   },
@@ -461,6 +504,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# OHS与夜间低通气\n\n## 临床要点\n- 通气支持与体重管理需并行。\n- 夜间低通气是核心问题。\n- 减重后仍需复评。\n\n## 治疗要点\n- PAP/NIV 改善夜间通气。\n- 长期体重管理。\n\n## 评估要点\n- 症状负担与耐量\n- 肺功能与血气趋势\n- 急性加重史\n\n## 治疗策略\n- 通气支持与康复并行\n- 个体化长期管理\n- 教育与依从性支持\n\n## 随访指标\n- 症状与耐量变化\n- 急性加重风险\n- 依从性与数据趋势\n",
     "relatedGuides": [
+      "copd-longterm",
+      "pulmonary-rehab",
       "ohs-ventilation"
     ]
   },
@@ -484,6 +529,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# 神经肌肉疾病与通气支持\n\n## 临床要点\n- 呼吸肌无力是主要问题。\n- FVC 与夜间低通气是评估核心。\n- 需联合咳嗽辅助。\n\n## 管理要点\n- 评估 FVC 与夜间低通气。\n- 结合咳嗽辅助与排痰。\n\n## 评估要点\n- 症状负担与耐量\n- 肺功能与血气趋势\n- 急性加重史\n\n## 治疗策略\n- 通气支持与康复并行\n- 个体化长期管理\n- 教育与依从性支持\n\n## 随访指标\n- 症状与耐量变化\n- 急性加重风险\n- 依从性与数据趋势\n",
     "relatedGuides": [
+      "copd-longterm",
+      "pulmonary-rehab",
       "niv-acute",
       "neuromuscular-niv"
     ]
@@ -509,7 +556,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# 呼吸治疗评估框架（门诊/随访）\n\n## 临床要点\n- 四维评估：症状、氧合、通气、睡眠质量。\n- 随访更重趋势与一致性，而非单次数值。\n- 调整依据：症状改善 + 数据改善 + 依从性。\n\n## 评估维度\n- **症状**：白天嗜睡、气促、晨起头痛、夜间憋醒。\n- **氧合**：SpO2、最低血氧、T90/低氧负荷。\n- **通气**：CO2 潴留风险、通气量、呼吸驱动。\n- **睡眠质量**：觉醒次数、睡眠结构、白天功能。\n\n## 核心指标清单\n- 主观：ESS、疲劳/注意力变化、运动耐量。\n- 客观：AHI/ODI、漏气、使用时长、血气趋势。\n\n## 随访记录模板\n- 每周记录症状变化、漏气与使用时长。\n- 复诊前整理近 2-4 周趋势图。\n\n## 评估输出\n- 是否维持当前方案。\n- 是否需要调整模式或压力。\n- 是否需要复诊或进一步检查。\n\n## 评估要点\n- 氧合与通气趋势\n- 症状负担与耐量\n- 风险分层\n\n## 治疗策略\n- 分层干预与动态评估\n- 个体化方案\n- 随访与教育并行\n",
     "relatedGuides": [
-      "followup-adherence"
+      "followup-adherence",
+      "sleep-clinic"
     ]
   },
   {
@@ -532,7 +580,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# 急性呼吸衰竭与 NIV 启动评估\n\n## 临床要点\n- 启动前必须完成适应证/禁忌证评估。\n- 疗效评估窗口要短，避免延误升级。\n- 关注意识、气道保护与血气动态。\n\n## 启动前评估\n- **意识状态**：能否配合、是否具备气道保护能力。\n- **分泌物管理**：痰量、排痰能力、误吸风险。\n- **血气与氧合**：PaCO2、PaO2、pH 与趋势。\n\n## 适应证与禁忌证\n- 适应证以通气不足或氧合不足为主。\n- 禁忌证包括意识障碍、无法保护气道、严重呕吐等。\n\n## 启动策略\n- 先保证氧合，再优化通气。\n- 监测人机同步、漏气与耐受。\n\n## 升级警示\n- 症状无改善或血气恶化应考虑升级。\n\n## 评估要点\n- 氧合与通气动态\n- 意识与血流动力学\n- 呼吸功与疲劳迹象\n\n## 治疗策略\n- 氧疗/无创/有创分级策略\n- 动态评估疗效与升级\n- 人机同步与并发症管理\n\n## 风险提示\n- 延误升级风险\n- 感染与并发症\n- 参数不当导致损伤\n",
     "relatedGuides": [
-      "niv-acute"
+      "niv-acute",
+      "copd-exacerbation"
     ]
   },
   {
@@ -556,6 +605,7 @@ export const clinicalHandbookData = [
     "content": "# COPD 急性加重期通气策略\n\n## 核心目标\n- 纠正通气不足，缓解 CO2 潴留。\n- 改善呼吸功与主观症状。\n\n## 临床要点\n- 评估意识、呼吸肌疲劳、分泌物负担。\n- NIV 常作为首选支持方式。\n- 动态监测血气与症状变化。\n\n## 关键监测\n- pH、PaCO2、呼吸频率。\n- 漏气与人机同步性。\n\n## 评估要点\n- 氧合与通气动态\n- 意识与血流动力学\n- 呼吸功与疲劳迹象\n\n## 治疗策略\n- 氧疗/无创/有创分级策略\n- 动态评估疗效与升级\n- 人机同步与并发症管理\n\n## 风险提示\n- 延误升级风险\n- 感染与并发症\n- 参数不当导致损伤\n",
     "relatedGuides": [
       "niv-acute",
+      "copd-exacerbation",
       "copd-longterm"
     ]
   },
@@ -579,7 +629,9 @@ export const clinicalHandbookData = [
     ],
     "content": "# ARDS 保护性通气要点\n\n## 临床要点\n- 低潮气量与平台压控制是核心。\n- PEEP 策略需结合肺顺应性。\n- 避免以氧合为唯一目标。\n\n## 核心策略\n- 低潮气量通气与平台压限制。\n- 结合 PEEP/FiO2 策略优化氧合。\n- 关注肺顺应性与驱动压变化。\n\n## 关键监测\n- 氧合改善与肺顺应性趋势。\n- 呼吸机相关并发症风险。\n\n## 评估要点\n- 氧合与通气动态\n- 意识与血流动力学\n- 呼吸功与疲劳迹象\n\n## 治疗策略\n- 氧疗/无创/有创分级策略\n- 动态评估疗效与升级\n- 人机同步与并发症管理\n\n## 风险提示\n- 延误升级风险\n- 感染与并发症\n- 参数不当导致损伤\n",
     "relatedGuides": [
-      "ards-weaning"
+      "ards-weaning",
+      "niv-acute",
+      "weaning-failure"
     ]
   },
   {
@@ -602,7 +654,10 @@ export const clinicalHandbookData = [
     ],
     "content": "# 撤机与拔管评估流程\n\n## 临床要点\n- SBT 只是条件之一，拔管需综合评估。\n- 气道保护与分泌物管理是关键。\n- 拔管后需密切观察早期失败迹象。\n\n## 评估要点\n- 原发病稳定与血流动力学稳定。\n- 氧合与通气可维持。\n- 气道保护与咳嗽能力评估。\n\n## 关键检查\n- 呼吸功与耐受。\n- 分泌物负担。\n- 早期拔管失败风险评估。\n\n## 评估要点\n- 氧合与通气动态\n- 意识与血流动力学\n- 呼吸功与疲劳迹象\n\n## 治疗策略\n- 氧疗/无创/有创分级策略\n- 动态评估疗效与升级\n- 人机同步与并发症管理\n\n## 风险提示\n- 延误升级风险\n- 感染与并发症\n- 参数不当导致损伤\n",
     "relatedGuides": [
-      "ards-weaning"
+      "ards-weaning",
+      "niv-acute",
+      "weaning-failure",
+      "airway-infection"
     ]
   },
   {
@@ -696,7 +751,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# 睡眠呼吸障碍随访指标清单\n\n## 临床要点\n- 必须同时关注数据与症状。\n- 漏气与时长是首要指标。\n- 症状未改善需复评原因。\n\n## 关键指标\n- AHI、漏气、使用时长趋势。\n- 主观症状：嗜睡、晨起头痛、夜间憋醒。\n- 合并症变化：血压、心血管风险。\n\n## 随访要点\n- 关键数据趋势监测\n- 主观症状与依从性\n- 异常信号及时复评\n\n## 沟通要点\n- 目标与收益清晰\n- 问题导向的调整方案\n- 风险提示明确\n",
     "relatedGuides": [
-      "followup-adherence"
+      "followup-adherence",
+      "home-remote"
     ]
   },
   {
@@ -719,7 +775,9 @@ export const clinicalHandbookData = [
     ],
     "content": "# 呼吸治疗教育与患者沟通要点\n\n## 临床要点\n- 沟通应围绕目标、收益与风险。\n- 先解决不适，再谈依从性。\n- 教育需结构化与可执行。\n\n## 沟通结构\n- 解释**为什么要用**与不使用的风险。\n- 说明**治疗目标与预期**。\n- 给出**常见问题处理方案**。\n- 明确**何时必须就医**。\n\n## 随访要点\n- 复盘数据与症状一致性。\n- 记录关键问题与下一步计划。\n\n## 沟通要点\n- 目标与收益清晰\n- 问题导向的调整方案\n- 风险提示明确\n",
     "relatedGuides": [
-      "followup-adherence"
+      "followup-adherence",
+      "osa-education",
+      "alarm-safety"
     ]
   },
   {
@@ -742,6 +800,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# HFNC 高流量氧疗适应证与监测\n\n## 临床要点\n- HFNC 适合低氧性呼衰与拔管后支持。\n- 监测呼吸功与SpO2趋势。\n- 无效需及时升级评估。\n\n## 适用场景\n- 低氧性呼吸衰竭。\n- 术后或拔管后支持。\n- 轻中度氧合不足需舒适氧疗者。\n\n## 监测要点\n- 呼吸频率、SpO2、呼吸功。\n- 症状改善与耐受情况。\n\n## 评估要点\n- 氧合与通气动态\n- 意识与血流动力学\n- 呼吸功与疲劳迹象\n\n## 治疗策略\n- 氧疗/无创/有创分级策略\n- 动态评估疗效与升级\n- 人机同步与并发症管理\n\n## 风险提示\n- 延误升级风险\n- 感染与并发症\n- 参数不当导致损伤\n",
     "relatedGuides": [
+      "niv-acute",
+      "copd-exacerbation",
       "oxygen-hfnc"
     ]
   },
@@ -764,7 +824,10 @@ export const clinicalHandbookData = [
       "氧合与通气需分开判断。",
       "代偿可掩盖问题。"
     ],
-    "content": "# ABG 血气分析速读\n\n## 临床要点\n- 先看 pH，再看 PaCO2 与 HCO3-。\n- 氧合与通气需分开判断。\n- 代偿可掩盖问题。\n\n## 关键要点\n- pH 判断酸碱方向。\n- PaCO2 判断通气。\n- HCO3- 判断代偿。\n- PaO2/SpO2 判断氧合。\n\n## 评估要点\n- 指标需结合临床症状\n- 趋势比单次值更重要\n- 注意检测条件影响\n\n## 应用场景\n- 用于诊断分层\n- 用于治疗评估\n- 用于随访复评\n"
+    "content": "# ABG 血气分析速读\n\n## 临床要点\n- 先看 pH，再看 PaCO2 与 HCO3-。\n- 氧合与通气需分开判断。\n- 代偿可掩盖问题。\n\n## 关键要点\n- pH 判断酸碱方向。\n- PaCO2 判断通气。\n- HCO3- 判断代偿。\n- PaO2/SpO2 判断氧合。\n\n## 评估要点\n- 指标需结合临床症状\n- 趋势比单次值更重要\n- 注意检测条件影响\n\n## 应用场景\n- 用于诊断分层\n- 用于治疗评估\n- 用于随访复评\n",
+    "relatedGuides": [
+      "oxygen-hfnc"
+    ]
   },
   {
     "id": 9113,
@@ -784,7 +847,10 @@ export const clinicalHandbookData = [
       "FEV1% 反映严重度。",
       "需结合症状与影像。"
     ],
-    "content": "# 肺功能检查（PFT）解读要点\n\n## 临床要点\n- FEV1/FVC 用于判断阻塞。\n- FEV1% 反映严重度。\n- 需结合症状与影像。\n\n## 快速判断\n- FEV1/FVC 下降提示阻塞。\n- FEV1% 反映严重度。\n- 可逆性试验用于评估气道反应性。\n\n## 评估要点\n- 指标需结合临床症状\n- 趋势比单次值更重要\n- 注意检测条件影响\n\n## 应用场景\n- 用于诊断分层\n- 用于治疗评估\n- 用于随访复评\n"
+    "content": "# 肺功能检查（PFT）解读要点\n\n## 临床要点\n- FEV1/FVC 用于判断阻塞。\n- FEV1% 反映严重度。\n- 需结合症状与影像。\n\n## 快速判断\n- FEV1/FVC 下降提示阻塞。\n- FEV1% 反映严重度。\n- 可逆性试验用于评估气道反应性。\n\n## 评估要点\n- 指标需结合临床症状\n- 趋势比单次值更重要\n- 注意检测条件影响\n\n## 应用场景\n- 用于诊断分层\n- 用于治疗评估\n- 用于随访复评\n",
+    "relatedGuides": [
+      "oxygen-hfnc"
+    ]
   },
   {
     "id": 9114,
@@ -807,7 +873,8 @@ export const clinicalHandbookData = [
     "content": "# NIV 参数设置与人机同步\n\n## 临床要点\n- EPAP 控阻塞，IPAP 提供通气。\n- 触发/循环决定同步性。\n- 漏气是同步性问题的首要原因。\n\n## 参数逻辑\n- EPAP 解决阻塞。\n- IPAP 提供通气支持。\n- 触发与循环设置影响同步。\n\n## 同步性要点\n- 观察触发延迟与吸气时间。\n- 评估漏气与面罩适配。\n\n## 评估要点\n- 结合症状与数据\n- 重视趋势与变化\n- 个体化评估\n\n## 治疗策略\n- 分层干预\n- 动态调整\n- 随访复评\n",
     "relatedGuides": [
       "pap-path",
-      "niv-acute"
+      "niv-acute",
+      "home-remote"
     ]
   },
   {
@@ -830,7 +897,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# 睡眠分期与临床意义\n\n## 临床要点\n- REM 期事件易加重。\n- 深睡不足会影响恢复。\n- 分期异常常伴白天功能下降。\n\n## 评估要点\n- AHI/ODI/T90 与症状结合\n- 体位/REM 期差异\n- 合并症与风险评估\n\n## 治疗策略\n- 按适应证选择 PAP 模式\n- 面罩与漏气管理\n- 必要时复评与滴定\n\n## 随访指标\n- AHI 与漏气趋势\n- 使用时长与主观症状\n- 合并症控制情况\n",
     "relatedGuides": [
-      "psg-diagnosis"
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -851,7 +919,11 @@ export const clinicalHandbookData = [
       "ETCO2 与 PaCO2 需结合判断。",
       "趋势比单次值更重要。"
     ],
-    "content": "# Capnography 波形与通气评估\n\n## 临床要点\n- 波形变化反映通气与气道阻力。\n- ETCO2 与 PaCO2 需结合判断。\n- 趋势比单次值更重要。\n\n## 常见提示\n- 波形变平提示通气减少。\n- 斜率改变提示气道阻力增加。\n\n## 评估要点\n- 指标需结合临床症状\n- 趋势比单次值更重要\n- 注意检测条件影响\n\n## 应用场景\n- 用于诊断分层\n- 用于治疗评估\n- 用于随访复评\n"
+    "content": "# Capnography 波形与通气评估\n\n## 临床要点\n- 波形变化反映通气与气道阻力。\n- ETCO2 与 PaCO2 需结合判断。\n- 趋势比单次值更重要。\n\n## 常见提示\n- 波形变平提示通气减少。\n- 斜率改变提示气道阻力增加。\n\n## 评估要点\n- 指标需结合临床症状\n- 趋势比单次值更重要\n- 注意检测条件影响\n\n## 应用场景\n- 用于诊断分层\n- 用于治疗评估\n- 用于随访复评\n",
+    "relatedGuides": [
+      "oxygen-hfnc",
+      "airway-infection"
+    ]
   },
   {
     "id": 9117,
@@ -989,7 +1061,10 @@ export const clinicalHandbookData = [
       "避免自行调整关键参数。",
       "信息需谨慎甄别。"
     ],
-    "content": "# Apnea Board 患者社区使用提示\n\n## 临床要点\n- 可参考经验技巧，但不替代处方。\n- 避免自行调整关键参数。\n- 信息需谨慎甄别。\n\n## 使用建议\n- 关注通用经验与舒适度技巧。\n- 不自行替换医生处方。\n\n## 提醒\n论坛观点需谨慎甄别。\n\n## 评估要点\n- 结合症状与数据\n- 重视趋势与变化\n- 个体化评估\n\n## 治疗策略\n- 分层干预\n- 动态调整\n- 随访复评\n"
+    "content": "# Apnea Board 患者社区使用提示\n\n## 临床要点\n- 可参考经验技巧，但不替代处方。\n- 避免自行调整关键参数。\n- 信息需谨慎甄别。\n\n## 使用建议\n- 关注通用经验与舒适度技巧。\n- 不自行替换医生处方。\n\n## 提醒\n论坛观点需谨慎甄别。\n\n## 评估要点\n- 结合症状与数据\n- 重视趋势与变化\n- 个体化评估\n\n## 治疗策略\n- 分层干预\n- 动态调整\n- 随访复评\n",
+    "relatedGuides": [
+      "osa-education"
+    ]
   },
   {
     "id": 9124,
@@ -1068,7 +1143,12 @@ export const clinicalHandbookData = [
       "强调关键指标可追踪。",
       "质控应与流程绑定。"
     ],
-    "content": "# 临床路径标准化与质量控制\n\n## 临床要点\n- 路径要覆盖评估、干预与随访。\n- 强调关键指标可追踪。\n- 质控应与流程绑定。\n\n## 核心结构\n- 评估 → 干预 → 随访。\n- 标准化指标与记录模板。\n\n## 质量控制\n- 设定关键质量指标。\n- 定期复盘与流程修订。\n\n## 随访要点\n- 关键数据趋势监测\n- 主观症状与依从性\n- 异常信号及时复评\n\n## 沟通要点\n- 目标与收益清晰\n- 问题导向的调整方案\n- 风险提示明确\n"
+    "content": "# 临床路径标准化与质量控制\n\n## 临床要点\n- 路径要覆盖评估、干预与随访。\n- 强调关键指标可追踪。\n- 质控应与流程绑定。\n\n## 核心结构\n- 评估 → 干预 → 随访。\n- 标准化指标与记录模板。\n\n## 质量控制\n- 设定关键质量指标。\n- 定期复盘与流程修订。\n\n## 随访要点\n- 关键数据趋势监测\n- 主观症状与依从性\n- 异常信号及时复评\n\n## 沟通要点\n- 目标与收益清晰\n- 问题导向的调整方案\n- 风险提示明确\n",
+    "relatedGuides": [
+      "followup-adherence",
+      "osa-education",
+      "alarm-safety"
+    ]
   },
   {
     "id": 9128,
@@ -1087,7 +1167,11 @@ export const clinicalHandbookData = [
       "需结合病情制定个体计划。",
       "随访与依从性同样重要。"
     ],
-    "content": "# 呼吸康复与运动训练要点\n\n## 临床要点\n- 核心目标是提升耐量与生活质量。\n- 需结合病情制定个体计划。\n- 随访与依从性同样重要。\n\n## 核心目标\n- 提升耐量与生活质量。\n\n## 关键组成\n- 呼吸训练与有氧耐量训练。\n- 健康教育与随访管理。\n\n## 评估要点\n- 症状负担与耐量\n- 肺功能与血气趋势\n- 急性加重史\n\n## 治疗策略\n- 通气支持与康复并行\n- 个体化长期管理\n- 教育与依从性支持\n\n## 随访指标\n- 症状与耐量变化\n- 急性加重风险\n- 依从性与数据趋势\n"
+    "content": "# 呼吸康复与运动训练要点\n\n## 临床要点\n- 核心目标是提升耐量与生活质量。\n- 需结合病情制定个体计划。\n- 随访与依从性同样重要。\n\n## 核心目标\n- 提升耐量与生活质量。\n\n## 关键组成\n- 呼吸训练与有氧耐量训练。\n- 健康教育与随访管理。\n\n## 评估要点\n- 症状负担与耐量\n- 肺功能与血气趋势\n- 急性加重史\n\n## 治疗策略\n- 通气支持与康复并行\n- 个体化长期管理\n- 教育与依从性支持\n\n## 随访指标\n- 症状与耐量变化\n- 急性加重风险\n- 依从性与数据趋势\n",
+    "relatedGuides": [
+      "copd-longterm",
+      "pulmonary-rehab"
+    ]
   },
   {
     "id": 9129,
@@ -1108,7 +1192,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# 远程随访与依从性管理\n\n## 临床要点\n- 关键指标：时长、漏气、AHI。\n- 异常趋势需及时干预。\n- 记录与反馈闭环很关键。\n\n## 核心指标\n- 使用时长、漏气、AHI 趋势。\n\n## 管理要点\n- 异常趋势提示 → 复查 → 调整方案。\n\n## 随访要点\n- 关键数据趋势监测\n- 主观症状与依从性\n- 异常信号及时复评\n\n## 沟通要点\n- 目标与收益清晰\n- 问题导向的调整方案\n- 风险提示明确\n",
     "relatedGuides": [
-      "followup-adherence"
+      "followup-adherence",
+      "home-remote"
     ]
   },
   {
@@ -1152,6 +1237,7 @@ export const clinicalHandbookData = [
     "content": "# 急性呼吸衰竭分型与通气路径\n\n## 临床要点\n- I 型以低氧为主，II 型以通气不足为主。\n- 选择氧疗/NIV/IMV需结合病情动态。\n- 早期评估与及时升级是关键。\n\n## 分型要点\n- I 型：低氧为主，通气相对保留。\n- II 型：通气不足为主，CO2 潴留明显。\n\n## 关键要点\n- 氧合评估 → 氧疗或 HFNC。\n- 通气不足评估 → NIV 或升级有创通气。\n\n## 评估要点\n- 氧合与通气动态\n- 意识与血流动力学\n- 呼吸功与疲劳迹象\n\n## 治疗策略\n- 氧疗/无创/有创分级策略\n- 动态评估疗效与升级\n- 人机同步与并发症管理\n\n## 风险提示\n- 延误升级风险\n- 感染与并发症\n- 参数不当导致损伤\n",
     "relatedGuides": [
       "niv-acute",
+      "copd-exacerbation",
       "oxygen-hfnc"
     ]
   },
@@ -1175,7 +1261,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# NIV 失败识别与升级时机\n\n## 临床要点\n- 症状无改善与血气恶化是关键信号。\n- 同步性差与漏气高需优先处理。\n- 升级时机应早于明显衰竭。\n\n## 失败信号\n- 症状无改善或加重。\n- 血气持续恶化。\n- 明显人机不同步或漏气持续偏高。\n\n## 升级原则\n- 先排除可逆因素，再评估升级。\n- 不能以 NIV 反复试错延误治疗。\n\n## 评估要点\n- 氧合与通气动态\n- 意识与血流动力学\n- 呼吸功与疲劳迹象\n\n## 治疗策略\n- 氧疗/无创/有创分级策略\n- 动态评估疗效与升级\n- 人机同步与并发症管理\n\n## 风险提示\n- 延误升级风险\n- 感染与并发症\n- 参数不当导致损伤\n",
     "relatedGuides": [
-      "niv-acute"
+      "niv-acute",
+      "copd-exacerbation"
     ]
   },
   {
@@ -1198,7 +1285,10 @@ export const clinicalHandbookData = [
     ],
     "content": "# OSA 合并心血管风险评估\n\n## 临床要点\n- 低氧负荷与事件密度同等重要。\n- 评估需结合高血压与代谢风险。\n- 治疗目标应覆盖症状与风险双维度。\n\n## 评估重点\n- 低氧负荷（最低血氧与 T90）。\n- 夜间事件密度与持续时间。\n- 合并高血压与代谢风险。\n\n## 评估要点\n- AHI/ODI/T90 与症状结合\n- 体位/REM 期差异\n- 合并症与风险评估\n\n## 治疗策略\n- 按适应证选择 PAP 模式\n- 面罩与漏气管理\n- 必要时复评与滴定\n\n## 随访指标\n- AHI 与漏气趋势\n- 使用时长与主观症状\n- 合并症控制情况\n",
     "relatedGuides": [
-      "osa-education"
+      "psg-diagnosis",
+      "pap-path",
+      "osa-education",
+      "sleep-clinic"
     ]
   },
   {
@@ -1222,6 +1312,8 @@ export const clinicalHandbookData = [
     "content": "# COPD 稳定期管理与随访路径\n\n## 临床要点\n- 症状与急性加重史决定管理强度。\n- 肺功能与血气趋势需长期追踪。\n- 康复与依从性是核心。\n\n## 核心评估\n- 症状与急性加重史。\n- 肺功能与血气趋势。\n- 合并症与生活质量。\n\n## 随访要点\n- 记录呼吸症状与耐量变化。\n- 评估依从性与用药/通气效果。\n\n## 评估要点\n- 症状负担与耐量\n- 肺功能与血气趋势\n- 急性加重史\n\n## 治疗策略\n- 通气支持与康复并行\n- 个体化长期管理\n- 教育与依从性支持\n\n## 随访指标\n- 症状与耐量变化\n- 急性加重风险\n- 依从性与数据趋势\n",
     "relatedGuides": [
       "copd-longterm",
+      "pulmonary-rehab",
+      "copd-exacerbation",
       "followup-adherence"
     ]
   },
@@ -1245,7 +1337,6 @@ export const clinicalHandbookData = [
     ],
     "content": "# 围术期睡眠呼吸障碍管理要点\n\n## 临床要点\n- 术前评估风险分层与通气计划。\n- 术后需要强化监测与复评。\n- 必要时提前制定通气方案。\n\n## 评估要点\n- 术前风险分层。\n- 术后监测与通气计划。\n\n## 治疗策略\n- 分层干预\n- 动态调整\n- 随访复评\n",
     "relatedGuides": [
-      "osa-education",
       "post-op-support"
     ]
   },
@@ -1267,7 +1358,11 @@ export const clinicalHandbookData = [
       "不同机制对应不同支持策略。",
       "延误鉴别会影响转归。"
     ],
-    "content": "# 低氧鉴别：心源性 vs 肺源性\n\n## 临床要点\n- 结合症状、影像与血气综合判断。\n- 不同机制对应不同支持策略。\n- 延误鉴别会影响转归。\n\n## 评估要点\n- 临床症状与影像表现。\n- 血气与心肺负荷指标。\n\n## 治疗策略\n- 氧疗/无创/有创分级策略\n- 动态评估疗效与升级\n- 人机同步与并发症管理\n\n## 风险提示\n- 延误升级风险\n- 感染与并发症\n- 参数不当导致损伤\n"
+    "content": "# 低氧鉴别：心源性 vs 肺源性\n\n## 临床要点\n- 结合症状、影像与血气综合判断。\n- 不同机制对应不同支持策略。\n- 延误鉴别会影响转归。\n\n## 评估要点\n- 临床症状与影像表现。\n- 血气与心肺负荷指标。\n\n## 治疗策略\n- 氧疗/无创/有创分级策略\n- 动态评估疗效与升级\n- 人机同步与并发症管理\n\n## 风险提示\n- 延误升级风险\n- 感染与并发症\n- 参数不当导致损伤\n",
+    "relatedGuides": [
+      "niv-acute",
+      "copd-exacerbation"
+    ]
   },
   {
     "id": 9137,
@@ -1289,6 +1384,8 @@ export const clinicalHandbookData = [
     ],
     "content": "# 呼吸机报警与临床排查流程\n\n## 临床要点\n- 先排查回路与面罩，再评估病情。\n- 报警需结合临床表现。\n- 避免仅调整参数而忽略病因。\n\n## 关键要点\n- 回路与面罩密闭性。\n- 气道阻力与分泌物。\n- 肺部病情变化。\n\n## 评估要点\n- 漏气与舒适度\n- 压力范围与耐受\n- 依从性与使用时长\n\n## 维护要点\n- 清洁与耗材更换\n- 密闭性检查\n- 异常报警处理\n\n## 风险提示\n- 漏气导致疗效下降\n- 皮肤压伤风险\n- 参数调整不当\n",
     "relatedGuides": [
+      "alarm-safety",
+      "tracheostomy-care",
       "airway-infection"
     ]
   },
@@ -1311,6 +1408,7 @@ export const clinicalHandbookData = [
     ],
     "content": "# 顺应性与气道阻力评估\n\n## 临床要点\n- 顺应性变化反映肺部状态变化。\n- 气道阻力升高提示阻塞或分泌物问题。\n- 趋势比单次值更重要。\n\n## 评估要点\n- 顺应性变化反映肺部状态变化。\n- 气道阻力升高提示阻塞或分泌物问题。\n\n## 应用场景\n- 用于诊断分层\n- 用于治疗评估\n- 用于随访复评\n",
     "relatedGuides": [
+      "oxygen-hfnc",
       "airway-infection"
     ]
   },
@@ -1330,7 +1428,8 @@ export const clinicalHandbookData = [
       "可增加高血压与心血管风险"
     ],
     "relatedGuides": [
-      "osa-education"
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1349,6 +1448,10 @@ export const clinicalHandbookData = [
       "关注AHI/ODI与低氧负荷",
       "事件类型决定治疗路径",
       "结合症状与合并症评估"
+    ],
+    "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1368,6 +1471,10 @@ export const clinicalHandbookData = [
       "关注AHI/ODI与低氧负荷",
       "事件类型决定治疗路径",
       "结合症状与合并症评估"
+    ],
+    "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1386,6 +1493,9 @@ export const clinicalHandbookData = [
       "混合性需分段判断"
     ],
     "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic",
+      "airway-infection",
       "csa-asv"
     ]
   },
@@ -1408,7 +1518,8 @@ export const clinicalHandbookData = [
       "评估觉醒与腿动"
     ],
     "relatedGuides": [
-      "psg-diagnosis"
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1424,6 +1535,10 @@ export const clinicalHandbookData = [
     "keyPoints": [
       "适合中低风险筛查",
       "复杂病例准确性受限"
+    ],
+    "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1441,6 +1556,10 @@ export const clinicalHandbookData = [
     "keyPoints": [
       "REM 相关 OSA 常见",
       "需覆盖最差期"
+    ],
+    "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1460,7 +1579,8 @@ export const clinicalHandbookData = [
       "可配合体位治疗"
     ],
     "relatedGuides": [
-      "osa-education"
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1476,6 +1596,10 @@ export const clinicalHandbookData = [
     "keyPoints": [
       "与高血压、心律失常相关",
       "影响睡眠质量"
+    ],
+    "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1494,6 +1618,10 @@ export const clinicalHandbookData = [
       "关注AHI/ODI与低氧负荷",
       "事件类型决定治疗路径",
       "结合症状与合并症评估"
+    ],
+    "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1513,7 +1641,8 @@ export const clinicalHandbookData = [
       "鼻阻塞或肥胖可导致打鼾"
     ],
     "relatedGuides": [
-      "osa-education"
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1533,6 +1662,8 @@ export const clinicalHandbookData = [
       "白天疲劳明显"
     ],
     "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic",
       "airway-infection"
     ]
   },
@@ -1549,6 +1680,10 @@ export const clinicalHandbookData = [
     "keyPoints": [
       "可能由呼吸事件、药物、压力等导致",
       "需结合 PSG"
+    ],
+    "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1565,6 +1700,10 @@ export const clinicalHandbookData = [
       "关注AHI/ODI与低氧负荷",
       "事件类型决定治疗路径",
       "结合症状与合并症评估"
+    ],
+    "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1583,6 +1722,10 @@ export const clinicalHandbookData = [
       "关注AHI/ODI与低氧负荷",
       "事件类型决定治疗路径",
       "结合症状与合并症评估"
+    ],
+    "relatedGuides": [
+      "psg-diagnosis",
+      "sleep-clinic"
     ]
   },
   {
@@ -1603,7 +1746,10 @@ export const clinicalHandbookData = [
       "OSA 一线治疗"
     ],
     "relatedGuides": [
-      "pap-path"
+      "pap-path",
+      "niv-acute",
+      "home-remote",
+      "airway-infection"
     ]
   },
   {
@@ -1624,7 +1770,9 @@ export const clinicalHandbookData = [
       "压力需求波动明显"
     ],
     "relatedGuides": [
-      "pap-path"
+      "pap-path",
+      "niv-acute",
+      "home-remote"
     ]
   },
   {
@@ -1646,7 +1794,9 @@ export const clinicalHandbookData = [
       "高压不耐受"
     ],
     "relatedGuides": [
-      "pap-path"
+      "pap-path",
+      "niv-acute",
+      "home-remote"
     ]
   },
   {
@@ -1665,6 +1815,11 @@ export const clinicalHandbookData = [
       "备份频率设置",
       "触发灵敏度",
       "S 适合自主呼吸稳定"
+    ],
+    "relatedGuides": [
+      "pap-path",
+      "niv-acute",
+      "home-remote"
     ]
   },
   {
@@ -1681,6 +1836,11 @@ export const clinicalHandbookData = [
       "设置合适频率",
       "避免人机不同步",
       "S/T 或 ST 模式"
+    ],
+    "relatedGuides": [
+      "pap-path",
+      "niv-acute",
+      "home-remote"
     ]
   },
   {
@@ -1704,6 +1864,9 @@ export const clinicalHandbookData = [
       "慢性通气不足"
     ],
     "relatedGuides": [
+      "pap-path",
+      "niv-acute",
+      "home-remote",
       "airway-infection"
     ]
   },
@@ -1725,6 +1888,9 @@ export const clinicalHandbookData = [
       "中枢事件占比高"
     ],
     "relatedGuides": [
+      "pap-path",
+      "niv-acute",
+      "home-remote",
       "csa-asv"
     ]
   },
@@ -1747,7 +1913,9 @@ export const clinicalHandbookData = [
       "阻塞事件与通气不足并存"
     ],
     "relatedGuides": [
-      "pap-path"
+      "pap-path",
+      "niv-acute",
+      "home-remote"
     ]
   },
   {
@@ -1766,6 +1934,11 @@ export const clinicalHandbookData = [
       "逐步调整 PS",
       "关注舒适度",
       "通气不足"
+    ],
+    "relatedGuides": [
+      "pap-path",
+      "niv-acute",
+      "home-remote"
     ]
   },
   {
@@ -1784,6 +1957,8 @@ export const clinicalHandbookData = [
       "OHS"
     ],
     "relatedGuides": [
+      "copd-longterm",
+      "pulmonary-rehab",
       "niv-acute"
     ]
   },
@@ -1805,7 +1980,8 @@ export const clinicalHandbookData = [
       "复查血气与症状"
     ],
     "relatedGuides": [
-      "copd-longterm"
+      "copd-longterm",
+      "pulmonary-rehab"
     ]
   },
   {
@@ -1824,6 +2000,8 @@ export const clinicalHandbookData = [
       "定期复诊"
     ],
     "relatedGuides": [
+      "copd-longterm",
+      "pulmonary-rehab",
       "ohs-ventilation"
     ]
   },
@@ -1843,6 +2021,8 @@ export const clinicalHandbookData = [
       "随访呼吸肌功能"
     ],
     "relatedGuides": [
+      "copd-longterm",
+      "pulmonary-rehab",
       "neuromuscular-niv"
     ]
   },
@@ -1881,6 +2061,9 @@ export const clinicalHandbookData = [
       "粒径与流量影响沉积",
       "结合面罩/接口",
       "哮喘、COPD 等气道疾病"
+    ],
+    "relatedGuides": [
+      "airway-infection"
     ]
   },
   {
