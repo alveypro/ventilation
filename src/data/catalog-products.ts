@@ -9467,5 +9467,149 @@ export const catalogProductsData = [
       "目录"
     ],
     "dataCompleteness": 70
+  },
+  {
+    "name": "AirMini AutoSet",
+    "brand": "瑞思迈",
+    "series": "AirMini",
+    "type": "便携PAP",
+    "price": 0,
+    "highlights": [
+      "超便携",
+      "旅行场景",
+      "自动调压"
+    ],
+    "description": "旅行便携机型，强调小体积与移动使用。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "旅行/便携",
+      "通气模式": "APAP/CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://www.resmed.com"
+    },
+    "deviceType": "PAP_TRAVEL",
+    "status": "在售",
+    "scenarioTags": [
+      "旅行",
+      "便携"
+    ],
+    "channels": [
+      "电商",
+      "跨境"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合频繁出行与差旅使用。"
+    ],
+    "id": 30109,
+    "brandId": 1,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "Vivo 45 LS",
+    "brand": "博毅雅",
+    "series": "Vivo",
+    "type": "家用NIV",
+    "price": 0,
+    "highlights": [
+      "家用NIV",
+      "轻量化",
+      "多场景"
+    ],
+    "description": "家用通气支持设备，强调便携与长期支持。",
+    "suitableFor": [
+      "chronic_respiratory"
+    ],
+    "specs": {
+      "适用场景": "家用通气",
+      "通气模式": "多模式",
+      "价格区间": "待补充",
+      "官方页面": "https://www.breas.com"
+    },
+    "deviceType": "NIV_HOME",
+    "status": "在售",
+    "scenarioTags": [
+      "家用通气",
+      "长期支持"
+    ],
+    "channels": [
+      "线下",
+      "院内"
+    ],
+    "refurbRisk": "低",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "面向长期通气支持与移动场景。"
+    ],
+    "id": 30110,
+    "brandId": 6,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "S.Box",
+    "brand": "SEFAM",
+    "series": "S.Box",
+    "type": "睡眠呼吸机",
+    "price": 0,
+    "highlights": [
+      "入门家用",
+      "自动调压",
+      "易用"
+    ],
+    "description": "入门级家用自动调压机型。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "家用睡眠治疗",
+      "通气模式": "APAP/CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://www.sefam.com"
+    },
+    "deviceType": "PAP_SLEEP",
+    "status": "在售",
+    "scenarioTags": [
+      "入门",
+      "家用"
+    ],
+    "channels": [
+      "线下",
+      "跨境"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合入门级睡眠治疗。"
+    ],
+    "id": 30111,
+    "brandId": 13,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
   }
 ]

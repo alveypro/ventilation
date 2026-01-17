@@ -466,8 +466,17 @@
           </el-button>
         </div>
 
-        <div class="related-section" v-if="relatedProducts.length || relatedDiseases.length || relatedTutorials.length">
+        <div class="related-section" v-if="similarProducts.length || relatedProducts.length || relatedDiseases.length || relatedTutorials.length">
           <h3>相关内容推荐</h3>
+
+          <div v-if="similarProducts.length" class="related-block">
+            <h4>同级替代推荐</h4>
+            <el-row :gutter="16">
+              <el-col :xs="24" :sm="12" :md="8" v-for="item in similarProducts" :key="item.id">
+                <ProductCard :product="item" :show-compare="false" @detail="goToProduct(item.id)" />
+              </el-col>
+            </el-row>
+          </div>
 
           <div v-if="relatedProducts.length" class="related-block">
             <h4>同类产品</h4>
@@ -995,14 +1004,13 @@ const longformContent = computed(() => {
       : product.value.deviceType === 'PAP_TRAVEL'
         ? '便携PAP'
         : product.value.type
+  const scenarios = product.value.scenarioTags?.length ? product.value.scenarioTags.join(' / ') : '家庭/临床通用'
+  const modeSummary = visibleModeTags.value.length ? visibleModeTags.value.join(' / ') : '基础模式'
   const diseaseLabels = (product.value.suitableFor || []).map(getDiseaseLabel)
-  const diseaseLine = diseaseLabels.length ? diseaseLabels.join('、') : '未标注'
-  const scenarioLine = product.value.scenarioTags?.length ? product.value.scenarioTags.join(' / ') : '日常通气'
-  const specsTable = [
-    '| 维度 | 参数 |',
-    '| --- | --- |',
-    ...keySpecs.value.map(item => `| ${item.label} | ${item.value || '—'} |`),
-  ].join('\\n')
+  const diseaseLine = diseaseLabels.length ? diseaseLabels.join('、') : '睡眠通气需求人群'
+  const specLines = keySpecs.value.length
+    ? keySpecs.value.slice(0, 5).map(item => `- ${item.label}：${item.value || '—'}`)
+    : ['- 关键参数待补充']
   const indications = (product.value.clinicalIndications?.length
     ? product.value.clinicalIndications
     : recommendedPeople.value.length
@@ -1011,111 +1019,48 @@ const longformContent = computed(() => {
   ).map(item => `- ${item}`)
   const cautions = cautionList.value.length
     ? cautionList.value.map(item => `- ${item}`)
-    : ['- 需在专业指导下调整关键参数']
-  const contraindications = (product.value.contraindications?.length
-    ? product.value.contraindications
-    : product.value.asv
-      ? ['涉及 ASV 等高风险模式，需严格适应证与随访。']
-      : []
-  ).map(item => `- ${item}`)
-  const monitoringFocus = [
-    '- 监测 AHI/漏气/使用时长趋势，关注连续变化。',
-    '- 如出现夜间憋醒或低氧，建议复核压力范围与面罩密封。',
+    : ['- 关键参数需在专业指导下调整']
+  const monitoringNotes = [
+    '- 关注 AHI/漏气/使用时长的趋势变化。',
+    '- 不适或低氧未改善需复盘面罩与压力。',
   ]
-  const followupPlan = [
-    '- 适应期：前 1-2 周以舒适度与面罩贴合为主。',
-    '- 稳定期：结合数据与症状每 2-4 周微调。',
+  const followupNotes = [
+    '- 适应期：1-2 周内以舒适度与面罩贴合为主。',
+    '- 稳定期：2-4 周复盘数据与症状。',
   ]
-  const monitoringNotes = (product.value.monitoringNotes?.length
-    ? product.value.monitoringNotes
-    : monitoringFocus.map(item => item.replace(/^- /, ''))
-  ).map(item => `- ${item}`)
-  const followupNotes = (product.value.followupNotes?.length
-    ? product.value.followupNotes
-    : followupPlan.map(item => item.replace(/^- /, ''))
-  ).map(item => `- ${item}`)
-  const evidenceSummaries = (product.value.evidenceSummaries?.length
-    ? product.value.evidenceSummaries
-    : [
-      '当前条目以公开参数与常见使用建议整理，尚未引入型号级临床结论。',
-      '建议结合随访数据与医嘱进行个体化调整。',
-    ]
-  ).map(item => `- ${item}`)
-  const evidenceLevel = infoLabel.value.replace('资料等级 ', '')
-  const sourceLines: string[] = []
-  if (product.value.evidenceSources?.length) {
-    sourceLines.push(
-      ...product.value.evidenceSources.map(source =>
-        `- ${source.title}（${source.org}${source.date ? `，${source.date}` : ''}${source.url ? `）：${source.url}` : '）'}`
-      )
-    )
-  }
-  if (product.value.specs?.['官方页面']) {
-    sourceLines.push(`- 官方页面：${product.value.specs['官方页面']}`)
-  }
-  if (product.value.sourcePaths?.length) {
-    sourceLines.push(...product.value.sourcePaths.map(path => `- 内部资料路径：${path}`))
-  }
-  if (!sourceLines.length) {
-    sourceLines.push('- 暂无可公开引用来源，建议补充官方页面或说明书。')
-  }
-  const modeSummary = visibleModeTags.value.length ? visibleModeTags.value.join(' / ') : '基础模式'
-  const scenarios = product.value.scenarioTags?.length ? product.value.scenarioTags.slice(0, 3).join(' / ') : '日常通气'
-  const dataNote = product.value.sourceTypes?.length
-    ? `资料来源类型：${product.value.sourceTypes.join(' / ')}。`
-    : '资料来源类型：公开参数与目录信息为主。'
-  const missingFields: string[] = []
-  if (!product.value.epapMin && !product.value.epapMax && !product.value.ipapMin && !product.value.ipapMax) {
-    missingFields.push('压力范围')
-  }
-  if (!product.value.humidifier) missingFields.push('湿化配置')
-  if (!product.value.heatedTube) missingFields.push('加热管')
-  if (!product.value.noiseDb) missingFields.push('噪音水平')
-  if (!product.value.weightKg) missingFields.push('重量')
-  if (!product.value.connectivity?.length) missingFields.push('数据连接方式')
   return [
-    '## 产品定位与适用场景',
-    `${product.value.name} 定位为${device}，以 ${modeSummary} 为主，重点覆盖 ${scenarios} 场景。适用人群以 ${audienceLabel.value} 为主。`,
-    `适用疾病：${diseaseLine}；使用场景：${scenarioLine}。`,
+    '## 核心要点',
+    `${device}定位，主打${modeSummary}，主要覆盖${scenarios}。`,
     '',
-    '## 适用人群',
+    '## 适用人群与场景',
+    `- 适用人群：${diseaseLine}`,
+    `- 典型场景：${scenarios}`,
+    '',
+    '## 关键参数（精简版）',
+    ...specLines,
+    '',
+    '## 使用与随访要点',
+    '**适用提示**',
     ...indications,
-    '',
-    '## 适应证与禁忌/慎用提示',
-    '- 本节为通用提示，需结合临床评估与医嘱。',
-    '- 参数调整与模式切换需在专业指导下进行。',
+    '**风险提示**',
     ...cautions,
-    ...(contraindications.length ? contraindications : ['- 未收录明确禁忌证，需结合患者基础疾病评估。']),
-    '',
-    '## 资料等级与可靠性',
-    `资料等级：${evidenceLevel}。`,
-    dataNote,
-    '',
-    '## 证据摘要',
-    ...evidenceSummaries,
-    '',
-    '## 核心参数摘要',
-    specsTable,
-    ...(missingFields.length ? ['', '## 信息缺口提示', `- 仍需补充：${missingFields.join('、')}。`] : []),
-    '',
-    '## 临床与使用要点',
-    '- 选型优先级：模式匹配 > 压力范围 > 舒适配置。',
-    '- 面罩适配与湿化设置决定依从性。',
-    '',
-    '## 监测指标与随访建议',
+    '**随访重点**',
     ...monitoringNotes,
+    '**随访节奏**',
     ...followupNotes,
-    '',
-    '## 资料与参考',
-    ...sourceLines,
-    '',
-    '## 版本与合规提示',
-    '- 不同批次或地区版本可能存在参数差异，请以铭牌与官方资料为准。',
-    '',
-    '## 风险与合规提示',
-    '- 二手/翻新渠道需关注版本差异与耗材安全。',
-    '- 本页面为资料整理，不替代临床诊断与个体化处方。',
   ].join('\\n')
+})
+
+const similarProducts = computed(() => {
+  if (!allProducts.value.length) return []
+  const band = getPriceBand(product.value.price)
+  return allProducts.value.filter(item => {
+    if (item.id === product.value.id) return false
+    if (product.value.deviceType && item.deviceType !== product.value.deviceType) return false
+    if (band !== '待补充' && getPriceBand(item.price) !== band) return false
+    if (item.brand === product.value.brand) return false
+    return true
+  }).slice(0, 3)
 })
 
 const authorityReferences = computed(() => {

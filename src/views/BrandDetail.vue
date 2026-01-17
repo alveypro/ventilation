@@ -216,6 +216,16 @@
         </el-table>
       </div>
 
+      <div class="brand-matrix" v-if="competitorMatrix.length">
+        <h2>竞品矩阵表</h2>
+        <el-table :data="competitorMatrix" stripe style="width: 100%">
+          <el-table-column prop="competitor" label="竞品品牌" min-width="160" />
+          <el-table-column prop="focus" label="对比维度" min-width="200" />
+          <el-table-column prop="brandEdge" label="本品牌优势" min-width="240" />
+          <el-table-column prop="competitorEdge" label="竞品优势" min-width="240" />
+        </el-table>
+      </div>
+
       <div class="brand-tech">
         <h2>核心技术关键词</h2>
         <div class="tag-row">
@@ -381,6 +391,15 @@ const competitorCards = computed(() => {
     ],
   }
   return map[brand.value.name] || []
+})
+
+const competitorMatrix = computed(() => {
+  return competitorCards.value.map(card => ({
+    competitor: card.name,
+    focus: card.focus,
+    brandEdge: card.difference,
+    competitorEdge: card.caution || '对比优势需结合场景评估',
+  }))
 })
 
 const productMatrix = computed(() => {
