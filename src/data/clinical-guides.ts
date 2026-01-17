@@ -497,7 +497,7 @@ export const clinicalGuides = [
       evidence: ['NIV 可降低插管率与死亡率', '1-2 小时内反应决定去留', '早期评估可减少失败'],
       contraindications: ['意识障碍无法保护气道', '血流动力学不稳定', '大量分泌物或频繁误吸'],
     },
-    related: ['niv-acute', 'oxygen-hfnc', 'airway-infection', 'followup-adherence'],
+    related: ['niv-acute', 'oxygen-hfnc', 'airway-infection', 'followup-adherence', 'emergency-airway'],
     sections: [
       {
         id: 'triage',
@@ -534,7 +534,7 @@ export const clinicalGuides = [
       evidence: ['拔管失败显著增加死亡率', '高风险人群可预防性使用 NIV/HFNC', '气道保护能力是决定性因素'],
       contraindications: ['意识不清无法保护气道', '大量分泌物或咳嗽无力', '持续血流动力学不稳'],
     },
-    related: ['ards-weaning', 'oxygen-hfnc', 'airway-infection'],
+    related: ['ards-weaning', 'oxygen-hfnc', 'airway-infection', 'icu-prone-ventilation'],
     sections: [
       {
         id: 'risk',
@@ -596,7 +596,7 @@ export const clinicalGuides = [
       evidence: ['肺康复改善生活质量与运动耐量', '规范评估可降低风险', '随访与教育提升长期效果'],
       contraindications: ['不稳定心血管状态', '急性加重期需先稳定', '严重低氧需评估支持'],
     },
-    related: ['copd-longterm', 'followup-adherence', 'oxygen-hfnc'],
+    related: ['copd-longterm', 'followup-adherence', 'oxygen-hfnc', 'home-oxygen'],
     sections: [
       {
         id: 'assessment',
@@ -627,7 +627,7 @@ export const clinicalGuides = [
       evidence: ['远程管理可提升早期依从性', '问题分级可提高处理效率', '持续反馈降低弃疗率'],
       contraindications: ['隐私与数据授权不足', '严重不适需线下评估', '设备故障需线下处理'],
     },
-    related: ['followup-adherence', 'pap-path', 'osa-education'],
+    related: ['followup-adherence', 'pap-path', 'osa-education', 'home-oxygen'],
     sections: [
       {
         id: 'pipeline',
@@ -658,7 +658,7 @@ export const clinicalGuides = [
       evidence: ['结构化门诊流程提升诊断效率', '筛查量表有助于分层管理', '路径化随访可提升疗效'],
       contraindications: ['重症合并症需先院内处理', '疑似中枢事件需扩展评估', '严重失眠需综合评估'],
     },
-    related: ['psg-diagnosis', 'pap-path', 'osa-education'],
+    related: ['psg-diagnosis', 'pap-path', 'osa-education', 'emergency-airway'],
     sections: [
       {
         id: 'screening',
@@ -677,6 +677,130 @@ export const clinicalGuides = [
         title: '治疗决策',
         summary: '分层后进入 PAP/NIV 或其他方案。',
         points: ['轻中度以 PAP 为主。', '合并通气不足需评估 NIV。'],
+      },
+    ],
+  },
+  {
+    id: 'pediatric-support',
+    title: '儿科呼吸支持路径',
+    subtitle: '儿科氧疗、NIV/CPAP 选择与安全监测。',
+    clinicalNotes: {
+      metrics: ['体重校正潮气量与呼吸频率', 'SpO2 目标与低氧负荷', '喂养与呼吸协调'],
+      evidence: ['儿科通气参数需按体重与年龄调整', '早期识别呼吸疲劳可减少升级延误', '家庭教育可降低再入院风险'],
+      contraindications: ['意识下降或气道保护不足', '先天性气道问题需专科评估', '持续低氧或高碳酸需升级'],
+    },
+    related: ['oxygen-hfnc', 'niv-acute', 'home-oxygen'],
+    sections: [
+      {
+        id: 'assessment',
+        title: '初评与分层',
+        summary: '评估呼吸功、氧合与喂养状态决定支持等级。',
+        points: ['关注呻吟、三凹征与呼吸频率趋势。', '合并感染需并行评估。'],
+      },
+      {
+        id: 'support',
+        title: '支持方式选择',
+        summary: '从鼻导管氧疗到 HFNC/NIV 逐级升级。',
+        points: ['轻度低氧优先低流量氧疗。', '呼吸功增加可考虑 HFNC/CPAP。'],
+      },
+      {
+        id: 'safety',
+        title: '安全监测',
+        summary: '重点监测疲劳迹象与喂养安全。',
+        points: ['持续低氧或意识改变需升级。', '喂养困难需暂停并评估。'],
+      },
+    ],
+  },
+  {
+    id: 'icu-prone-ventilation',
+    title: 'ICU 俯卧位通气策略',
+    subtitle: '适应证、执行流程与并发症管理。',
+    clinicalNotes: {
+      metrics: ['P/F 比与氧合改善幅度', '平台压与驱动压变化', '体位相关皮肤与血流风险'],
+      evidence: ['俯卧位可改善 ARDS 氧合与转归', '需要标准化流程与团队协作', '并发症预防决定执行质量'],
+      contraindications: ['不稳定血流动力学', '脊柱不稳或近期腹部手术', '无法安全翻身者'],
+    },
+    related: ['ards-weaning', 'airway-infection', 'weaning-failure'],
+    sections: [
+      {
+        id: 'indications',
+        title: '适应证与时机',
+        summary: '中重度 ARDS 氧合不佳是核心指征。',
+        points: ['P/F 持续低于阈值需考虑俯卧位。', '早期执行更易获益。'],
+      },
+      {
+        id: 'procedure',
+        title: '执行流程',
+        summary: '多学科协作降低管路脱落风险。',
+        points: ['翻身前固定管路与镇静评估。', '设置头位与压力点保护。'],
+      },
+      {
+        id: 'complications',
+        title: '并发症管理',
+        summary: '皮肤损伤与管路脱落是常见问题。',
+        points: ['定期评估压力点与管路安全。', '异常血流动力学需立即复位。'],
+      },
+    ],
+  },
+  {
+    id: 'emergency-airway',
+    title: '急诊气道管理与通气支持',
+    subtitle: '快速评估、气道通畅与通气策略。',
+    clinicalNotes: {
+      metrics: ['意识水平与气道保护能力', 'SpO2 与呼吸频率变化', '血流动力学稳定性'],
+      evidence: ['先处理气道与氧合再评估通气', '快速评估可减少缺氧时间', '标准化流程降低插管并发症'],
+      contraindications: ['未稳定颈椎损伤需专科协作', '持续低氧需快速升级', '无法配合需立即保障气道'],
+    },
+    related: ['niv-acute', 'oxygen-hfnc', 'airway-infection'],
+    sections: [
+      {
+        id: 'triage',
+        title: '快速评估',
+        summary: '先判断是否需要立即气道保护。',
+        points: ['意识下降或保护不足应快速处理。', '评估吸入性风险与分泌物负荷。'],
+      },
+      {
+        id: 'strategy',
+        title: '通气策略',
+        summary: '从面罩通气到插管的阶梯式选择。',
+        points: ['轻中度问题可先氧疗/NIV。', '无效时及时升级插管。'],
+      },
+      {
+        id: 'post',
+        title: '后续管理',
+        summary: '插管后需尽快稳定与复盘原因。',
+        points: ['确认管路位置与通气参数。', '评估原发病并制定后续路径。'],
+      },
+    ],
+  },
+  {
+    id: 'home-oxygen',
+    title: '家庭氧疗管理路径',
+    subtitle: '适应证评估、设备选择与随访安全。',
+    clinicalNotes: {
+      metrics: ['静息与活动 SpO2', '每日使用时长', '急性加重频率与症状变化'],
+      evidence: ['长期氧疗可改善慢性低氧人群转归', '设备教育显著降低风险', '随访可提升安全与依从性'],
+      contraindications: ['氧疗目标未明确', '存在高 CO2 潴留风险需谨慎', '未完成安全教育不建议出院即用'],
+    },
+    related: ['oxygen-hfnc', 'copd-longterm', 'followup-adherence'],
+    sections: [
+      {
+        id: 'criteria',
+        title: '适应证判定',
+        summary: '需基于静息或活动低氧明确指征。',
+        points: ['结合 SpO2/PaO2 与症状判断。', '合并高碳酸需谨慎设定目标。'],
+      },
+      {
+        id: 'equipment',
+        title: '设备选择',
+        summary: '固定式与便携式需结合生活方式。',
+        points: ['明确流量与使用场景。', '备用方案要提前规划。'],
+      },
+      {
+        id: 'safety',
+        title: '安全与随访',
+        summary: '教育 + 复查是风险控制核心。',
+        points: ['禁止明火与易燃环境。', '异常症状需及时复诊。'],
       },
     ],
   },
