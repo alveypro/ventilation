@@ -1116,5 +1116,173 @@ export const catalogBrandsData = [
     "productCount": null,
     "founded": null,
     "logo": ""
+  },
+  {
+    "name": "Transcend",
+    "country": "美国",
+    "description": "便携式睡眠呼吸设备品牌，主打旅行场景。",
+    "website": "https://mytranscend.com",
+    "positioning": "旅行与便携 PAP 领域的代表品牌。",
+    "story": "专注小型化与轻量化的睡眠通气设备，面向移动使用需求。",
+    "strengths": [
+      "便携体积小",
+      "旅行场景适配",
+      "配件体系完整"
+    ],
+    "focusAreas": [
+      "便携PAP",
+      "旅行场景"
+    ],
+    "cautions": [
+      "需要关注噪音与舒适度取舍",
+      "配件匹配需确认"
+    ],
+    "sources": [
+      {
+        "title": "Official Website",
+        "org": "Transcend",
+        "url": "https://mytranscend.com",
+        "date": "持续更新"
+      }
+    ],
+    "milestones": [
+      {
+        "year": "早期",
+        "title": "便携通气切入",
+        "description": "聚焦旅行与轻量化通气设备。"
+      },
+      {
+        "year": "中期",
+        "title": "产品线完善",
+        "description": "形成多代便携通气产品。"
+      },
+      {
+        "year": "近年",
+        "title": "场景深化",
+        "description": "强化旅行与移动场景配套。"
+      }
+    ],
+    "technologyFocus": [
+      "小型化设计",
+      "旅行适配",
+      "轻量化"
+    ],
+    "id": 25,
+    "marketShare": "",
+    "productCount": null,
+    "founded": null,
+    "logo": ""
+  },
+  {
+    "name": "HDM",
+    "country": "美国",
+    "description": "便携式睡眠通气设备品牌，强调轻量化。",
+    "website": "https://hdmusa.com",
+    "positioning": "面向旅行与轻量化场景的 PAP 设备品牌。",
+    "story": "以轻量化与便携为特色，覆盖旅行与短期使用场景。",
+    "strengths": [
+      "体积小",
+      "便携易携带",
+      "旅行场景适配"
+    ],
+    "focusAreas": [
+      "便携PAP",
+      "旅行PAP"
+    ],
+    "cautions": [
+      "配件兼容需核对",
+      "体验需适配个人舒适度"
+    ],
+    "sources": [
+      {
+        "title": "Official Website",
+        "org": "HDM",
+        "url": "https://hdmusa.com",
+        "date": "持续更新"
+      }
+    ],
+    "milestones": [
+      {
+        "year": "早期",
+        "title": "轻量化布局",
+        "description": "推出便携睡眠通气产品。"
+      },
+      {
+        "year": "中期",
+        "title": "旅行场景深耕",
+        "description": "完善便携通气产品线。"
+      },
+      {
+        "year": "近年",
+        "title": "配件生态完善",
+        "description": "配件与适配方案拓展。"
+      }
+    ],
+    "technologyFocus": [
+      "轻量化",
+      "便携设计",
+      "旅行场景"
+    ],
+    "id": 26,
+    "marketShare": "",
+    "productCount": null,
+    "founded": null,
+    "logo": ""
+  },
+  {
+    "name": "React Health",
+    "country": "美国",
+    "description": "家用通气设备品牌，覆盖睡眠与双水平场景。",
+    "website": "https://reacthealth.com",
+    "positioning": "家用睡眠与双水平通气设备品牌。",
+    "story": "面向家用市场的通气产品线，强调稳定与易用。",
+    "strengths": [
+      "家用场景适配",
+      "设备易用性",
+      "产品线覆盖"
+    ],
+    "focusAreas": [
+      "家用PAP",
+      "家用NIV"
+    ],
+    "cautions": [
+      "渠道版本需核对",
+      "配件与耗材需确认"
+    ],
+    "sources": [
+      {
+        "title": "Official Website",
+        "org": "React Health",
+        "url": "https://reacthealth.com",
+        "date": "持续更新"
+      }
+    ],
+    "milestones": [
+      {
+        "year": "早期",
+        "title": "家用通气布局",
+        "description": "建立家用PAP产品线。"
+      },
+      {
+        "year": "中期",
+        "title": "双水平扩展",
+        "description": "覆盖家用双水平通气需求。"
+      },
+      {
+        "year": "近年",
+        "title": "场景完善",
+        "description": "完善家用通气配套。"
+      }
+    ],
+    "technologyFocus": [
+      "家用通气",
+      "舒适体验",
+      "易用设计"
+    ],
+    "id": 27,
+    "marketShare": "",
+    "productCount": null,
+    "founded": null,
+    "logo": ""
   }
 ]

@@ -8649,5 +8649,438 @@ export const catalogProductsData = [
       "目录"
     ],
     "dataCompleteness": 70
+  },
+  {
+    "name": "AirCurve 10 ST-A",
+    "brand": "瑞思迈",
+    "series": "AirCurve 10",
+    "type": "家用NIV",
+    "price": 0,
+    "highlights": [
+      "ST-A 模式",
+      "目标通气支持",
+      "家用长期通气"
+    ],
+    "description": "支持高级通气策略，面向长期通气管理。",
+    "suitableFor": [
+      "chronic_respiratory"
+    ],
+    "specs": {
+      "适用场景": "家用NIV",
+      "通气模式": "ST-A",
+      "价格区间": "待补充",
+      "官方页面": "https://www.resmed.com"
+    },
+    "deviceType": "NIV_HOME",
+    "status": "在售",
+    "scenarioTags": [
+      "长期通气",
+      "慢病管理"
+    ],
+    "channels": [
+      "线下",
+      "院内"
+    ],
+    "refurbRisk": "低",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "面向通气不足人群，需专业评估后使用。"
+    ],
+    "id": 30092,
+    "brandId": 1,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "Lumis 150 ST-A",
+    "brand": "瑞思迈",
+    "series": "Lumis",
+    "type": "家用NIV",
+    "price": 0,
+    "highlights": [
+      "ST-A 目标通气",
+      "舒适度优化",
+      "家用场景"
+    ],
+    "description": "面向家用通气支持的高级型号。",
+    "suitableFor": [
+      "chronic_respiratory"
+    ],
+    "specs": {
+      "适用场景": "家用NIV",
+      "通气模式": "ST-A",
+      "价格区间": "待补充",
+      "官方页面": "https://www.resmed.com"
+    },
+    "deviceType": "NIV_HOME",
+    "status": "在售",
+    "scenarioTags": [
+      "慢病管理",
+      "家用通气"
+    ],
+    "channels": [
+      "线下"
+    ],
+    "refurbRisk": "低",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "强调舒适度与长期通气管理。"
+    ],
+    "id": 30093,
+    "brandId": 1,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "DreamStation 2 BiPAP Auto",
+    "brand": "飞利浦伟康",
+    "series": "DreamStation 2",
+    "type": "家用NIV",
+    "price": 0,
+    "highlights": [
+      "双水平自动调节",
+      "家用NIV",
+      "数据随访"
+    ],
+    "description": "双水平自动调节机型，适用于家用通气支持。",
+    "suitableFor": [
+      "sleep_apnea",
+      "chronic_respiratory"
+    ],
+    "specs": {
+      "适用场景": "家用NIV",
+      "通气模式": "BiPAP Auto",
+      "价格区间": "待补充",
+      "官方页面": "https://www.philips.com/healthcare"
+    },
+    "deviceType": "NIV_HOME",
+    "status": "在售",
+    "scenarioTags": [
+      "家用通气",
+      "睡眠治疗"
+    ],
+    "channels": [
+      "线下",
+      "电商"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合压力需求波动或舒适度要求较高的人群。"
+    ],
+    "id": 30094,
+    "brandId": 2,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "DreamStation 2 CPAP",
+    "brand": "飞利浦伟康",
+    "series": "DreamStation 2",
+    "type": "睡眠呼吸机",
+    "price": 0,
+    "highlights": [
+      "固定压力",
+      "家用睡眠治疗",
+      "便捷操作"
+    ],
+    "description": "固定压力机型，适合稳定 OSA 场景。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "家用睡眠治疗",
+      "通气模式": "CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://www.philips.com/healthcare"
+    },
+    "deviceType": "PAP_SLEEP",
+    "status": "在售",
+    "scenarioTags": [
+      "睡眠治疗",
+      "家用"
+    ],
+    "channels": [
+      "线下",
+      "电商"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合压力需求稳定的睡眠人群。"
+    ],
+    "id": 30095,
+    "brandId": 2,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "Transcend 3 Auto",
+    "brand": "Transcend",
+    "series": "Transcend",
+    "type": "便携PAP",
+    "price": 0,
+    "highlights": [
+      "便携体积",
+      "旅行场景",
+      "自动调压"
+    ],
+    "description": "旅行场景常见便携机型，强调小体积与移动使用。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "旅行/便携",
+      "通气模式": "APAP",
+      "价格区间": "待补充",
+      "官方页面": "https://mytranscend.com"
+    },
+    "deviceType": "PAP_TRAVEL",
+    "status": "在售",
+    "scenarioTags": [
+      "旅行",
+      "便携"
+    ],
+    "channels": [
+      "跨境",
+      "电商"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合差旅与短期使用场景。"
+    ],
+    "id": 30096,
+    "brandId": 25,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "Transcend Micro Auto",
+    "brand": "Transcend",
+    "series": "Transcend",
+    "type": "便携PAP",
+    "price": 0,
+    "highlights": [
+      "超轻量",
+      "旅行便携",
+      "自动调压"
+    ],
+    "description": "超轻量便携机型，面向高频旅行人群。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "旅行/便携",
+      "通气模式": "APAP",
+      "价格区间": "待补充",
+      "官方页面": "https://mytranscend.com"
+    },
+    "deviceType": "PAP_TRAVEL",
+    "status": "在售",
+    "scenarioTags": [
+      "旅行",
+      "便携"
+    ],
+    "channels": [
+      "跨境",
+      "电商"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "强调轻量化与移动场景体验。"
+    ],
+    "id": 30097,
+    "brandId": 25,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "Z2 Auto",
+    "brand": "HDM",
+    "series": "Z",
+    "type": "便携PAP",
+    "price": 0,
+    "highlights": [
+      "轻量化",
+      "旅行场景",
+      "自动调压"
+    ],
+    "description": "便携自动调压机型，面向旅行场景。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "旅行/便携",
+      "通气模式": "APAP",
+      "价格区间": "待补充",
+      "官方页面": "https://hdmusa.com"
+    },
+    "deviceType": "PAP_TRAVEL",
+    "status": "在售",
+    "scenarioTags": [
+      "旅行",
+      "便携"
+    ],
+    "channels": [
+      "跨境",
+      "电商"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合轻量化与短期出行使用。"
+    ],
+    "id": 30098,
+    "brandId": 26,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "Luna G3 Auto CPAP",
+    "brand": "React Health",
+    "series": "Luna G3",
+    "type": "睡眠呼吸机",
+    "price": 0,
+    "highlights": [
+      "自动调压",
+      "家用睡眠",
+      "易用界面"
+    ],
+    "description": "面向家用睡眠治疗的自动调压机型。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "家用睡眠治疗",
+      "通气模式": "APAP/CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://reacthealth.com"
+    },
+    "deviceType": "PAP_SLEEP",
+    "status": "在售",
+    "scenarioTags": [
+      "睡眠治疗",
+      "家用"
+    ],
+    "channels": [
+      "线下",
+      "电商"
+    ],
+    "refurbRisk": "低",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合稳定 OSA 场景与家庭使用。"
+    ],
+    "id": 30099,
+    "brandId": 27,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "Luna G3 BiPAP",
+    "brand": "React Health",
+    "series": "Luna G3",
+    "type": "家用NIV",
+    "price": 0,
+    "highlights": [
+      "双水平支持",
+      "家用通气",
+      "舒适度优化"
+    ],
+    "description": "家用双水平通气机型，面向压力需求更高场景。",
+    "suitableFor": [
+      "sleep_apnea",
+      "chronic_respiratory"
+    ],
+    "specs": {
+      "适用场景": "家用通气",
+      "通气模式": "BiPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://reacthealth.com"
+    },
+    "deviceType": "NIV_HOME",
+    "status": "在售",
+    "scenarioTags": [
+      "家用通气",
+      "睡眠治疗"
+    ],
+    "channels": [
+      "线下",
+      "电商"
+    ],
+    "refurbRisk": "低",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合压力需求较高或舒适度要求更高人群。"
+    ],
+    "id": 30100,
+    "brandId": 27,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
   }
 ]

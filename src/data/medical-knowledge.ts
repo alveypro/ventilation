@@ -131,8 +131,8 @@ export const extendedProductsData = [
     reviews: [
       {
         id: 1,
-        author: '李专业人员',
-        role: '专业人员',
+        author: '匿名用户',
+        role: '用户',
         rating: 5,
         date: '2024-01-15',
         title: '医学数据完整，便于临床管理',
@@ -141,8 +141,8 @@ export const extendedProductsData = [
       },
       {
         id: 2,
-        author: '张先生',
-        role: '患者',
+        author: '匿名用户',
+        role: '用户',
         rating: 5,
         date: '2024-01-10',
         title: '效果显著，睡眠明显改善',
@@ -151,8 +151,8 @@ export const extendedProductsData = [
       },
       {
         id: 3,
-        author: '王女士',
-        role: '患者',
+        author: '匿名用户',
+        role: '用户',
         rating: 4,
         date: '2024-01-05',
         title: '很好但初期适应有难度',

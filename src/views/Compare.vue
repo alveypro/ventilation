@@ -91,6 +91,29 @@
         </table>
       </div>
 
+      <el-card class="scenario-compare" style="margin-top: 20px;">
+        <template #header>
+          <span>应用场景对比</span>
+        </template>
+        <div class="scenario-grid">
+          <div v-for="product in selectedProducts" :key="product.id" class="scenario-card">
+            <h4>{{ product.name }}</h4>
+            <p class="scenario-meta">{{ product.brand }} · {{ formatPriceRange(product.price) }}</p>
+            <div class="scenario-tags">
+              <el-tag
+                v-for="tag in product.scenarioTags || []"
+                :key="tag"
+                size="small"
+                type="info"
+              >
+                {{ tag }}
+              </el-tag>
+              <span v-if="!(product.scenarioTags && product.scenarioTags.length)" class="placeholder">场景待补充</span>
+            </div>
+          </div>
+        </div>
+      </el-card>
+
       <el-card class="compare-report" style="margin-top: 20px;">
         <template #header>
           <span>对比结论</span>
@@ -222,6 +245,8 @@ const comparisonRows = computed(() => {
   const rows = [
     buildRow('deviceType', '设备类型', p => p.deviceType === 'PAP_SLEEP' ? '睡眠PAP' : p.deviceType === 'NIV_HOME' ? '家用NIV' : p.deviceType === 'PAP_TRAVEL' ? '便携/旅行' : p.type),
     buildRow('modeTags', '支持模式', p => p.modeTags?.join(' / ') || ''),
+    buildRow('scenarioTags', '应用场景', p => p.scenarioTags?.join(' / ') || ''),
+    buildRow('platformFamily', '平台家族', p => p.platformFamily || ''),
     buildRow('epap', '压力范围', p => p.epapMin !== undefined && p.epapMax !== undefined ? `${p.epapMin}-${p.epapMax} cmH2O` : p.specs?.['EPAP'] || ''),
     buildRow('ipap', 'IPAP 上限', p => p.ipapMax ? `${p.ipapMax} cmH2O` : p.specs?.['IPAP上限'] || ''),
     buildRow('backupRate', '后备频率', p => p.backupRate === undefined ? '' : p.backupRate ? '支持' : '不支持'),
@@ -229,6 +254,9 @@ const comparisonRows = computed(() => {
     buildRow('humidifier', '湿化器', p => p.humidifier || ''),
     buildRow('heatedTube', '加温管路', p => p.heatedTube || ''),
     buildRow('connectivity', '连接方式', p => p.connectivity?.join(' / ') || ''),
+    buildRow('channels', '渠道', p => p.channels?.join(' / ') || ''),
+    buildRow('refurbRisk', '翻新风险', p => p.refurbRisk || ''),
+    buildRow('overclaimRisk', '夸大风险', p => p.overclaimRisk || ''),
     buildRow('weight', '重量', p => p.weightKg ? `${p.weightKg} kg` : ''),
     buildRow('noise', '噪音', p => p.noiseDb || ''),
   ]
@@ -516,6 +544,35 @@ const gotoProduct = (productId: number) => {
   min-width: 150px;
   background: #f5f7fa !important;
   font-weight: 600;
+}
+
+.scenario-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.scenario-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #f9fafb;
+}
+
+.scenario-card h4 {
+  margin: 0 0 6px;
+}
+
+.scenario-meta {
+  color: #6b7280;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.scenario-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .product-col {

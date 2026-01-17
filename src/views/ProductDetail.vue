@@ -344,6 +344,16 @@
           </ol>
         </el-card>
 
+        <el-card class="model-block">
+          <h3>卖点卡片</h3>
+          <div class="selling-grid">
+            <div v-for="item in sellingCards" :key="item.title" class="selling-card">
+              <div class="selling-title">{{ item.title }}</div>
+              <div class="selling-desc">{{ item.description }}</div>
+            </div>
+          </div>
+        </el-card>
+
         <!-- 核心特性 -->
         <div class="highlights-section">
           <h3>核心特性</h3>
@@ -858,6 +868,43 @@ const professionalSummary = computed(() => {
   const connectivity = product.value.connectivity?.length ? `数据连接 ${product.value.connectivity.join(' / ')}` : '数据连接待确认'
   const pressureNote = epap || ipap ? `压力范围 EPAP ${epap || '—'} / IPAP ${ipap || '—'}` : '压力范围待补充'
   return `${device} 定位，支持 ${modes}。${pressureNote}；${humidifier}；${connectivity}。`
+})
+
+const sellingCards = computed(() => {
+  const cards = []
+  const deviceLabel = product.value.deviceType === 'PAP_SLEEP'
+    ? '睡眠PAP'
+    : product.value.deviceType === 'NIV_HOME'
+      ? '家用NIV'
+      : product.value.deviceType === 'PAP_TRAVEL'
+        ? '便携PAP'
+        : product.value.type
+  cards.push({
+    title: '定位与人群',
+    description: `设备定位：${deviceLabel}；适用场景以${product.value.type || '睡眠/通气'}为主。`,
+  })
+  const scenarios = product.value.scenarioTags?.length ? product.value.scenarioTags.join(' / ') : '家庭/临床通用'
+  cards.push({
+    title: '应用场景',
+    description: `重点覆盖：${scenarios}。`,
+  })
+  const comfort = [
+    product.value.humidifier ? `湿化：${product.value.humidifier}` : '湿化待补充',
+    product.value.heatedTube ? `加温管路：${product.value.heatedTube}` : '加温管路待补充',
+    product.value.noiseDb ? `噪音：${product.value.noiseDb}` : '噪音待补充',
+  ].join('；')
+  cards.push({
+    title: '舒适度与静音',
+    description: comfort,
+  })
+  const dataNote = product.value.connectivity?.length
+    ? `数据连接：${product.value.connectivity.join(' / ')}`
+    : '数据连接待补充'
+  cards.push({
+    title: '随访与数据',
+    description: dataNote,
+  })
+  return cards
 })
 
 const plainSummary = computed(() => {
@@ -1535,6 +1582,32 @@ const goToBrand = () => {
 .highlights-section h3 {
   margin-bottom: 15px;
   font-size: 16px;
+}
+
+.selling-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: 10px;
+}
+
+.selling-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #f9fafb;
+}
+
+.selling-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #111827;
+}
+
+.selling-desc {
+  color: #4b5563;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .evidence-list {
