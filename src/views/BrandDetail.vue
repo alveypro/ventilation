@@ -60,6 +60,30 @@
         </div>
       </el-card>
 
+      <el-card shadow="hover" class="brand-portrait">
+        <h3>品牌画像</h3>
+        <div class="portrait-grid">
+          <div v-for="item in brandPortraitCards" :key="item.title" class="portrait-card">
+            <h4>{{ item.title }}</h4>
+            <p>{{ item.description }}</p>
+          </div>
+        </div>
+      </el-card>
+
+      <el-card shadow="hover" class="brand-compare" v-if="competitorCards.length">
+        <h3>竞品对比</h3>
+        <div class="compare-grid">
+          <div v-for="card in competitorCards" :key="card.name" class="compare-card">
+            <h4>{{ brand.name }} vs {{ card.name }}</h4>
+            <p class="compare-focus">对比维度：{{ card.focus }}</p>
+            <ul>
+              <li>{{ card.difference }}</li>
+              <li v-if="card.caution">{{ card.caution }}</li>
+            </ul>
+          </div>
+        </div>
+      </el-card>
+
       <el-card shadow="hover" class="brand-longform">
         <div class="report-header">
           <div>
@@ -288,6 +312,77 @@ const brandMilestones = computed(() => {
   ]
 })
 
+const brandPortraitCards = computed(() => {
+  const focus = brand.value.focusAreas?.length ? brand.value.focusAreas.join(' / ') : '睡眠 / 通气'
+  const scenarios = brandProducts.value.length
+    ? uniqueList(brandProducts.value.flatMap(item => item.scenarioTags || [])).slice(0, 6).join(' / ')
+    : '家用 / 临床'
+  const channels = brandProducts.value.length
+    ? uniqueList(brandProducts.value.flatMap(item => item.channels || [])).slice(0, 5).join(' / ')
+    : '线下 / 电商'
+  const risks = brand.value.cautions?.length ? brand.value.cautions.join('；') : '需核对版本与渠道差异'
+  return [
+    { title: '核心定位', description: brand.value.positioning || '面向睡眠与通气场景的设备品牌。' },
+    { title: '重点场景', description: `覆盖场景：${scenarios}` },
+    { title: '优势方向', description: `重点方向：${focus}` },
+    { title: '渠道与风险', description: `渠道：${channels}；风险提示：${risks}` },
+  ]
+})
+
+const competitorCards = computed(() => {
+  const map: Record<string, { name: string; focus: string; difference: string; caution?: string }[]> = {
+    '瑞思迈': [
+      { name: '飞利浦伟康', focus: '数据随访 vs 渠道覆盖', difference: '更强调算法与随访生态，竞品渠道覆盖更广。', caution: '注意不同地区版本与渠道差异。' },
+      { name: '费雪派克', focus: '舒适度体验', difference: '本品牌算法与数据闭环更突出，竞品舒适体验口碑强。' },
+    ],
+    '飞利浦伟康': [
+      { name: '瑞思迈', focus: '算法与随访', difference: '渠道覆盖与产品线更广，竞品算法与数据闭环更强。' },
+      { name: '瑞迈特', focus: '价格与渠道', difference: '定位更偏中高端与多场景，竞品性价比优势明显。' },
+    ],
+    '瑞迈特': [
+      { name: '鱼跃', focus: '渠道与性价比', difference: '本品牌平台化机型迭代快，竞品渠道覆盖更广。' },
+      { name: '飞利浦伟康', focus: '品牌与产品线', difference: '本品牌性价比更高，竞品覆盖更广。' },
+    ],
+    '鱼跃': [
+      { name: '瑞迈特', focus: '平台与型号', difference: '本品牌渠道覆盖更广，竞品平台化与型号规划更集中。' },
+      { name: 'React Health', focus: '渠道与体验', difference: '本品牌渠道优势明显，竞品强调家用体验与易用性。' },
+    ],
+    '律维施泰因': [
+      { name: '瑞思迈', focus: '舒适度 vs 数据生态', difference: '强调稳定与舒适体验，竞品数据生态更成熟。' },
+      { name: '瑞迈特', focus: '价格与渠道', difference: '定位偏中高端，竞品性价比更高。' },
+    ],
+    '博毅雅': [
+      { name: '飞利浦伟康', focus: 'NIV 场景覆盖', difference: '本品牌聚焦家用NIV，竞品覆盖家用与院内。' },
+      { name: '瑞思迈', focus: '便携与长期支持', difference: '本品牌强调家用通气，竞品便携与生态更成熟。' },
+    ],
+    '费雪派克': [
+      { name: '瑞思迈', focus: '舒适度与算法', difference: '舒适度优势更明显，竞品算法与数据闭环更强。' },
+      { name: '飞利浦伟康', focus: '家用体验', difference: '本品牌强调舒适体验，竞品产品线覆盖更广。' },
+    ],
+    'Transcend': [
+      { name: '瑞思迈', focus: '便携体验', difference: '主打轻量化与旅行场景，竞品生态与配件更完整。' },
+    ],
+    'HDM': [
+      { name: '瑞思迈', focus: '旅行便携', difference: '便携机型轻量化优势明显，竞品生态支持更丰富。' },
+    ],
+    'React Health': [
+      { name: '瑞迈特', focus: '家用性价比', difference: '强调易用体验与家用场景，竞品渠道覆盖更广。' },
+    ],
+    '迈柯唯': [
+      { name: '德尔格', focus: '院内通气平台', difference: '系统化方案能力突出，竞品安全稳定口碑强。' },
+      { name: '哈美顿', focus: '智能化策略', difference: '强调系统协同，竞品智能化策略更强。' },
+    ],
+    '德尔格': [
+      { name: '迈柯唯', focus: '系统化与流程', difference: '安全稳定口碑突出，竞品系统协同更完整。' },
+    ],
+    '迈瑞': [
+      { name: '迈柯唯', focus: '院内通气平台', difference: '本品牌本地化服务强，竞品高端平台更成熟。' },
+      { name: '德尔格', focus: '稳定性与支持', difference: '本品牌性价比突出，竞品稳定与国际支持更强。' },
+    ],
+  }
+  return map[brand.value.name] || []
+})
+
 const productMatrix = computed(() => {
   const top = brandProducts.value.slice(0, 3)
   return [
@@ -482,6 +577,11 @@ const goToProduct = (id: number) => {
   margin-bottom: 24px;
 }
 
+.brand-portrait,
+.brand-compare {
+  margin-bottom: 24px;
+}
+
 .brand-profile h3 {
   margin-bottom: 12px;
 }
@@ -537,6 +637,44 @@ const goToProduct = (id: number) => {
 
 .profile-links a:hover {
   text-decoration: underline;
+}
+
+.portrait-grid,
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.portrait-card,
+.compare-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #f9fafb;
+}
+
+.portrait-card h4,
+.compare-card h4 {
+  margin-bottom: 6px;
+}
+
+.portrait-card p,
+.compare-card p {
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 0 6px;
+}
+
+.compare-focus {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.compare-card ul {
+  padding-left: 18px;
+  color: #475569;
+  margin: 6px 0 0;
 }
 
 .brand-visuals {

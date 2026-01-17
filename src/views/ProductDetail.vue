@@ -354,6 +354,20 @@
           </div>
         </el-card>
 
+        <el-card class="model-block">
+          <h3>适配人群模板</h3>
+          <ul class="profile-list">
+            <li v-for="item in fitProfile" :key="item">{{ item }}</li>
+          </ul>
+        </el-card>
+
+        <el-card class="model-block">
+          <h3>购买清单</h3>
+          <ul class="profile-list">
+            <li v-for="item in buyChecklist" :key="item">{{ item }}</li>
+          </ul>
+        </el-card>
+
         <!-- 核心特性 -->
         <div class="highlights-section">
           <h3>核心特性</h3>
@@ -905,6 +919,42 @@ const sellingCards = computed(() => {
     description: dataNote,
   })
   return cards
+})
+
+const fitProfile = computed(() => {
+  const profiles = []
+  if (product.value.deviceType === 'PAP_SLEEP') {
+    profiles.push('睡眠呼吸障碍需要稳定正压支持的人群。')
+  }
+  if (product.value.deviceType === 'NIV_HOME') {
+    profiles.push('通气不足或夜间低通气人群，需要长期通气支持。')
+  }
+  if (product.value.deviceType === 'PAP_TRAVEL') {
+    profiles.push('差旅或移动场景，需要轻量化设备的人群。')
+  }
+  const scenarios = product.value.scenarioTags?.length
+    ? `适配场景：${product.value.scenarioTags.join(' / ')}。`
+    : '适配场景：家庭/临床通用。'
+  profiles.push(scenarios)
+  profiles.push('对舒适度敏感者需关注面罩与湿化配置。')
+  return profiles
+})
+
+const buyChecklist = computed(() => {
+  const list = [
+    '确认处方或专业人员建议的模式与压力范围。',
+    '核对型号与版本（地区版/渠道版可能存在差异）。',
+    '确认面罩型号与尺寸是否匹配。',
+    '了解湿化与加温管路配置是否满足舒适需求。',
+    '确认售后、耗材更换周期与配件供应。',
+  ]
+  if (product.value.channels?.length) {
+    list.push(`常见渠道：${product.value.channels.join(' / ')}。`)
+  }
+  if (product.value.refurbRisk) {
+    list.push(`翻新风险提示：${product.value.refurbRisk}。`)
+  }
+  return list
 })
 
 const plainSummary = computed(() => {
@@ -1608,6 +1658,14 @@ const goToBrand = () => {
   color: #4b5563;
   font-size: 13px;
   line-height: 1.6;
+}
+
+.profile-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 .evidence-list {

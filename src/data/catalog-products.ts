@@ -9082,5 +9082,390 @@ export const catalogProductsData = [
       "目录"
     ],
     "dataCompleteness": 70
+  },
+  {
+    "name": "AirStart 10",
+    "brand": "瑞思迈",
+    "series": "AirStart 10",
+    "type": "睡眠呼吸机",
+    "price": 0,
+    "highlights": [
+      "入门PAP",
+      "固定压力",
+      "家用稳定"
+    ],
+    "description": "入门级固定压力机型，面向基础睡眠治疗场景。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "家用睡眠治疗",
+      "通气模式": "CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://www.resmed.com"
+    },
+    "deviceType": "PAP_SLEEP",
+    "status": "在售",
+    "scenarioTags": [
+      "入门",
+      "家用"
+    ],
+    "channels": [
+      "电商",
+      "线下"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合压力需求稳定的入门场景。"
+    ],
+    "id": 30101,
+    "brandId": 1,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "DreamStation Go CPAP",
+    "brand": "飞利浦伟康",
+    "series": "DreamStation Go",
+    "type": "便携PAP",
+    "price": 0,
+    "highlights": [
+      "旅行便携",
+      "固定压力",
+      "轻量化"
+    ],
+    "description": "旅行场景固定压力机型，强调便携性。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "旅行/便携",
+      "通气模式": "CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://www.philips.com/healthcare"
+    },
+    "deviceType": "PAP_TRAVEL",
+    "status": "在售",
+    "scenarioTags": [
+      "旅行",
+      "便携"
+    ],
+    "channels": [
+      "电商",
+      "跨境"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合差旅或短期使用场景。"
+    ],
+    "id": 30102,
+    "brandId": 2,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "G3 C20",
+    "brand": "瑞迈特",
+    "series": "G3",
+    "type": "睡眠呼吸机",
+    "price": 0,
+    "highlights": [
+      "入门APAP",
+      "家用场景",
+      "性价比"
+    ],
+    "description": "家用入门级自动调压机型。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "家用睡眠治疗",
+      "通气模式": "APAP/CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://www.bmc-medical.com"
+    },
+    "deviceType": "PAP_SLEEP",
+    "status": "在售",
+    "scenarioTags": [
+      "入门",
+      "家用"
+    ],
+    "channels": [
+      "电商",
+      "线下"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合初次使用者与家用场景。"
+    ],
+    "id": 30103,
+    "brandId": 3,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "G3 C20A",
+    "brand": "瑞迈特",
+    "series": "G3",
+    "type": "睡眠呼吸机",
+    "price": 0,
+    "highlights": [
+      "自动调压",
+      "家用",
+      "舒适度优化"
+    ],
+    "description": "面向家庭睡眠治疗的自动调压机型。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "家用睡眠治疗",
+      "通气模式": "APAP/CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://www.bmc-medical.com"
+    },
+    "deviceType": "PAP_SLEEP",
+    "status": "在售",
+    "scenarioTags": [
+      "家用",
+      "睡眠治疗"
+    ],
+    "channels": [
+      "电商",
+      "线下"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "强调舒适与易用体验。"
+    ],
+    "id": 30104,
+    "brandId": 3,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "YH-830 Auto",
+    "brand": "鱼跃",
+    "series": "YH",
+    "type": "睡眠呼吸机",
+    "price": 0,
+    "highlights": [
+      "自动调压",
+      "家用",
+      "渠道丰富"
+    ],
+    "description": "家用自动调压机型，面向大众市场。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "家用睡眠治疗",
+      "通气模式": "APAP/CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://www.yuwell.com"
+    },
+    "deviceType": "PAP_SLEEP",
+    "status": "在售",
+    "scenarioTags": [
+      "家用",
+      "入门"
+    ],
+    "channels": [
+      "电商",
+      "线下"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合家用入门与渠道购买场景。"
+    ],
+    "id": 30105,
+    "brandId": 4,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "YH-830 CPAP",
+    "brand": "鱼跃",
+    "series": "YH",
+    "type": "睡眠呼吸机",
+    "price": 0,
+    "highlights": [
+      "固定压力",
+      "家用",
+      "入门"
+    ],
+    "description": "固定压力机型，面向基础睡眠治疗需求。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "家用睡眠治疗",
+      "通气模式": "CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://www.yuwell.com"
+    },
+    "deviceType": "PAP_SLEEP",
+    "status": "在售",
+    "scenarioTags": [
+      "入门",
+      "家用"
+    ],
+    "channels": [
+      "电商",
+      "线下"
+    ],
+    "refurbRisk": "中",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合压力需求稳定的入门场景。"
+    ],
+    "id": 30106,
+    "brandId": 4,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "Luna II Auto CPAP",
+    "brand": "React Health",
+    "series": "Luna II",
+    "type": "睡眠呼吸机",
+    "price": 0,
+    "highlights": [
+      "自动调压",
+      "家用",
+      "易用"
+    ],
+    "description": "面向家庭睡眠治疗的自动调压机型。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "适用场景": "家用睡眠治疗",
+      "通气模式": "APAP/CPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://reacthealth.com"
+    },
+    "deviceType": "PAP_SLEEP",
+    "status": "在售",
+    "scenarioTags": [
+      "家用",
+      "睡眠治疗"
+    ],
+    "channels": [
+      "电商",
+      "线下"
+    ],
+    "refurbRisk": "低",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合家庭睡眠治疗与长期使用。"
+    ],
+    "id": 30107,
+    "brandId": 27,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
+  },
+  {
+    "name": "Luna II BiPAP",
+    "brand": "React Health",
+    "series": "Luna II",
+    "type": "家用NIV",
+    "price": 0,
+    "highlights": [
+      "双水平通气",
+      "家用场景",
+      "舒适度优化"
+    ],
+    "description": "家用双水平机型，适合压力需求较高场景。",
+    "suitableFor": [
+      "sleep_apnea",
+      "chronic_respiratory"
+    ],
+    "specs": {
+      "适用场景": "家用通气",
+      "通气模式": "BiPAP",
+      "价格区间": "待补充",
+      "官方页面": "https://reacthealth.com"
+    },
+    "deviceType": "NIV_HOME",
+    "status": "在售",
+    "scenarioTags": [
+      "家用通气",
+      "睡眠治疗"
+    ],
+    "channels": [
+      "电商",
+      "线下"
+    ],
+    "refurbRisk": "低",
+    "overclaimRisk": "低",
+    "evidenceSummaries": [
+      "适合舒适度要求更高的通气需求。"
+    ],
+    "id": 30108,
+    "brandId": 27,
+    "platformId": null,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "目录",
+    "tagType": "success",
+    "sourceTypes": [
+      "目录"
+    ],
+    "dataCompleteness": 70
   }
 ]
