@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, watch, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { formatPriceRange } from '@/utils/helpers'
 import type { Product } from '@/types'
 
@@ -74,9 +74,9 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-  click: []
-  detail: []
-  toggleCompare: (id: number, checked: boolean) => void
+  (event: 'click'): void
+  (event: 'detail'): void
+  (event: 'toggleCompare', id: number, checked: boolean): void
 }>()
 
 const localCompare = ref(Boolean(props.compareChecked))

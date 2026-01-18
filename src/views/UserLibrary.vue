@@ -6,6 +6,27 @@
       <p>公开版知识整理（共 {{ filteredItems.length }} 条）。</p>
     </div>
 
+    <section class="learning-path">
+      <div class="path-header">
+        <h2>学习路径</h2>
+        <p>从入门到长期管理的最短路线，先看重点再深入细节。</p>
+      </div>
+      <el-row :gutter="16">
+        <el-col :xs="24" :md="12" v-for="path in learningPath" :key="path.title">
+          <el-card class="path-card">
+            <div class="path-top">
+              <h3>{{ path.title }}</h3>
+              <el-tag size="small" type="info">{{ path.tag }}</el-tag>
+            </div>
+            <p class="path-desc">{{ path.description }}</p>
+            <ul class="path-steps">
+              <li v-for="step in path.steps" :key="step">{{ step }}</li>
+            </ul>
+          </el-card>
+        </el-col>
+      </el-row>
+    </section>
+
     <el-card class="filters">
       <div class="filter-row">
         <el-input v-model="query" placeholder="搜索用户知识" clearable />
@@ -64,6 +85,33 @@ const docTypeOptions = Array.from(
 ) as string[]
 const router = useRouter()
 
+const learningPath = [
+  {
+    title: '入门与判断',
+    tag: '先弄清',
+    description: '先分清打鼾与 OSA，再理解报告与诊断流程。',
+    steps: ['先做筛查或监测', '按指标判断严重度', '确认是否需要用机']
+  },
+  {
+    title: '选购与适应',
+    tag: '先舒服',
+    description: '选对机型与面罩，第一周重点是舒适与习惯。',
+    steps: ['机型与面罩匹配', '湿化与睡姿优化', '7 天适应计划']
+  },
+  {
+    title: '问题处理',
+    tag: '先排查',
+    description: '不适大多可调整，优先排查漏气与设置。',
+    steps: ['漏气与口干处理', '压力不适沟通', '必要时复评']
+  },
+  {
+    title: '长期管理',
+    tag: '先稳定',
+    description: '关注随访、生活方式与合并症，稳住长期效果。',
+    steps: ['定期随访记录', '作息与体重管理', '合并症风险控制']
+  }
+]
+
 const filteredItems = computed(() => {
   const keyword = query.value.trim().toLowerCase()
   return publicUserLibraryData.filter(item => {
@@ -114,6 +162,53 @@ const goToItem = (id: number) => {
 .page-header p {
   font-size: 14px;
   color: #6b7280;
+}
+
+.learning-path {
+  margin: 10px 0 24px;
+}
+
+.path-header h2 {
+  font-size: 20px;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.path-header p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 14px;
+}
+
+.path-card {
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  margin-bottom: 12px;
+}
+
+.path-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.path-top h3 {
+  font-size: 16px;
+  color: #111827;
+  margin: 0;
+}
+
+.path-desc {
+  color: #4b5563;
+  font-size: 14px;
+  margin: 8px 0 10px;
+}
+
+.path-steps {
+  padding-left: 18px;
+  margin: 0;
+  color: #475569;
+  font-size: 13px;
 }
 
 .filters {

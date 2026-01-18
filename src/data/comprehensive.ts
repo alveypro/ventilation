@@ -1,8 +1,10 @@
+import type { Product, Brand } from '@/types'
+
 // 扩展的产品数据库
-export const productsData = []
+export const productsData: Product[] = []
 
 // 品牌库数据
-export const brandsData = [
+export const brandsData: Brand[] = [
   {
     id: 1,
     name: '瑞思迈',

@@ -1,4 +1,37 @@
-export const clinicalGuides = [
+export type ClinicalGuideSection = {
+  id: string
+  title: string
+  summary: string
+  points?: string[]
+  table?: {
+    title: string
+    headers: string[]
+    rows: string[][]
+  }
+  flow?: {
+    title: string
+    steps: string[]
+  }
+  diagram?: {
+    title: string
+    svg: string
+  }
+}
+
+export type ClinicalGuide = {
+  id: string
+  title: string
+  subtitle: string
+  clinicalNotes?: {
+    metrics: string[]
+    evidence: string[]
+    contraindications: string[]
+  }
+  related?: string[]
+  sections: ClinicalGuideSection[]
+}
+
+export const clinicalGuides: ClinicalGuide[] = [
   {
     id: 'pap-path',
     title: 'PAP 模式与滴定路径',

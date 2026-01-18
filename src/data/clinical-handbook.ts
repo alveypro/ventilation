@@ -1,4 +1,18 @@
-export const clinicalHandbookData = [
+export type ClinicalHandbookItem = {
+  id: number
+  title: string
+  summary: string
+  category?: string
+  level?: string
+  docType?: string
+  keywords?: string[]
+  keyPoints?: string[]
+  content: string
+  relatedGuides?: string[]
+  sourcePath?: string
+}
+
+export const clinicalHandbookData: ClinicalHandbookItem[] = [
   {
     "id": 9001,
     "title": "睡眠呼吸障碍（SDB）概览",

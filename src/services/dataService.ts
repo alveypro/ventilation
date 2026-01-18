@@ -16,6 +16,8 @@ type ReviewItem = {
   date: string
   title: string
   content: string
+  summary?: string
+  category?: string
   helpful: number
   productId: number
   productName: string
@@ -151,7 +153,7 @@ const mergeArrays = <T>(a?: T[], b?: T[]) => {
   return Array.from(new Set(list))
 }
 
-const mergeSpecs = (a?: Record<string, string>, b?: Record<string, string>) => {
+const mergeSpecs = (a?: Record<string, string | undefined>, b?: Record<string, string | undefined>) => {
   return { ...(a || {}), ...(b || {}) }
 }
 

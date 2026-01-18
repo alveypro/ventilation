@@ -12,7 +12,7 @@ export interface Product {
   highlights: string[]
   description: string
   suitableFor: string[]
-  specs: Record<string, string>
+  specs: Record<string, string | undefined>
   image?: string
   images?: string[]
   sourcePaths?: string[]
@@ -74,7 +74,7 @@ export interface ProductReview {
 
 export interface ContentSource {
   title: string
-  org: string
+  org?: string
   url?: string
   date?: string
 }
