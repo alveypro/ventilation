@@ -19,12 +19,12 @@ export const resourceCategories: ResourceCategory[] = [
     items: [
       {
         name: 'AASM 睡眠医学临床指南',
-        url: '#',
+        url: 'https://aasm.org/clinical-resources/practice-standards/',
         description: '睡眠医学与睡眠呼吸暂停相关指南与共识。',
       },
       {
         name: 'ERS/ATS 无创通气临床共识',
-        url: '#',
+        url: 'https://www.thoracic.org/professionals/clinical-resources.php',
         description: '无创通气评估、启动与随访的共识框架。',
       },
     ],
@@ -36,12 +36,12 @@ export const resourceCategories: ResourceCategory[] = [
     items: [
       {
         name: '睡眠医学继续教育课程',
-        url: '#',
+        url: 'https://learn.aasm.org/',
         description: '面向临床人员的系统课程与案例学习。',
       },
       {
         name: '呼吸治疗技能培训',
-        url: '#',
+        url: 'https://www.aarc.org/education/continuing-education/',
         description: '通气支持、设备管理与随访能力提升。',
       },
     ],
@@ -53,12 +53,12 @@ export const resourceCategories: ResourceCategory[] = [
     items: [
       {
         name: 'PubMed 检索入口',
-        url: '#',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/',
         description: '查阅最新研究、系统综述与临床试验。',
       },
       {
         name: 'Cochrane 证据库',
-        url: '#',
+        url: 'https://www.cochranelibrary.com/',
         description: '高质量系统综述与证据总结入口。',
       },
     ],
@@ -70,12 +70,12 @@ export const resourceCategories: ResourceCategory[] = [
     items: [
       {
         name: '睡眠呼吸暂停患者教育',
-        url: '#',
+        url: 'https://medlineplus.gov/sleepapnea.html',
         description: '基础概念、风险提示与自我管理建议。',
       },
       {
         name: '呼吸机使用与随访指南',
-        url: '#',
+        url: 'https://www.nhlbi.nih.gov/health/sleep-apnea/treatment',
         description: '使用要点、常见问题与安全红线提醒。',
       },
     ],
