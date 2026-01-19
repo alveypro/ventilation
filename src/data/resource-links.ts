@@ -18,14 +18,14 @@ export const resourceCategories: ResourceCategory[] = [
     subtitle: '面向临床学习与路径对照的通用资源',
     items: [
       {
-        name: '临床指南资源 01',
+        name: 'AASM 睡眠医学临床指南',
         url: '#',
-        description: '提供临床路径与诊疗共识的通用入口。',
+        description: '睡眠医学与睡眠呼吸暂停相关指南与共识。',
       },
       {
-        name: '临床指南资源 02',
+        name: 'ERS/ATS 无创通气临床共识',
         url: '#',
-        description: '涵盖呼吸与睡眠相关的标准化建议。',
+        description: '无创通气评估、启动与随访的共识框架。',
       },
     ],
   },
@@ -35,14 +35,14 @@ export const resourceCategories: ResourceCategory[] = [
     subtitle: '课程与继续教育的通用入口',
     items: [
       {
-        name: '继续教育资源 01',
+        name: '睡眠医学继续教育课程',
         url: '#',
-        description: '适用于医护与专业人员的学习资料。',
+        description: '面向临床人员的系统课程与案例学习。',
       },
       {
-        name: '继续教育资源 02',
+        name: '呼吸治疗技能培训',
         url: '#',
-        description: '提供学习框架与技能提升指引。',
+        description: '通气支持、设备管理与随访能力提升。',
       },
     ],
   },
@@ -52,14 +52,14 @@ export const resourceCategories: ResourceCategory[] = [
     subtitle: '科研与论文检索的通用入口',
     items: [
       {
-        name: '研究检索入口 01',
+        name: 'PubMed 检索入口',
         url: '#',
-        description: '用于查阅最新研究与系统综述。',
+        description: '查阅最新研究、系统综述与临床试验。',
       },
       {
-        name: '研究检索入口 02',
+        name: 'Cochrane 证据库',
         url: '#',
-        description: '适用于主题检索与证据筛选。',
+        description: '高质量系统综述与证据总结入口。',
       },
     ],
   },
@@ -69,14 +69,14 @@ export const resourceCategories: ResourceCategory[] = [
     subtitle: '面向患者与家属的通用资料',
     items: [
       {
-        name: '患者教育资源 01',
+        name: '睡眠呼吸暂停患者教育',
         url: '#',
-        description: '提供基础概念与使用指导。',
+        description: '基础概念、风险提示与自我管理建议。',
       },
       {
-        name: '患者教育资源 02',
+        name: '呼吸机使用与随访指南',
         url: '#',
-        description: '聚焦常见问题与安全提示。',
+        description: '使用要点、常见问题与安全红线提醒。',
       },
     ],
   },
