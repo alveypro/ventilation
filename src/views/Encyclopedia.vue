@@ -85,7 +85,14 @@
             </div>
             <ul class="resource-list">
               <li v-for="item in category.items" :key="item.name">
-                <a :href="item.url" target="_blank" rel="noopener">{{ item.name }}</a>
+                <a
+                  :href="item.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  @click.prevent="openExternal(item.url)"
+                >
+                  {{ item.name }}
+                </a>
                 <p>{{ item.description }}</p>
               </li>
             </ul>
@@ -273,6 +280,10 @@ const buildTopicIndex = () => {
 
 const goTo = (path: string) => {
   router.push(path)
+}
+
+const openExternal = (url: string) => {
+  window.open(url, '_blank', 'noopener,noreferrer')
 }
 
 

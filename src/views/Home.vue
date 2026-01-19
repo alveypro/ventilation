@@ -41,7 +41,14 @@
           <el-card shadow="hover" class="resource-card">
             <h4>{{ item.name }}</h4>
             <p>{{ item.description }}</p>
-            <a :href="item.url" target="_blank" rel="noopener">访问官网 →</a>
+            <a
+              :href="item.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              @click.prevent="openExternal(item.url)"
+            >
+              访问官网 →
+            </a>
           </el-card>
         </el-col>
       </el-row>
@@ -136,6 +143,10 @@ const primaryNav = ref([
 
 const goTo = (path: string) => {
   router.push(path)
+}
+
+const openExternal = (url: string) => {
+  window.open(url, '_blank', 'noopener,noreferrer')
 }
 </script>
 
