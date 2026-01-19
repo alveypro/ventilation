@@ -68,6 +68,34 @@ const pickProvider = () => {
 }
 
 exports.handler = async (event) => {
+  const parsePayload = (raw) => {
+    if (!raw) return {}
+    const text = Buffer.isBuffer(raw) ? raw.toString('utf-8') : String(raw)
+    try {
+      const parsed = JSON.parse(text)
+      if (parsed && typeof parsed === 'object' && parsed.body) {
+        const bodyText = parsed.isBase64Encoded || parsed.isBase64
+          ? Buffer.from(parsed.body, 'base64').toString('utf-8')
+          : parsed.body
+        try {
+          return JSON.parse(bodyText || '{}')
+        } catch (error) {
+          return {}
+        }
+      }
+      return parsed
+    } catch (error) {
+      const parts = text.split('\r\n\r\n')
+      const body = parts.slice(1).join('\r\n\r\n')
+      if (!body) return {}
+      try {
+        return JSON.parse(body)
+      } catch (err) {
+        return {}
+      }
+    }
+  }
+
   try {
     const method = event?.httpMethod || event?.method || 'POST'
     if (method === 'OPTIONS') {
@@ -77,9 +105,18 @@ exports.handler = async (event) => {
       return { statusCode: 405, headers: corsHeaders, body: JSON.stringify({ message: 'Method not allowed' }) }
     }
 
-    const rawBody = event?.body || ''
-    const bodyText = event?.isBase64Encoded ? Buffer.from(rawBody, 'base64').toString('utf-8') : rawBody
-    const payload = JSON.parse(bodyText || '{}')
+    let payload = {}
+    if (event && typeof event === 'object' && event.messages) {
+      payload = event
+    } else if (event && typeof event === 'object' && typeof event.byteLength === 'number') {
+      payload = parsePayload(Buffer.from(event))
+    } else if (typeof event === 'string') {
+      payload = parsePayload(event)
+    } else {
+      const rawBody = event?.body || ''
+      const bodyText = event?.isBase64Encoded ? Buffer.from(rawBody, 'base64').toString('utf-8') : rawBody
+      payload = parsePayload(bodyText)
+    }
     if (!payload?.messages?.length) {
       return { statusCode: 400, headers: corsHeaders, body: JSON.stringify({ message: 'Missing messages' }) }
     }
