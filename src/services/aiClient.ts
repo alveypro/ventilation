@@ -15,8 +15,9 @@ export type AiChatResponse = {
   sources?: string[]
 }
 
-const AI_BASE = (import.meta.env.VITE_AI_API_BASE_URL || '').replace(/\/$/, '')
-const AI_CHAT_PATH = import.meta.env.VITE_AI_CHAT_PATH || '/ai/chat'
+const DEFAULT_AI_BASE = 'https://airivo-ai-proxy-hvdlupqeav.cn-hangzhou.fcapp.run'
+const AI_BASE = (import.meta.env.VITE_AI_API_BASE_URL || DEFAULT_AI_BASE).replace(/\/$/, '')
+const AI_CHAT_PATH = import.meta.env.VITE_AI_CHAT_PATH || '/'
 const AI_ENDPOINT = AI_BASE ? `${AI_BASE}${AI_CHAT_PATH}` : ''
 
 export const sendAiChat = async (payload: AiChatRequest): Promise<AiChatResponse> => {
