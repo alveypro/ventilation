@@ -96,6 +96,20 @@ exports.handler = async (event) => {
     }
   }
 
+  const parseWrapper = (raw) => {
+    if (!raw) return null
+    const text = Buffer.isBuffer(raw) ? raw.toString('utf-8') : String(raw)
+    try {
+      const parsed = JSON.parse(text)
+      if (parsed && typeof parsed === 'object' && parsed.headers) {
+        return parsed
+      }
+    } catch (error) {
+      return null
+    }
+    return null
+  }
+
   try {
     const method = event?.httpMethod || event?.method || 'POST'
     if (method === 'OPTIONS') {
@@ -106,16 +120,27 @@ exports.handler = async (event) => {
     }
 
     let payload = {}
+    let wrapper = null
     if (event && typeof event === 'object' && event.messages) {
       payload = event
+    } else if (event && typeof event === 'object' && event.headers) {
+      wrapper = event
+      payload = parsePayload(event.body || '')
     } else if (event && typeof event === 'object' && typeof event.byteLength === 'number') {
-      payload = parsePayload(Buffer.from(event))
+      const raw = Buffer.from(event)
+      wrapper = parseWrapper(raw)
+      payload = parsePayload(raw)
     } else if (typeof event === 'string') {
+      wrapper = parseWrapper(event)
       payload = parsePayload(event)
     } else {
       const rawBody = event?.body || ''
       const bodyText = event?.isBase64Encoded ? Buffer.from(rawBody, 'base64').toString('utf-8') : rawBody
       payload = parsePayload(bodyText)
+    }
+
+    if (wrapper?.headers?.['Access-Control-Request-Method']) {
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ ok: true }) }
     }
     if (!payload?.messages?.length) {
       return { statusCode: 400, headers: corsHeaders, body: JSON.stringify({ message: 'Missing messages' }) }
