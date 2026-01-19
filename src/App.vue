@@ -90,12 +90,15 @@
     <el-footer class="footer">
       <p>&copy; 2024 呼吸机之家 | 专业呼吸机选购与使用指南</p>
     </el-footer>
+
+    <AiAssistant />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import AiAssistant from '@/components/AiAssistant.vue'
 
 const route = useRoute()
 const router = useRouter()
