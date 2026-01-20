@@ -233,7 +233,33 @@ const readPdfText = async (file: File) => {
     const line = content.items.map((item: any) => item.str).join(' ')
     pages.push(line)
   }
-  return pages.join('\n')
+  const text = pages.join('\n').trim()
+  if (text.length >= 40) {
+    return text
+  }
+
+  // Fallback for scanned PDFs: OCR the first few pages.
+  const { createWorker } = await import('tesseract.js')
+  const worker = await createWorker('chi_sim+eng')
+  const maxPages = Math.min(pdf.numPages, 5)
+  const ocrTexts: string[] = []
+  for (let i = 1; i <= maxPages; i += 1) {
+    const page = await pdf.getPage(i)
+    const viewport = page.getViewport({ scale: 1.5 })
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')
+    if (!context) continue
+    canvas.width = viewport.width
+    canvas.height = viewport.height
+    await page.render({ canvasContext: context, viewport }).promise
+    const { data } = await worker.recognize(canvas)
+    if (data?.text) {
+      ocrTexts.push(data.text)
+    }
+  }
+  await worker.terminate()
+  const ocrText = ocrTexts.join('\n').trim()
+  return ocrText || text
 }
 
 const readDocxText = async (file: File) => {
