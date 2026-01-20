@@ -31,6 +31,7 @@
             <input ref="fileInput" type="file" class="hidden-input" :accept="acceptTypes" @change="handleFile" />
           </div>
           <p class="upload-hint">支持 PDF/DOCX/PPTX/TXT/图片，单文件 ≤ 20MB。</p>
+          <p class="upload-hint" v-if="docs.length">已选 {{ selectedDocIds.length }} / {{ docs.length }} 份</p>
           <div class="doc-list" v-if="docs.length">
             <div class="doc-item" v-for="doc in docs" :key="doc.id">
               <el-checkbox v-model="selectedDocIds" :label="doc.id">{{ doc.name }}</el-checkbox>
@@ -328,10 +329,18 @@ const sendMessage = async () => {
   saveHistory()
 
   try {
-    const docText = selectedDocs.value
+    if (docs.value.length && !selectedDocIds.value.length) {
+      selectedDocIds.value = docs.value.map(item => item.id)
+    }
+    const docTextRaw = selectedDocs.value
       .map(doc => `文档：${doc.name}\n${doc.text.slice(0, 3000)}`)
       .join('\n\n')
       .slice(0, 8000)
+    const docText = docTextRaw
+      ? `以下为用户上传文档的提取内容，请基于其回答：\n${docTextRaw}`
+      : docs.value.length
+        ? '提示：用户已上传文档，但未提取到可用文本。'
+        : ''
     const context = buildContext(content, docText)
     const payload = {
       sessionId: sessionId.value,
