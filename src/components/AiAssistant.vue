@@ -20,6 +20,27 @@
           仅供学习参考，不替代医生诊疗建议。如有严重症状，请及时就医。
         </div>
 
+        <div class="assistant-upload">
+          <div class="upload-header">
+            <span>文档/图片</span>
+            <el-tag size="small" type="info">本地保存</el-tag>
+          </div>
+          <div class="upload-actions">
+            <el-button size="small" @click="triggerFile">上传文件</el-button>
+            <el-button size="small" text @click="clearDocs" :disabled="!docs.length">清空文档</el-button>
+            <input ref="fileInput" type="file" class="hidden-input" :accept="acceptTypes" @change="handleFile" />
+          </div>
+          <p class="upload-hint">支持 PDF/DOCX/PPTX/TXT/图片，单文件 ≤ 20MB。</p>
+          <div class="doc-list" v-if="docs.length">
+            <div class="doc-item" v-for="doc in docs" :key="doc.id">
+              <el-checkbox v-model="selectedDocIds" :label="doc.id">{{ doc.name }}</el-checkbox>
+              <span class="doc-meta">{{ formatSize(doc.size) }}</span>
+              <el-button text size="small" @click="removeDoc(doc.id)">删除</el-button>
+            </div>
+          </div>
+          <p class="upload-error" v-if="uploadError">{{ uploadError }}</p>
+        </div>
+
         <div class="assistant-messages">
           <div
             v-for="item in messages"
@@ -73,6 +94,11 @@ import { computed, onMounted, ref } from 'vue'
 import { sendAiChat } from '@/services/aiClient'
 import { publicUserLibraryData } from '@/data/public-user-library'
 import { clinicalHandbookData } from '@/data/clinical-handbook'
+import { clearDocs as clearDocStore, deleteDoc, listDocs, saveDoc } from '@/utils/docStore'
+import type { StoredDoc } from '@/utils/docStore'
+import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist'
+import JSZip from 'jszip'
+import mammoth from 'mammoth'
 
 type ChatMessage = {
   id: string
@@ -87,6 +113,13 @@ const sending = ref(false)
 const errorMessage = ref('')
 const messages = ref<ChatMessage[]>([])
 const sessionId = ref('')
+const docs = ref<StoredDoc[]>([])
+const selectedDocIds = ref<string[]>([])
+const uploadError = ref('')
+const fileInput = ref<HTMLInputElement | null>(null)
+
+const acceptTypes = '.pdf,.docx,.pptx,.txt,.jpg,.jpeg,.png,.webp'
+const MAX_FILE_SIZE = 20 * 1024 * 1024
 
 const suggestedPrompts = [
   'AHI 下降但仍很困怎么办？',
@@ -96,6 +129,8 @@ const suggestedPrompts = [
 ]
 
 const storageKey = computed(() => `ai-chat-history:${sessionId.value}`)
+
+const selectedDocs = computed(() => docs.value.filter(doc => selectedDocIds.value.includes(doc.id)))
 
 const loadHistory = () => {
   const raw = localStorage.getItem(storageKey.value)
@@ -123,6 +158,14 @@ const buildSessionId = () => {
   localStorage.setItem('ai-chat-session', id)
 }
 
+const initPdfWorker = () => {
+  try {
+    GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString()
+  } catch (error) {
+    // ignore
+  }
+}
+
 const toTimestamp = () => {
   const now = new Date()
   return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
@@ -133,7 +176,7 @@ const scoreItem = (text: string, tokens: string[]) => {
   return tokens.reduce((score, token) => (lower.includes(token) ? score + 1 : score), 0)
 }
 
-const buildContext = (query: string) => {
+const buildContext = (query: string, docText: string) => {
   const tokens = query
     .toLowerCase()
     .split(/[\s,，。；;、/\\|]+/)
@@ -153,12 +196,120 @@ const buildContext = (query: string) => {
 
   if (!ranked.length) return ''
 
-  return ranked
+  const knowledge = ranked
     .map(({ item }) => {
       const points = (item.keyPoints || []).slice(0, 4).join('；')
       return `标题：${item.title}\n摘要：${item.summary}\n要点：${points || '无'}`
     })
     .join('\n\n')
+  const parts = [knowledge, docText].filter(Boolean)
+  return parts.join('\n\n')
+}
+
+const triggerFile = () => {
+  uploadError.value = ''
+  fileInput.value?.click()
+}
+
+const formatSize = (bytes: number) => {
+  if (bytes < 1024) return `${bytes}B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)}KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)}MB`
+}
+
+const readText = async (file: File) => {
+  return file.text()
+}
+
+const readPdfText = async (file: File) => {
+  initPdfWorker()
+  const data = new Uint8Array(await file.arrayBuffer())
+  const pdf = await getDocument({ data }).promise
+  const pages = []
+  for (let i = 1; i <= pdf.numPages; i += 1) {
+    const page = await pdf.getPage(i)
+    const content = await page.getTextContent()
+    const line = content.items.map((item: any) => item.str).join(' ')
+    pages.push(line)
+  }
+  return pages.join('\n')
+}
+
+const readDocxText = async (file: File) => {
+  const result = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() })
+  return result.value || ''
+}
+
+const readPptxText = async (file: File) => {
+  const zip = await JSZip.loadAsync(await file.arrayBuffer())
+  const slideFiles = Object.keys(zip.files).filter(name => name.startsWith('ppt/slides/slide'))
+  const texts: string[] = []
+  for (const name of slideFiles) {
+    const xml = await zip.files[name].async('string')
+    const matches = Array.from(xml.matchAll(/<a:t>(.*?)<\\/a:t>/g))
+    matches.forEach(match => texts.push(match[1]))
+  }
+  return texts.join('\n')
+}
+
+const readImageText = async (file: File) => {
+  const { createWorker } = await import('tesseract.js')
+  const worker = await createWorker('chi_sim+eng')
+  const { data } = await worker.recognize(file)
+  await worker.terminate()
+  return data.text || ''
+}
+
+const extractText = async (file: File) => {
+  const name = file.name.toLowerCase()
+  if (name.endsWith('.pdf')) return readPdfText(file)
+  if (name.endsWith('.docx')) return readDocxText(file)
+  if (name.endsWith('.pptx')) return readPptxText(file)
+  if (name.endsWith('.txt')) return readText(file)
+  if (name.match(/\.(jpg|jpeg|png|webp)$/)) return readImageText(file)
+  return ''
+}
+
+const handleFile = async (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+  uploadError.value = ''
+  if (file.size > MAX_FILE_SIZE) {
+    uploadError.value = '文件过大，请控制在 20MB 以内。'
+    target.value = ''
+    return
+  }
+  try {
+    const text = await extractText(file)
+    const doc: StoredDoc = {
+      id: `doc-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`,
+      name: file.name,
+      type: file.type || 'unknown',
+      size: file.size,
+      createdAt: Date.now(),
+      text: text.trim(),
+    }
+    await saveDoc(doc)
+    docs.value = await listDocs()
+    selectedDocIds.value = docs.value.map(item => item.id)
+  } catch (error) {
+    uploadError.value = '解析失败，请更换文件重试。'
+  } finally {
+    target.value = ''
+  }
+}
+
+const removeDoc = async (id: string) => {
+  await deleteDoc(id)
+  docs.value = await listDocs()
+  selectedDocIds.value = selectedDocIds.value.filter(item => item !== id)
+}
+
+const clearDocs = async () => {
+  await clearDocStore()
+  docs.value = []
+  selectedDocIds.value = []
 }
 
 const sendMessage = async () => {
@@ -177,7 +328,11 @@ const sendMessage = async () => {
   saveHistory()
 
   try {
-    const context = buildContext(content)
+    const docText = selectedDocs.value
+      .map(doc => `文档：${doc.name}\n${doc.text.slice(0, 3000)}`)
+      .join('\n\n')
+      .slice(0, 8000)
+    const context = buildContext(content, docText)
     const payload = {
       sessionId: sessionId.value,
       context,
@@ -215,6 +370,10 @@ const usePrompt = (prompt: string) => {
 onMounted(() => {
   buildSessionId()
   loadHistory()
+  listDocs().then(items => {
+    docs.value = items
+    selectedDocIds.value = items.map(item => item.id)
+  })
 })
 </script>
 
@@ -250,6 +409,66 @@ onMounted(() => {
   gap: 12px;
   height: calc(100vh - 240px);
   overflow: hidden;
+}
+
+.assistant-upload {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #f8fafc;
+}
+
+.upload-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.upload-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.upload-hint {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0 0 6px;
+}
+
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: #1f2937;
+}
+
+.doc-meta {
+  color: #94a3b8;
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.upload-error {
+  color: #ef4444;
+  font-size: 12px;
+  margin: 6px 0 0;
+}
+
+.hidden-input {
+  display: none;
 }
 
 .assistant-notice {
