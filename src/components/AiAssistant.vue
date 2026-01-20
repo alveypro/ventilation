@@ -246,7 +246,7 @@ const readPptxText = async (file: File) => {
   const texts: string[] = []
   for (const name of slideFiles) {
     const xml = await zip.files[name].async('string')
-    const matches = Array.from(xml.matchAll(/<a:t>(.*?)<\\/a:t>/g))
+    const matches = Array.from(xml.matchAll(/<a:t>(.*?)<\/a:t>/g))
     matches.forEach(match => texts.push(match[1]))
   }
   return texts.join('\n')
