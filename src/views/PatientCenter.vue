@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="patient-center-page">
     <div class="page-header">
       <h1>👤 患者自学中心</h1>
@@ -111,18 +111,7 @@
           </el-card>
         </el-col>
       </el-row>
-      <el-card shadow="hover" class="pack-card">
-        <div class="pack-body">
-          <div>
-            <h4>患者知识包</h4>
-            <p class="description">通俗认知、使用步骤、维护清单与复诊记录。</p>
-          </div>
-          <div class="pack-actions">
-            <el-button type="primary" @click="downloadPack">一键下载</el-button>
-            <el-button @click="openPdf">PDF模板</el-button>
-          </div>
-        </div>
-      </el-card>
+
     </div>
 
     <!-- 收藏清单 -->
@@ -140,23 +129,6 @@
           </el-card>
         </el-col>
       </el-row>
-    </div>
-
-    <div class="content-section">
-      <h2>✅ 个人执行清单</h2>
-      <el-card shadow="hover" class="checklist-card">
-        <el-row :gutter="16" v-for="item in patientChecklist" :key="item.id" class="checklist-row">
-          <el-col :xs="24" :md="6">
-            <strong>{{ item.title }}</strong>
-          </el-col>
-          <el-col :xs="24" :md="18">
-            <el-input v-model="item.note" placeholder="记录自己的执行情况" />
-          </el-col>
-        </el-row>
-        <div class="checklist-actions">
-          <el-button type="primary" @click="exportChecklist">导出PDF</el-button>
-        </div>
-      </el-card>
     </div>
 
     <!-- 进度追踪 -->
@@ -244,9 +216,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { loadFromStorage, saveToStorage } from '@/utils/storage'
-import { buildKnowledgePack } from '@/utils/packs'
-import { openPdfTemplate } from '@/utils/pdfTemplates'
-import { openPrint } from '@/utils/print'
 
 const diseaseKnowledge = ref([
   {
@@ -574,32 +543,6 @@ const downloadTool = (tool: { title: string }) => {
   link.click()
   URL.revokeObjectURL(link.href)
 }
-
-const downloadPack = () => {
-  const content = buildKnowledgePack('patient')
-  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
-  const link = document.createElement('a')
-  link.href = URL.createObjectURL(blob)
-  link.download = '患者知识包.txt'
-  link.click()
-  URL.revokeObjectURL(link.href)
-}
-
-const openPdf = () => {
-  openPdfTemplate('patient')
-}
-
-const patientChecklist = ref([
-  { id: 1, title: '首次使用', note: '完成开箱检查与面罩调试。' },
-  { id: 2, title: '坚持使用', note: '每晚至少6小时。' },
-  { id: 3, title: '清洁维护', note: '每周清洁面罩与管路。' },
-  { id: 4, title: '复诊记录', note: '记录AHI与不适情况。' },
-])
-
-const exportChecklist = () => {
-  const items = patientChecklist.value.map(item => `${item.title}: ${item.note || '—'}`)
-  openPrint('患者执行清单', [{ title: '执行清单', items }])
-}
 const successStories = ref([
   {
     id: 1,
@@ -915,37 +858,6 @@ const resources = ref([
   margin: 0 0 12px 0;
   color: #606266;
   font-size: 13px;
-}
-
-.pack-card {
-  margin-top: 20px;
-}
-
-.pack-body {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.pack-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.checklist-card {
-  padding: 10px;
-}
-
-.checklist-row {
-  margin-bottom: 12px;
-}
-
-.checklist-actions {
-  margin-top: 12px;
-  text-align: right;
 }
 
 .favorite-card {
