@@ -28,10 +28,11 @@ export default defineConfig({
     chunkSizeWarningLimit: 700,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vue: ['vue', 'vue-router', 'pinia'],
-          element: ['element-plus'],
-          vendor: ['axios'],
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return
+          if (id.includes('element-plus')) return 'element'
+          if (id.includes('vue-router') || id.includes('pinia')) return 'vue'
+          if (id.includes('axios')) return 'vendor'
         },
       },
     },

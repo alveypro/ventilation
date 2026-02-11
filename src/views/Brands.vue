@@ -23,6 +23,24 @@
       </el-row>
     </el-card>
 
+    <section class="brand-guide">
+      <h2>品牌选择建议</h2>
+      <el-row :gutter="20">
+        <el-col :xs="24" :md="8" v-for="tip in brandTips" :key="tip.title">
+          <el-card shadow="hover" class="tip-card">
+            <div class="tip-icon">{{ tip.icon }}</div>
+            <div>
+              <h4>{{ tip.title }}</h4>
+              <p>{{ tip.description }}</p>
+              <ul>
+                <li v-for="item in tip.items" :key="item">{{ item }}</li>
+              </ul>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </section>
+
     <el-row v-if="isLoading" :gutter="20" class="brands-grid">
       <el-col :xs="24" :sm="12" :md="8" v-for="i in 6" :key="i">
         <el-skeleton :rows="4" />
@@ -91,6 +109,27 @@ const filters = reactive({
   keyword: '',
   country: ''
 })
+
+const brandTips = ref([
+  {
+    icon: '🏷️',
+    title: '看产品线完整度',
+    description: '多系列覆盖可降低后续升级或换机成本。',
+    items: ['是否覆盖 CPAP/APAP/BiPAP', '是否有耗材与配件生态', '售后网点与服务能力'],
+  },
+  {
+    icon: '🧪',
+    title: '看数据能力',
+    description: '数据可视化与远程随访能力影响长期依从性。',
+    items: ['是否支持云端/SD 数据', '报告可读性与可导出性', '是否支持远程随访'],
+  },
+  {
+    icon: '🛡️',
+    title: '看渠道与风险',
+    description: '注意灰市与翻新风险，优先官方或授权渠道。',
+    items: ['渠道版本差异', '翻新/水货风险提示', '保修与耗材真伪'],
+  },
+])
 
 const countryOptions = computed(() => {
   return Array.from(new Set(brands.value.map(item => item.country))).sort()
@@ -182,6 +221,26 @@ const resetFilters = () => {
 
 .brands-grid {
   margin-top: 30px;
+}
+
+.brand-guide {
+  margin: 24px 0;
+}
+
+.tip-card {
+  height: 100%;
+}
+
+.tip-card ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.tip-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
 .brand-card {

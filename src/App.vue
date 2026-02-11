@@ -91,14 +91,15 @@
       <p>&copy; 2024 呼吸机之家 | 专业呼吸机选购与使用指南</p>
     </el-footer>
 
-    <AiAssistant />
+    <AiAssistant v-if="showAiAssistant" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { defineAsyncComponent, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import AiAssistant from '@/components/AiAssistant.vue'
+
+const AiAssistant = defineAsyncComponent(() => import('@/components/AiAssistant.vue'))
 
 const route = useRoute()
 const router = useRouter()
@@ -122,6 +123,7 @@ const menuItems = [
   { key: 'agent', label: '代理商' },
   { key: 'manufacturer', label: '厂家' },
 ]
+const showAiAssistant = import.meta.env.VITE_SHOW_AI_ASSISTANT === 'true'
 
 const syncActiveMenu = () => {
   const section = route.path.split('/')[1] || 'home'

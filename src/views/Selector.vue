@@ -123,6 +123,21 @@
         </el-col>
       </el-row>
     </div>
+
+    <div class="content-section">
+      <h2>选机提醒与风险提示</h2>
+      <el-row :gutter="20">
+        <el-col :xs="24" :md="8" v-for="tip in selectorTips" :key="tip.title">
+          <el-card shadow="hover" class="rule-card">
+            <h3>{{ tip.title }}</h3>
+            <p class="description">{{ tip.description }}</p>
+            <ul>
+              <li v-for="item in tip.items" :key="item">{{ item }}</li>
+            </ul>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -329,6 +344,24 @@ const scoringThresholds = [
   { range: '70–84', recommendation: '匹配良好：主流机型可优先考虑' },
   { range: '55–69', recommendation: '基础匹配：建议结合预算与舒适度调整' },
   { range: '< 55', recommendation: '信息不足：建议补充症状或预算再评估' },
+]
+
+const selectorTips = [
+  {
+    title: '必须专业评估的情况',
+    description: '以下情况不建议自行选机或调参。',
+    items: ['怀疑中枢性呼吸暂停或心衰', '持续低氧或明显通气不足', '合并神经肌肉疾病'],
+  },
+  {
+    title: '选机不等于参数',
+    description: '推荐结果只是“方向”，参数需要结合评估。',
+    items: ['先选模式，再谈压力', '面罩适配影响疗效', '随访数据比单次更重要'],
+  },
+  {
+    title: '随访是成功关键',
+    description: '稳定使用比一次选对更重要。',
+    items: ['适应期 1-2 周高频复盘', '关注 AHI/漏气/时长趋势', '不适持续要复评'],
+  },
 ]
 </script>
 

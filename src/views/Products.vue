@@ -88,6 +88,74 @@
       </div>
     </el-card>
 
+    <section class="guide-section">
+      <h2>选购与评估提示</h2>
+      <el-row :gutter="20">
+        <el-col :xs="24" :md="8" v-for="tip in buyingTips" :key="tip.title">
+          <el-card shadow="hover" class="tip-card">
+            <div class="tip-icon">{{ tip.icon }}</div>
+            <div>
+              <h4>{{ tip.title }}</h4>
+              <p>{{ tip.description }}</p>
+              <ul>
+                <li v-for="item in tip.items" :key="item">{{ item }}</li>
+              </ul>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </section>
+
+    <section class="guide-section">
+      <h2>关键参数解读</h2>
+      <el-row :gutter="20">
+        <el-col :xs="24" :md="12">
+          <el-card shadow="hover" class="metric-card">
+            <h4>核心指标</h4>
+            <ul>
+              <li v-for="item in keyMetrics" :key="item.label">
+                <strong>{{ item.label }}</strong>：{{ item.detail }}
+              </li>
+            </ul>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :md="12">
+          <el-card shadow="hover" class="metric-card">
+            <h4>选机决策顺序</h4>
+            <ol>
+              <li v-for="item in decisionSteps" :key="item">{{ item }}</li>
+            </ol>
+          </el-card>
+        </el-col>
+      </el-row>
+    </section>
+
+    <section class="guide-section">
+      <h2>选机避坑清单</h2>
+      <div class="pitfall-grid">
+        <el-card v-for="item in pitfallChecklist" :key="item.title" shadow="hover" class="pitfall-card">
+          <h4>{{ item.title }}</h4>
+          <p class="pitfall-risk">风险：{{ item.risk }}</p>
+          <p class="pitfall-action">建议：{{ item.action }}</p>
+        </el-card>
+      </div>
+    </section>
+
+    <section class="guide-section">
+      <h2>按使用阶段给建议</h2>
+      <el-row :gutter="20">
+        <el-col :xs="24" :md="8" v-for="item in stageGuidance" :key="item.stage">
+          <el-card shadow="hover" class="tip-card">
+            <h4>{{ item.stage }}</h4>
+            <p>{{ item.summary }}</p>
+            <ul>
+              <li v-for="point in item.points" :key="point">{{ point }}</li>
+            </ul>
+          </el-card>
+        </el-col>
+      </el-row>
+    </section>
+
     <div class="source-section" v-if="showSourceSection && sourceProducts.length">
       <div class="section-header">
         <h2>资料提炼产品</h2>
@@ -178,6 +246,83 @@ onMounted(async () => {
   products.value = await fetchProducts()
   isLoading.value = false
 })
+
+const buyingTips = ref([
+  {
+    icon: '🧭',
+    title: '先看适应证与场景',
+    description: '不同人群优先看“适应证 + 低氧负荷”。',
+    items: ['OSA 优先 CPAP/APAP', '通气不足优先 NIV', '出行场景关注便携性'],
+  },
+  {
+    icon: '😴',
+    title: '舒适度决定依从性',
+    description: '面罩、湿化与噪音往往比价格更影响长期使用。',
+    items: ['先选面罩再调参数', '湿化不足易鼻干', '噪音影响睡眠质量'],
+  },
+  {
+    icon: '📈',
+    title: '看长期成本',
+    description: '耗材更换与售后支持决定总成本。',
+    items: ['滤网/管路/面罩周期', '配件可获得性', '售后与随访能力'],
+  },
+])
+
+const keyMetrics = ref([
+  { label: '压力范围', detail: '覆盖阻塞与通气需求，范围过小会限制疗效。' },
+  { label: '模式', detail: 'CPAP/APAP/BiPAP 适应证不同，需结合症状与评估。' },
+  { label: '漏气控制', detail: '漏气过大会影响算法判读与疗效。' },
+  { label: '数据能力', detail: '云端/SD 数据便于随访与复评。' },
+])
+
+const decisionSteps = ref([
+  '确定疾病类型与严重度',
+  '确认是否需要自动调压或双水平',
+  '评估面罩与舒适配置',
+  '确认数据能力与售后',
+  '结合预算与长期成本',
+])
+
+const pitfallChecklist = ref([
+  {
+    title: '只看价格，不看模式和数据能力',
+    risk: '短期省钱但长期可能疗效不足，复评成本更高。',
+    action: '先确定模式需求，再比较长期维护成本。',
+  },
+  {
+    title: '忽略面罩兼容与漏气控制',
+    risk: '依从性下降，夜间频繁觉醒，疗效波动。',
+    action: '优先验证面罩匹配，再做压力微调。',
+  },
+  {
+    title: '参数范围卡得太死',
+    risk: '场景变化时无法覆盖需求，导致治疗不足。',
+    action: '结合评估结果预留合理压力区间。',
+  },
+  {
+    title: '只看首购成本，忽略售后能力',
+    risk: '耗材和维护不稳定，后续使用体验断层。',
+    action: '将配件可得性和服务响应纳入决策。',
+  },
+])
+
+const stageGuidance = ref([
+  {
+    stage: '第1-2周：适应期',
+    summary: '重点是“戴得住”，不要急于追求参数激进优化。',
+    points: ['优先处理压痕和漏气', '湿化按体感逐步调', '记录入睡与醒后状态'],
+  },
+  {
+    stage: '第3-8周：稳定期',
+    summary: '开始看数据趋势，关注症状改善与睡眠质量。',
+    points: ['每周复盘关键指标', '识别高漏气时段', '结合白天状态评估疗效'],
+  },
+  {
+    stage: '2个月后：优化期',
+    summary: '围绕长期依从和并发风险做周期性复评。',
+    points: ['复核模式与压力策略', '关注体重/病情变化', '建立长期耗材更换节奏'],
+  },
+])
 
 const brandOptions = computed(() => {
   return Array.from(new Set(products.value.map(product => product.brand))).sort()
@@ -484,6 +629,50 @@ const cancelPreview = () => {
   margin-top: 30px;
 }
 
+.guide-section {
+  margin: 24px 0;
+}
+
+.tip-card,
+.metric-card {
+  height: 100%;
+}
+
+.pitfall-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.pitfall-card {
+  height: 100%;
+  border: 1px solid #fde68a;
+  background: linear-gradient(180deg, #fffdfa 0%, #fffbeb 100%);
+}
+
+.pitfall-risk {
+  margin: 8px 0 6px;
+  color: #b45309;
+}
+
+.pitfall-action {
+  color: #374151;
+}
+
+.tip-card ul,
+.metric-card ul,
+.metric-card ol {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.tip-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
 @media (max-width: 768px) {
   .filter-actions {
     flex-direction: column;
@@ -514,6 +703,10 @@ const cancelPreview = () => {
 
   .products-grid {
     margin-top: 20px;
+  }
+
+  .pitfall-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

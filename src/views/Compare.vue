@@ -13,6 +13,27 @@
       style="margin-bottom: 20px"
     />
 
+    <section class="compare-guide-grid">
+      <el-row :gutter="20">
+        <el-col :xs="24" :md="12">
+          <el-card shadow="hover" class="guide-block">
+            <h3>对比前准备</h3>
+            <ul>
+              <li v-for="item in prepChecklist" :key="item">{{ item }}</li>
+            </ul>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :md="12">
+          <el-card shadow="hover" class="guide-block">
+            <h3>如何读结论</h3>
+            <ul>
+              <li v-for="item in conclusionTips" :key="item">{{ item }}</li>
+            </ul>
+          </el-card>
+        </el-col>
+      </el-row>
+    </section>
+
     <el-card class="compare-guide" v-if="!hasProducts">
       <template #header>
         <span>对比指南</span>
@@ -197,6 +218,20 @@ const compareTips = ref([
     title: '看数据能力',
     description: '云端数据、依从性追踪对长期管理很关键。'
   }
+])
+
+const prepChecklist = ref([
+  '明确使用场景：居家、旅行或慢病长期管理。',
+  '确认需求模式：CPAP/APAP/BiPAP/NIV。',
+  '准备对比参数：压力范围、加湿、噪音、数据能力。',
+  '设定预算与耗材可获得性。',
+])
+
+const conclusionTips = ref([
+  '优先看“适应证+模式”是否匹配。',
+  '舒适度与漏气控制决定能否坚持。',
+  '数据能力影响随访与复评。',
+  '不要只看价格，关注长期成本。',
 ])
 
 onMounted(async () => {
@@ -387,6 +422,17 @@ const gotoProduct = (productId: number) => {
 <style scoped>
 .compare-page {
   padding: 20px;
+}
+
+.compare-guide-grid {
+  margin-bottom: 24px;
+}
+
+.guide-block ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #4b5563;
+  line-height: 1.6;
 }
 
 .page-header {

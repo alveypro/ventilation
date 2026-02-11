@@ -27,6 +27,11 @@ export const resourceCategories: ResourceCategory[] = [
         url: 'https://www.thoracic.org/professionals/clinical-resources.php',
         description: '无创通气评估、启动与随访的共识框架。',
       },
+      {
+        name: 'GOLD 慢阻肺指南',
+        url: 'https://goldcopd.org/gold-reports/',
+        description: '慢阻肺诊疗与长期管理的权威指南。',
+      },
     ],
   },
   {
@@ -43,6 +48,11 @@ export const resourceCategories: ResourceCategory[] = [
         name: '呼吸治疗技能培训',
         url: 'https://www.aarc.org/education/continuing-education/',
         description: '通气支持、设备管理与随访能力提升。',
+      },
+      {
+        name: 'ERS 在线培训课程',
+        url: 'https://ersnet.org/education/',
+        description: '呼吸相关课程与在线学习资源。',
       },
     ],
   },
@@ -61,6 +71,11 @@ export const resourceCategories: ResourceCategory[] = [
         url: 'https://www.cochranelibrary.com/',
         description: '高质量系统综述与证据总结入口。',
       },
+      {
+        name: 'ClinicalTrials 临床试验库',
+        url: 'https://clinicaltrials.gov/',
+        description: '查询相关临床试验进展与研究设计。',
+      },
     ],
   },
   {
@@ -77,6 +92,11 @@ export const resourceCategories: ResourceCategory[] = [
         name: '呼吸机使用与随访指南',
         url: 'https://www.nhlbi.nih.gov/health/sleep-apnea/treatment',
         description: '使用要点、常见问题与安全红线提醒。',
+      },
+      {
+        name: 'COPD 患者科普',
+        url: 'https://medlineplus.gov/copd.html',
+        description: '慢阻肺基础知识、治疗与日常管理建议。',
       },
     ],
   },

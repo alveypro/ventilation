@@ -251,7 +251,7 @@ const readPdfText = async (file: File) => {
     if (!context) continue
     canvas.width = viewport.width
     canvas.height = viewport.height
-    await page.render({ canvasContext: context, viewport }).promise
+    await page.render({ canvas, viewport }).promise
     const { data } = await worker.recognize(canvas)
     if (data?.text) {
       ocrTexts.push(data.text)
