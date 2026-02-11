@@ -4,7 +4,7 @@
       AI 专家
     </el-button>
 
-    <el-drawer v-model="drawerOpen" size="420px" direction="rtl" class="assistant-drawer">
+    <el-drawer v-model="drawerOpen" :size="drawerSize" direction="rtl" class="assistant-drawer">
       <template #header>
         <div class="assistant-header">
           <div>
@@ -42,15 +42,30 @@
           <p class="upload-error" v-if="uploadError">{{ uploadError }}</p>
         </div>
 
-        <div class="assistant-messages">
+        <div ref="messagesContainer" class="assistant-messages">
+          <div v-if="!messages.length && !sending" class="assistant-empty">
+            <p>还没有对话，先问一个与你当前症状或设备参数相关的问题。</p>
+          </div>
           <div
             v-for="item in messages"
             :key="item.id"
             :class="['assistant-message', item.role]"
           >
             <div class="message-bubble">
-              <p>{{ item.content }}</p>
-              <span class="message-time">{{ item.time }}</span>
+              <p class="message-content">{{ item.content }}</p>
+              <div class="message-meta">
+                <span class="message-time">{{ item.time }}</span>
+                <el-button v-if="item.role === 'assistant'" text size="small" @click="copyMessage(item.content)">
+                  复制
+                </el-button>
+              </div>
+            </div>
+          </div>
+          <div v-if="sending" class="assistant-message assistant">
+            <div class="message-bubble typing">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
             </div>
           </div>
         </div>
@@ -74,15 +89,19 @@
         <el-input
           v-model="inputValue"
           type="textarea"
-          :rows="2"
+          :autosize="{ minRows: 2, maxRows: 6 }"
           placeholder="输入你的问题，例如：AHI 下降但仍困怎么办？"
-          @keyup.enter.exact.prevent="sendMessage"
+          @keydown="handleInputKeydown"
         />
         <div class="assistant-actions">
-          <el-button size="small" @click="clearChat">清空记录</el-button>
-          <el-button type="primary" size="small" :loading="sending" @click="sendMessage">
-            发送
-          </el-button>
+          <span class="assistant-shortcut">Enter 发送 · Shift+Enter 换行</span>
+          <div class="assistant-action-buttons">
+            <el-button size="small" @click="clearChat">清空记录</el-button>
+            <el-button size="small" :disabled="!lastQuestion || sending" @click="retryLastQuestion">重试</el-button>
+            <el-button type="primary" size="small" :loading="sending" :disabled="cannotSend" @click="sendMessage()">
+              发送
+            </el-button>
+          </div>
         </div>
         <p class="assistant-hint" v-if="errorMessage">{{ errorMessage }}</p>
       </div>
@@ -91,7 +110,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 import { sendAiChat } from '@/services/aiClient'
 import { publicUserLibraryData } from '@/data/public-user-library'
 import { clinicalHandbookData } from '@/data/clinical-handbook'
@@ -118,6 +138,9 @@ const docs = ref<StoredDoc[]>([])
 const selectedDocIds = ref<string[]>([])
 const uploadError = ref('')
 const fileInput = ref<HTMLInputElement | null>(null)
+const messagesContainer = ref<HTMLDivElement | null>(null)
+const lastQuestion = ref('')
+const isMobile = ref(false)
 
 const acceptTypes = '.pdf,.docx,.pptx,.txt,.jpg,.jpeg,.png,.webp'
 const MAX_FILE_SIZE = 20 * 1024 * 1024
@@ -132,6 +155,8 @@ const suggestedPrompts = [
 const storageKey = computed(() => `ai-chat-history:${sessionId.value}`)
 
 const selectedDocs = computed(() => docs.value.filter(doc => selectedDocIds.value.includes(doc.id)))
+const cannotSend = computed(() => !inputValue.value.trim() || sending.value)
+const drawerSize = computed(() => (isMobile.value ? '100%' : '440px'))
 
 const loadHistory = () => {
   const raw = localStorage.getItem(storageKey.value)
@@ -339,11 +364,38 @@ const clearDocs = async () => {
   selectedDocIds.value = []
 }
 
-const sendMessage = async () => {
-  const content = inputValue.value.trim()
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (!messagesContainer.value) return
+    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+  })
+}
+
+const updateDevice = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+const copyMessage = async (content: string) => {
+  try {
+    await navigator.clipboard.writeText(content)
+    ElMessage.success('回答已复制')
+  } catch (error) {
+    ElMessage.error('复制失败，请手动复制')
+  }
+}
+
+const buildReplyText = (reply: string, sources?: string[]) => {
+  if (!sources?.length) return reply
+  const links = sources.slice(0, 4).map((item, index) => `${index + 1}. ${item}`).join('\n')
+  return `${reply}\n\n参考来源：\n${links}`
+}
+
+const sendMessage = async (presetContent?: string) => {
+  const content = (presetContent ?? inputValue.value).trim()
   if (!content || sending.value) return
   errorMessage.value = ''
   sending.value = true
+  lastQuestion.value = content
 
   messages.value.push({
     id: `user-${Date.now()}`,
@@ -353,6 +405,7 @@ const sendMessage = async () => {
   })
   inputValue.value = ''
   saveHistory()
+  scrollToBottom()
 
   try {
     if (docs.value.length && !selectedDocIds.value.length) {
@@ -381,12 +434,21 @@ const sendMessage = async () => {
     messages.value.push({
       id: `assistant-${Date.now()}`,
       role: 'assistant',
-      content: response.reply || '抱歉，暂时无法回答这个问题。',
+      content: buildReplyText(response.reply || '抱歉，暂时无法回答这个问题。', response.sources),
       time: toTimestamp(),
     })
     saveHistory()
+    scrollToBottom()
   } catch (error) {
-    errorMessage.value = 'AI 服务暂不可用，请稍后重试。'
+    errorMessage.value = 'AI 服务暂不可用，请稍后重试或点“重试”。'
+    messages.value.push({
+      id: `assistant-error-${Date.now()}`,
+      role: 'assistant',
+      content: '服务暂时拥堵，请稍后重试。建议把问题拆短一点再发送。',
+      time: toTimestamp(),
+    })
+    saveHistory()
+    scrollToBottom()
   } finally {
     sending.value = false
   }
@@ -394,21 +456,45 @@ const sendMessage = async () => {
 
 const clearChat = () => {
   messages.value = []
+  errorMessage.value = ''
   saveHistory()
 }
 
 const usePrompt = (prompt: string) => {
-  inputValue.value = prompt
+  sendMessage(prompt)
+}
+
+const retryLastQuestion = () => {
+  if (!lastQuestion.value || sending.value) return
+  sendMessage(lastQuestion.value)
+}
+
+const handleInputKeydown = (event: KeyboardEvent) => {
+  if (event.key !== 'Enter' || event.shiftKey) return
+  event.preventDefault()
   sendMessage()
 }
 
+watch(() => messages.value.length, scrollToBottom)
+watch(sending, scrollToBottom)
+watch(drawerOpen, value => {
+  if (!value) return
+  scrollToBottom()
+})
+
 onMounted(() => {
+  updateDevice()
+  window.addEventListener('resize', updateDevice)
   buildSessionId()
   loadHistory()
   listDocs().then(items => {
     docs.value = items
     selectedDocIds.value = items.map(item => item.id)
   })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateDevice)
 })
 </script>
 
@@ -424,6 +510,13 @@ onMounted(() => {
   border-radius: 999px;
   padding: 10px 18px;
   box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
+}
+
+.assistant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .assistant-header h3 {
@@ -520,6 +613,16 @@ onMounted(() => {
   padding-right: 8px;
 }
 
+.assistant-empty {
+  border: 1px dashed #dbeafe;
+  background: #f8fbff;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
 .assistant-message {
   display: flex;
   margin-bottom: 12px;
@@ -544,20 +647,67 @@ onMounted(() => {
   position: relative;
 }
 
+.message-content {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 .assistant-message.user .message-bubble {
   background: #2563eb;
   color: #fff;
 }
 
+.message-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  gap: 6px;
+}
+
 .message-time {
-  display: block;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
-  margin-top: 6px;
 }
 
 .assistant-message.assistant .message-time {
   color: #94a3b8;
+}
+
+.typing {
+  width: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #94a3b8;
+  animation: blink 1.1s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
 }
 
 .assistant-suggestions p {
@@ -583,10 +733,42 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+}
+
+.assistant-shortcut {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.assistant-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .assistant-hint {
   font-size: 12px;
   color: #ef4444;
+}
+
+@media (max-width: 768px) {
+  .ai-assistant {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .assistant-trigger {
+    padding: 10px 14px;
+  }
+
+  .assistant-body {
+    height: calc(100vh - 220px);
+  }
+
+  .assistant-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 </style>
