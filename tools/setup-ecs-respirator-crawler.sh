@@ -26,6 +26,14 @@ from bs4 import BeautifulSoup
 OUT_DIR = "/home/admin/.openclaw/workspace/data/respirators"
 SOURCE_NAME = "made-in-china"
 SOURCE_BASE = "https://www.made-in-china.com/products-search/hot-china-products/{}.html"
+PROBE_SOURCES = {
+    "jd": "https://search.jd.com/Search?keyword=%E5%91%BC%E5%90%B8%E6%9C%BA",
+    "taobao": "https://s.taobao.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA",
+    "tmall": "https://s.taobao.com/search?fromTmallRedirect=true&tab=mall&q=%E5%91%BC%E5%90%B8%E6%9C%BA",
+    "xianyu": "https://www.goofish.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA",
+    "xiaohongshu": "https://www.xiaohongshu.com/search_result/?keyword=%E5%91%BC%E5%90%B8%E6%9C%BA",
+    "alibaba": "https://www.alibaba.com/trade/search?SearchText=cpap+machine",
+}
 
 DOMESTIC = [
     {"brand": "鱼跃", "model": "YH-450 Auto", "features": ["自动滴定", "静音设计", "蓝牙传输"], "pressure_range": "4-20 cmH2O"},
@@ -69,6 +77,43 @@ def fetch_html(keyword):
     )
     with urlopen(req, timeout=20) as resp:
         return url, resp.read().decode("utf-8", "ignore")
+
+def http_get(url):
+    req = Request(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (respirator-crawler/2.0)",
+            "Accept-Language": "en-US,en;q=0.9",
+        },
+    )
+    with urlopen(req, timeout=20) as resp:
+        content = resp.read().decode("utf-8", "ignore")
+        final = resp.geturl()
+    return final, content
+
+def probe_sources():
+    report = {}
+    for name, url in PROBE_SOURCES.items():
+        try:
+            final, html = http_get(url)
+            lower = html.lower()
+            blocked = any(x in lower for x in ["captcha", "verify", "robot", "risk", "punish", "blocked", "service unavailable"])
+            money_tokens = len(re.findall(r"(?:us\\$|\\$|¥|￥)\\s?\\d+[\\d,.]*", lower))
+            status = "blocked" if blocked else "reachable"
+            report[name] = {
+                "status": status,
+                "final_url": final,
+                "html_length": len(html),
+                "money_tokens": money_tokens,
+                "at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            }
+        except Exception as exc:
+            report[name] = {
+                "status": "error",
+                "error": str(exc),
+                "at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            }
+    return report
 
 
 def parse_items(html):
@@ -222,24 +267,29 @@ def main():
     domestic_path = os.path.join(OUT_DIR, "domestic.json")
     imported_path = os.path.join(OUT_DIR, "imported.json")
     params_path = os.path.join(OUT_DIR, "parameters.json")
+    report_path = os.path.join(OUT_DIR, "source_report.json")
 
     domestic = build_list(DOMESTIC)
     imported = build_list(IMPORTED)
+    source_report = probe_sources()
     generated_at = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
     params = [
         {"name": "数据更新时间", "detail": generated_at},
         {"name": "外部数据源", "detail": SOURCE_NAME},
         {"name": "抓取策略", "detail": "按品牌/型号关键词抓取外部商品列表，提取真实报价与来源链接"},
         {"name": "说明", "detail": "若显示“未抓到外部价格”，表示当前外部源未返回可匹配型号"},
+        {"name": "平台探测报告", "detail": "详见 source_report.json（含京东/淘宝/天猫/咸鱼/小红书/阿里巴巴可抓取状态）"},
     ]
 
     write_json(domestic_path, domestic)
     write_json(imported_path, imported)
     write_json(params_path, params)
+    write_json(report_path, source_report)
     print("Generated:")
     print(domestic_path)
     print(imported_path)
     print(params_path)
+    print(report_path)
 
 
 if __name__ == "__main__":
