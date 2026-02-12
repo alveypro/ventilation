@@ -9,6 +9,7 @@ set -euo pipefail
 
 install -d -m 755 /opt/airivo-crawler
 install -d -m 755 /home/admin/.openclaw/workspace/data/respirators
+python3 -m pip install --user beautifulsoup4 lxml >/tmp/respirator-pip.log 2>&1 || true
 
 cat >/opt/airivo-crawler/crawl_respirators.py <<'PY'
 #!/usr/bin/env python3
@@ -17,11 +18,14 @@ import os
 import re
 import time
 from datetime import datetime
-from urllib.parse import quote_plus
+from urllib.parse import quote
 from urllib.request import Request, urlopen
-from xml.etree import ElementTree as ET
+
+from bs4 import BeautifulSoup
 
 OUT_DIR = "/home/admin/.openclaw/workspace/data/respirators"
+SOURCE_NAME = "made-in-china"
+SOURCE_BASE = "https://www.made-in-china.com/products-search/hot-china-products/{}.html"
 
 DOMESTIC = [
     {"brand": "鱼跃", "model": "YH-450 Auto", "features": ["自动滴定", "静音设计", "蓝牙传输"], "pressure_range": "4-20 cmH2O"},
@@ -37,88 +41,174 @@ IMPORTED = [
     {"brand": "律维施泰因", "model": "Prisma SMART", "features": ["自动调压", "数据追踪"], "pressure_range": "4-20 cmH2O"},
 ]
 
-RANGE_RE = re.compile(r"([1-9]\d{2,5})\s*(?:-|~|至)\s*([1-9]\d{2,5})\s*元")
-SINGLE_RE = re.compile(r"(?:¥|￥)\s*([1-9]\d{2,5})|([1-9]\d{2,5})\s*元")
+MODEL_HINTS = {
+    "YH-450 Auto": ["YH-450", "Yuwell", "鱼跃"],
+    "G3 Auto CPAP": ["G3", "BMC", "瑞迈特"],
+    "S9 Auto": ["S9", "凯迪泰", "Canta", "Yuwell"],
+    "S8 Auto": ["S8", "新松", "Sino", "Auto CPAP"],
+    "AirSense 11 AutoSet": ["AirSense", "11", "ResMed", "瑞思迈"],
+    "DreamStation Auto CPAP": ["DreamStation", "Philips", "飞利浦"],
+    "SleepStyle Auto": ["SleepStyle", "Fisher", "Paykel", "费雪"],
+    "Prisma SMART": ["Prisma", "Lowenstein", "Löwenstein", "律维施泰因"],
+}
+
+PRICE_RE = re.compile(r"US\$\s*([\d,.]+)(?:\s*-\s*([\d,.]+))?", re.I)
+ALLOW_TITLE_TERMS = ["cpap", "apap", "bipap", "sleep apnea", "ventilator", "respironics"]
+BLOCK_TITLE_TERMS = ["car", "auto parts", "oil filter", "telescope", "monokular", "truck", "headlight", "sensor"]
 
 
-def fetch_rss_text(query):
-    url = "https://www.bing.com/search?format=rss&q=" + quote_plus(query)
-    req = Request(url, headers={"User-Agent": "Mozilla/5.0 (respirator-crawler/1.0)"})
+def fetch_html(keyword):
+    slug = quote(keyword.replace(" ", "-"))
+    url = SOURCE_BASE.format(slug)
+    req = Request(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (respirator-crawler/2.0)",
+            "Accept-Language": "en-US,en;q=0.9",
+        },
+    )
     with urlopen(req, timeout=20) as resp:
-        return resp.read().decode("utf-8", "ignore")
+        return url, resp.read().decode("utf-8", "ignore")
 
 
-def extract_prices(text):
-    prices = []
-    for m in RANGE_RE.finditer(text):
-        a = int(m.group(1))
-        b = int(m.group(2))
-        if 500 <= a <= 50000 and 500 <= b <= 50000:
-            prices.extend([a, b])
-    for m in SINGLE_RE.finditer(text):
-        raw = m.group(1) or m.group(2)
-        if not raw:
+def parse_items(html):
+    soup = BeautifulSoup(html, "lxml")
+    items = []
+    for box in soup.select("div.products-item"):
+        link_node = box.select_one("h2.product-name a")
+        price_node = box.select_one(".price-new .price") or box.select_one(".price .price") or box.select_one(".price")
+        if not link_node or not price_node:
             continue
-        v = int(raw)
-        if 500 <= v <= 50000:
-            prices.append(v)
-    return prices
-
-
-def estimate_price(item, previous_map):
-    key = item["brand"] + " " + item["model"]
-    query = key + " 呼吸机 价格"
-    try:
-        rss = fetch_rss_text(query)
-        root = ET.fromstring(rss)
-        texts = []
-        for node in root.findall(".//item"):
-            title = (node.findtext("title") or "").strip()
-            desc = (node.findtext("description") or "").strip()
-            texts.append(title + " " + desc)
-        joined = " ".join(texts)
-        values = extract_prices(joined)
-        if values:
-            values = sorted(values)
-            low = values[0]
-            high = values[-1]
-            if low == high:
-                high = int(low * 1.12)
-            return "{}-{}".format(low, high)
-    except Exception:
-        pass
-    prev = previous_map.get(key)
-    if prev and prev.get("price"):
-        return prev["price"]
-    return "待更新"
-
-
-def load_previous(path):
-    if not os.path.exists(path):
-        return {}
-    try:
-        arr = json.load(open(path, "r", encoding="utf-8"))
-    except Exception:
-        return {}
-    if not isinstance(arr, list):
-        return {}
-    out = {}
-    for it in arr:
-        if not isinstance(it, dict):
+        title = " ".join(link_node.get_text(" ", strip=True).split())
+        t_low = title.lower()
+        if not any(term in t_low for term in ALLOW_TITLE_TERMS):
             continue
-        k = "{} {}".format(it.get("brand", ""), it.get("model", "")).strip()
-        if k:
-            out[k] = it
-    return out
+        if any(term in t_low for term in BLOCK_TITLE_TERMS):
+            continue
+        link = link_node.get("href", "").strip()
+        price_text = " ".join(price_node.get_text(" ", strip=True).split())
+        company_node = box.select_one(".company-name a")
+        company = " ".join(company_node.get_text(" ", strip=True).split()) if company_node else ""
+        moq_node = box.select_one(".moq-new .attribute")
+        moq = " ".join(moq_node.get_text(" ", strip=True).split()) if moq_node else ""
+        if not title or not link or not price_text:
+            continue
+        items.append(
+            {
+                "title": title,
+                "url": link,
+                "price_text": price_text,
+                "company": company,
+                "moq": moq,
+            }
+        )
+    return items
 
 
-def build_list(base, prev_map):
+def parse_price(price_text):
+    m = PRICE_RE.search(price_text)
+    if not m:
+        return None
+    low = float(m.group(1).replace(",", ""))
+    high = float((m.group(2) or m.group(1)).replace(",", ""))
+    return low, high
+
+
+def score_item(source, model):
+    title = source["title"].lower()
+    score = 0
+    for token in MODEL_HINTS.get(model, []):
+        tok = token.lower()
+        if tok and tok in title:
+            score += 3
+    for token in model.lower().split():
+        if len(token) >= 3 and token in title:
+            score += 2
+    return score
+
+
+def crawl_external_offer(item):
+    queries = [
+        "{} {}".format(item["brand"], item["model"]),
+        item["model"],
+        "{} CPAP".format(item["brand"]),
+        "CPAP",
+    ]
+    candidates = []
+    seen = set()
+    for q in queries:
+        if q in seen:
+            continue
+        seen.add(q)
+        try:
+            source_url, html = fetch_html(q)
+            for src in parse_items(html):
+                src["from_search"] = source_url
+                src["score"] = score_item(src, item["model"])
+                candidates.append(src)
+            time.sleep(0.4)
+        except Exception:
+            continue
+    if not candidates:
+        return None
+
+    # 优先命中型号，再按价格文本完整度和标题长度排序。
+    candidates.sort(
+        key=lambda x: (
+            x["score"],
+            1 if parse_price(x["price_text"]) else 0,
+            len(x["title"]),
+        ),
+        reverse=True,
+    )
+    for hit in candidates:
+        if hit["score"] < 3:
+            continue
+        parsed = parse_price(hit["price_text"])
+        if not parsed:
+            continue
+        low, high = parsed
+        return {
+            "price": "US${:.2f}-{:.2f}".format(low, high),
+            "source_name": SOURCE_NAME,
+            "source_url": hit["url"],
+            "source_title": hit["title"],
+            "source_company": hit["company"],
+            "source_moq": hit["moq"],
+            "source_price_text": hit["price_text"],
+            "source_search_url": hit["from_search"],
+        }
+    return None
+
+
+def enrich_item(item):
+    row = dict(item)
+    try:
+        offer = crawl_external_offer(item)
+        if offer:
+            row.update(offer)
+        else:
+            row["price"] = "未抓到外部价格"
+            row["source_name"] = SOURCE_NAME
+            row["source_url"] = ""
+            row["source_title"] = ""
+            row["source_company"] = ""
+            row["source_moq"] = ""
+            row["source_price_text"] = ""
+            row["source_search_url"] = ""
+    except Exception:
+        row["price"] = "抓取失败"
+        row["source_name"] = SOURCE_NAME
+    row["updated_at"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    return row
+
+
+def build_list(base):
     result = []
     for item in base:
-        row = dict(item)
-        row["price"] = estimate_price(item, prev_map)
+        row = enrich_item(item)
         result.append(row)
-        time.sleep(0.2)
+        time.sleep(0.3)
     return result
 
 
@@ -133,17 +223,14 @@ def main():
     imported_path = os.path.join(OUT_DIR, "imported.json")
     params_path = os.path.join(OUT_DIR, "parameters.json")
 
-    prev_domestic = load_previous(domestic_path)
-    prev_imported = load_previous(imported_path)
-
-    domestic = build_list(DOMESTIC, prev_domestic)
-    imported = build_list(IMPORTED, prev_imported)
+    domestic = build_list(DOMESTIC)
+    imported = build_list(IMPORTED)
     generated_at = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
     params = [
         {"name": "数据更新时间", "detail": generated_at},
-        {"name": "来源策略", "detail": "关键词聚合抓取（Bing RSS）+ 价格正则提取 + 历史回填"},
-        {"name": "压力范围", "detail": "多数家用PAP设备常见为 4-20 cmH2O，需结合评估设置"},
-        {"name": "使用说明", "detail": "爬虫价格为区间估计，仅供选型初筛"},
+        {"name": "外部数据源", "detail": SOURCE_NAME},
+        {"name": "抓取策略", "detail": "按品牌/型号关键词抓取外部商品列表，提取真实报价与来源链接"},
+        {"name": "说明", "detail": "若显示“未抓到外部价格”，表示当前外部源未返回可匹配型号"},
     ]
 
     write_json(domestic_path, domestic)
