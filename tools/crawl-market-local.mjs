@@ -35,7 +35,7 @@ const detectBlocked = (html, finalUrl) => {
 
 const collectOffers = async (page) => {
   return await page.evaluate(() => {
-    const priceRe = /(?:US\$|\$|¥|￥)\s?\d[\d,.]*/g
+    const priceRe = /(?:US\$|\$|¥|￥)\s?\d[\d,.]*|\d[\d,.]*\s*元/g
     const rows = []
     const anchors = Array.from(document.querySelectorAll('a[href]'))
     for (const a of anchors) {
@@ -56,6 +56,51 @@ const collectOffers = async (page) => {
     }
     return rows
   })
+}
+
+const collectFromRawHtml = (html) => {
+  const rows = []
+  const pushRow = (title, price, url = '') => {
+    const t = (title || '').replace(/\s+/g, ' ').trim()
+    const p = (price || '').replace(/\s+/g, ' ').trim()
+    if (!t || !p) return
+    rows.push({ title: t.slice(0, 200), url, prices: [p], snippet: '' })
+  }
+
+  const patterns = [
+    /"raw_title":"([^"]{6,220})"[^{}]{0,260}?"view_price":"([^"]{1,40})"/g,
+    /"title":"([^"]{6,220})"[^{}]{0,260}?"price":"([^"]{1,40})"/g,
+    /"title":"([^"]{6,220})"[^{}]{0,260}?"priceText":"([^"]{1,40})"/g,
+  ]
+
+  for (const re of patterns) {
+    let m
+    while ((m = re.exec(html)) !== null) {
+      pushRow(m[1], m[2])
+      if (rows.length >= 20) break
+    }
+    if (rows.length >= 20) break
+  }
+
+  return rows
+}
+
+const scrollPage = async (page) => {
+  try {
+    await page.evaluate(async () => {
+      await new Promise(resolve => {
+        let count = 0
+        const timer = setInterval(() => {
+          window.scrollBy(0, 900)
+          count += 1
+          if (count >= 8) {
+            clearInterval(timer)
+            resolve()
+          }
+        }, 450)
+      })
+    })
+  } catch {}
 }
 
 const ensureDir = (dir) => fs.mkdirSync(dir, { recursive: true })
@@ -116,6 +161,8 @@ const run = async () => {
     try {
       await page.goto(t.url, { waitUntil: 'commit', timeout: 90000 })
       await page.waitForTimeout(10000)
+      await scrollPage(page)
+      await page.waitForTimeout(2500)
       let html = await page.content()
       let finalUrl = page.url()
       let blocked = detectBlocked(html, finalUrl)
@@ -124,14 +171,26 @@ const run = async () => {
         process.stdin.resume()
         await new Promise(resolve => process.stdin.once('data', resolve))
         await page.waitForTimeout(4000)
+        await scrollPage(page)
+        await page.waitForTimeout(2000)
         html = await page.content()
         finalUrl = page.url()
         blocked = detectBlocked(html, finalUrl)
       }
-      const offers = blocked ? [] : await collectOffers(page)
+      const domOffers = await collectOffers(page)
+      const rawOffers = collectFromRawHtml(html)
+      const merged = [...domOffers, ...rawOffers]
+      const seen = new Set()
+      const offers = merged.filter(item => {
+        const key = `${item.title}|${item.prices?.[0] || ''}|${item.url || ''}`
+        if (seen.has(key)) return false
+        seen.add(key)
+        return true
+      })
       result.platforms[t.id] = {
-        status: blocked ? 'blocked' : offers.length ? 'ok' : 'empty',
+        status: offers.length ? 'ok' : blocked ? 'blocked' : 'empty',
         final_url: finalUrl,
+        blocked_hint: blocked,
         offers: offers.slice(0, 12),
         at: now(),
       }
