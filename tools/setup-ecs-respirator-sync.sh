@@ -39,6 +39,11 @@ fi
 cp -f "$FOUND/domestic.json" "$DEST/domestic.json"
 cp -f "$FOUND/imported.json" "$DEST/imported.json"
 cp -f "$FOUND/parameters.json" "$DEST/parameters.json"
+for optional in source_report.json free_market_prices.json; do
+  if [[ -f "$FOUND/$optional" ]]; then
+    cp -f "$FOUND/$optional" "$DEST/$optional"
+  fi
+done
 chmod 644 "$DEST/"*.json
 echo "Synced from $FOUND to $DEST"
 EOF
