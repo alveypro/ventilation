@@ -368,20 +368,30 @@ const loadCrawlerData = async () => {
   crawlerLoading.value = true
   crawlerError.value = ''
   try {
-    const [domesticRes, importedRes, paramsRes] = await Promise.all([
-      fetch('/data/respirators/domestic.json', { cache: 'no-store' }),
-      fetch('/data/respirators/imported.json', { cache: 'no-store' }),
-      fetch('/data/respirators/parameters.json', { cache: 'no-store' }),
-    ])
-    if (!domesticRes.ok || !importedRes.ok || !paramsRes.ok) {
-      throw new Error('crawler data files not found')
+    const dataBases = [
+      'https://ai.airivo.cn/data/respirators',
+      '/data/respirators',
+    ]
+    let payload: { domestic: any; imported: any; params: any } | null = null
+    for (const base of dataBases) {
+      const ts = Date.now()
+      const [domesticRes, importedRes, paramsRes] = await Promise.all([
+        fetch(`${base}/domestic.json?t=${ts}`, { cache: 'no-store' }),
+        fetch(`${base}/imported.json?t=${ts}`, { cache: 'no-store' }),
+        fetch(`${base}/parameters.json?t=${ts}`, { cache: 'no-store' }),
+      ])
+      if (!domesticRes.ok || !importedRes.ok || !paramsRes.ok) continue
+      payload = {
+        domestic: await domesticRes.json(),
+        imported: await importedRes.json(),
+        params: await paramsRes.json(),
+      }
+      break
     }
-    const domesticRaw = await domesticRes.json()
-    const importedRaw = await importedRes.json()
-    const paramsRaw = await paramsRes.json()
-    domesticDevices.value = Array.isArray(domesticRaw) ? domesticRaw.map(normalizeDevice) : []
-    importedDevices.value = Array.isArray(importedRaw) ? importedRaw.map(normalizeDevice) : []
-    parameterNotes.value = normalizeParameters(paramsRaw).slice(0, 12)
+    if (!payload) throw new Error('crawler data files not found')
+    domesticDevices.value = Array.isArray(payload.domestic) ? payload.domestic.map(normalizeDevice) : []
+    importedDevices.value = Array.isArray(payload.imported) ? payload.imported.map(normalizeDevice) : []
+    parameterNotes.value = normalizeParameters(payload.params).slice(0, 12)
   } catch (error) {
     crawlerError.value = '爬虫数据库尚未同步到站点，当前先展示内置产品库。'
   } finally {
