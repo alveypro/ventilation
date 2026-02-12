@@ -5,10 +5,15 @@ import path from 'path'
 import { execFileSync } from 'child_process'
 import { chromium } from 'playwright'
 
-const args = new Set(process.argv.slice(2))
+const argv = process.argv.slice(2)
+const args = new Set(argv)
 const loginMode = args.has('--login')
 const skipUpload = args.has('--no-upload')
 const interactiveBypass = !args.has('--no-interactive')
+const pagesArg = argv.find(x => x.startsWith('--pages='))
+const maxPages = Math.max(1, Math.min(500, Number(pagesArg?.split('=')[1] || 1) || 1))
+const maxOffersArg = argv.find(x => x.startsWith('--max-offers='))
+const maxOffers = Math.max(12, Math.min(2000, Number(maxOffersArg?.split('=')[1] || 240) || 240))
 
 const HOME = os.homedir()
 const WORK_DIR = process.cwd()
@@ -21,8 +26,16 @@ const REMOTE_KEY = process.env.REMOTE_KEY || path.join(HOME, 'Downloads', 'open.
 const REMOTE_OUT = '/home/admin/.openclaw/workspace/data/respirators/free_market_prices.json'
 
 const targets = [
-  { id: 'taobao', url: 'https://s.taobao.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA' },
-  { id: 'tmall', url: 'https://s.taobao.com/search?fromTmallRedirect=true&tab=mall&q=%E5%91%BC%E5%90%B8%E6%9C%BA' },
+  {
+    id: 'taobao',
+    urlForPage: page =>
+      `https://s.taobao.com/search?page=${page}&q=%E5%91%BC%E5%90%B8%E6%9C%BA&tab=all`,
+  },
+  {
+    id: 'tmall',
+    urlForPage: page =>
+      `https://s.taobao.com/search?page=${page}&fromTmallRedirect=true&tab=mall&q=%E5%91%BC%E5%90%B8%E6%9C%BA`,
+  },
 ]
 
 const now = () => new Date().toISOString()
@@ -152,56 +165,90 @@ const run = async () => {
     generated_at: now(),
     mode: 'local-browser',
     keyword: '呼吸机',
+    pages: maxPages,
+    max_offers: maxOffers,
     platforms: {},
   }
 
   for (const t of targets) {
     const page = await context.newPage()
+    const seen = new Set()
+    const offers = []
+    let lastFinalUrl = ''
+    let lastBlocked = false
+    let crawledPages = 0
+    let emptyPages = 0
+    let fatalError = null
     try {
-      await page.goto(t.url, { waitUntil: 'commit', timeout: 90000 })
-      await page.waitForTimeout(10000)
-      await scrollPage(page)
-      await page.waitForTimeout(2500)
-      let html = await page.content()
-      let finalUrl = page.url()
-      let blocked = detectBlocked(html, finalUrl)
-      if (blocked && interactiveBypass) {
-        console.log(`[${t.id}] 检测到拦截，请在浏览器中手动完成验证/滑块，完成后回终端按 Enter 继续...`)
-        process.stdin.resume()
-        await new Promise(resolve => process.stdin.once('data', resolve))
-        await page.waitForTimeout(4000)
+      for (let i = 1; i <= maxPages; i += 1) {
+        const pageUrl = t.urlForPage(i)
+        await page.goto(pageUrl, { waitUntil: 'commit', timeout: 90000 })
+        await page.waitForTimeout(8000)
         await scrollPage(page)
         await page.waitForTimeout(2000)
-        html = await page.content()
-        finalUrl = page.url()
-        blocked = detectBlocked(html, finalUrl)
+
+        let html = await page.content()
+        let finalUrl = page.url()
+        let blocked = detectBlocked(html, finalUrl)
+        if (blocked && interactiveBypass) {
+          console.log(`[${t.id} p${i}] 检测到拦截，请在浏览器中手动完成验证/滑块，完成后回终端按 Enter 继续...`)
+          process.stdin.resume()
+          await new Promise(resolve => process.stdin.once('data', resolve))
+          await page.waitForTimeout(4000)
+          await scrollPage(page)
+          await page.waitForTimeout(1500)
+          html = await page.content()
+          finalUrl = page.url()
+          blocked = detectBlocked(html, finalUrl)
+        }
+
+        lastFinalUrl = finalUrl
+        lastBlocked = blocked
+        crawledPages += 1
+
+        const domOffers = await collectOffers(page)
+        const rawOffers = collectFromRawHtml(html)
+        const merged = [...domOffers, ...rawOffers]
+        let pageAdded = 0
+        for (const item of merged) {
+          const key = `${item.title}|${item.prices?.[0] || ''}|${item.url || ''}`
+          if (seen.has(key)) continue
+          seen.add(key)
+          offers.push(item)
+          pageAdded += 1
+          if (offers.length >= maxOffers) break
+        }
+
+        if (pageAdded === 0) emptyPages += 1
+        else emptyPages = 0
+
+        if (offers.length >= maxOffers) break
+        if (emptyPages >= 3) break
       }
-      const domOffers = await collectOffers(page)
-      const rawOffers = collectFromRawHtml(html)
-      const merged = [...domOffers, ...rawOffers]
-      const seen = new Set()
-      const offers = merged.filter(item => {
-        const key = `${item.title}|${item.prices?.[0] || ''}|${item.url || ''}`
-        if (seen.has(key)) return false
-        seen.add(key)
-        return true
-      })
+
       result.platforms[t.id] = {
-        status: offers.length ? 'ok' : blocked ? 'blocked' : 'empty',
-        final_url: finalUrl,
-        blocked_hint: blocked,
-        offers: offers.slice(0, 12),
+        status: offers.length ? 'ok' : lastBlocked ? 'blocked' : 'empty',
+        final_url: lastFinalUrl,
+        blocked_hint: lastBlocked,
+        pages_crawled: crawledPages,
+        offers: offers.slice(0, maxOffers),
         at: now(),
       }
       await page.screenshot({ path: path.join(STATE_DIR, `${t.id}-last.png`), fullPage: true }).catch(() => {})
     } catch (error) {
+      fatalError = error
       result.platforms[t.id] = {
         status: 'error',
         error: `${error}`,
+        pages_crawled: crawledPages,
+        offers: offers.slice(0, maxOffers),
         at: now(),
       }
     } finally {
       await page.close()
+    }
+    if (fatalError) {
+      // Keep going for other platforms even if one platform fails.
     }
   }
 
