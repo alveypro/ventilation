@@ -30,7 +30,6 @@ PROBE_SOURCES = {
     "jd": "https://search.jd.com/Search?keyword=%E5%91%BC%E5%90%B8%E6%9C%BA",
     "taobao": "https://s.taobao.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA",
     "tmall": "https://s.taobao.com/search?fromTmallRedirect=true&tab=mall&q=%E5%91%BC%E5%90%B8%E6%9C%BA",
-    "xianyu": "https://www.goofish.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA",
     "xiaohongshu": "https://www.xiaohongshu.com/search_result/?keyword=%E5%91%BC%E5%90%B8%E6%9C%BA",
     "alibaba": "https://www.alibaba.com/trade/search?SearchText=cpap+machine",
 }

@@ -23,7 +23,6 @@ const REMOTE_OUT = '/home/admin/.openclaw/workspace/data/respirators/free_market
 const targets = [
   { id: 'taobao', url: 'https://s.taobao.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA' },
   { id: 'tmall', url: 'https://s.taobao.com/search?fromTmallRedirect=true&tab=mall&q=%E5%91%BC%E5%90%B8%E6%9C%BA' },
-  { id: 'xianyu', url: 'https://www.goofish.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA' },
 ]
 
 const now = () => new Date().toISOString()

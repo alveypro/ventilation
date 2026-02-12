@@ -24,7 +24,6 @@ const domains = {
   jd: ['.jd.com', '.3.cn'],
   taobao: ['.taobao.com'],
   tmall: ['.tmall.com', '.taobao.com'],
-  xianyu: ['.goofish.com', '.taobao.com'],
   xiaohongshu: ['.xiaohongshu.com'],
   alibaba: ['.alibaba.com'],
 }

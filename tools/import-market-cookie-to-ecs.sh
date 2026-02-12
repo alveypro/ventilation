@@ -3,7 +3,7 @@ set -euo pipefail
 
 if [[ $# -lt 2 ]]; then
   echo "Usage: $0 <platform> \"cookie_header\""
-  echo "platform: jd|taobao|tmall|xianyu|xiaohongshu|alibaba"
+  echo "platform: jd|taobao|tmall|xiaohongshu|alibaba"
   exit 1
 fi
 

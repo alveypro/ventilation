@@ -22,7 +22,6 @@ const targets = [
   { id: 'jd', url: 'https://search.jd.com/Search?keyword=%E5%91%BC%E5%90%B8%E6%9C%BA' },
   { id: 'taobao', url: 'https://s.taobao.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA' },
   { id: 'tmall', url: 'https://s.taobao.com/search?fromTmallRedirect=true&tab=mall&q=%E5%91%BC%E5%90%B8%E6%9C%BA' },
-  { id: 'xianyu', url: 'https://www.goofish.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA' },
   { id: 'xiaohongshu', url: 'https://www.xiaohongshu.com/search_result/?keyword=%E5%91%BC%E5%90%B8%E6%9C%BA' },
   { id: 'alibaba', url: 'https://www.alibaba.com/trade/search?SearchText=cpap+machine' },
 ]
