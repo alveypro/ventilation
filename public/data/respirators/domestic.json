@@ -1,0 +1,23 @@
+[
+  {
+    "brand": "鱼跃",
+    "model": "YH-450 Auto",
+    "price": "2800-3500",
+    "features": ["自动滴定", "静音设计", "蓝牙传输"],
+    "pressure_range": "4-20 cmH2O"
+  },
+  {
+    "brand": "瑞迈特",
+    "model": "G3 Auto CPAP",
+    "price": "2500-3200",
+    "features": ["智能压力调节", "数据导出", "自动启停"],
+    "pressure_range": "4-20 cmH2O"
+  },
+  {
+    "brand": "凯迪泰",
+    "model": "S9 Auto",
+    "price": "2200-3000",
+    "features": ["自动调压", "加温湿化", "漏气监测"],
+    "pressure_range": "4-20 cmH2O"
+  }
+]

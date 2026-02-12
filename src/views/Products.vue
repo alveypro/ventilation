@@ -130,6 +130,71 @@
       </el-row>
     </section>
 
+    <section class="guide-section crawler-section">
+      <div class="section-header">
+        <h2>爬虫呼吸机数据库</h2>
+        <el-tag size="small" type="success">自动读取 /data/respirators</el-tag>
+      </div>
+      <p class="crawler-hint">当前展示国产与进口机型快照，可作为选机初筛参考。</p>
+      <el-alert
+        v-if="crawlerError"
+        type="warning"
+        :closable="false"
+        show-icon
+        :title="crawlerError"
+      />
+      <el-row v-if="crawlerLoading" :gutter="20">
+        <el-col :xs="24" :md="12"><el-skeleton :rows="6" /></el-col>
+        <el-col :xs="24" :md="12"><el-skeleton :rows="6" /></el-col>
+      </el-row>
+      <el-row v-else :gutter="20">
+        <el-col :xs="24" :md="12">
+          <el-card shadow="hover" class="crawler-card">
+            <template #header>
+              <div class="crawler-head">
+                <span>国产机型</span>
+                <el-tag size="small">{{ domesticDevices.length }} 条</el-tag>
+              </div>
+            </template>
+            <el-empty v-if="!domesticDevices.length" description="暂无数据" />
+            <el-table v-else :data="domesticDevices.slice(0, 8)" size="small" stripe>
+              <el-table-column prop="brand" label="品牌" min-width="90" />
+              <el-table-column prop="model" label="型号" min-width="150" />
+              <el-table-column prop="pressureRange" label="压力范围" min-width="110" />
+              <el-table-column prop="price" label="价格" min-width="100" />
+            </el-table>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :md="12">
+          <el-card shadow="hover" class="crawler-card">
+            <template #header>
+              <div class="crawler-head">
+                <span>进口机型</span>
+                <el-tag size="small" type="warning">{{ importedDevices.length }} 条</el-tag>
+              </div>
+            </template>
+            <el-empty v-if="!importedDevices.length" description="暂无数据" />
+            <el-table v-else :data="importedDevices.slice(0, 8)" size="small" stripe>
+              <el-table-column prop="brand" label="品牌" min-width="90" />
+              <el-table-column prop="model" label="型号" min-width="150" />
+              <el-table-column prop="pressureRange" label="压力范围" min-width="110" />
+              <el-table-column prop="price" label="价格" min-width="100" />
+            </el-table>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-card v-if="parameterNotes.length" class="parameter-card">
+        <template #header>
+          <strong>教学参数说明</strong>
+        </template>
+        <ul>
+          <li v-for="item in parameterNotes" :key="item.name">
+            <strong>{{ item.name }}</strong>：{{ item.detail }}
+          </li>
+        </ul>
+      </el-card>
+    </section>
+
     <section class="guide-section">
       <h2>选机避坑清单</h2>
       <div class="pitfall-grid">
@@ -222,6 +287,22 @@ import type { Product } from '@/types'
 const router = useRouter()
 const products = ref<Product[]>([])
 const isLoading = ref(true)
+type CrawlerDevice = {
+  brand: string
+  model: string
+  price: string
+  pressureRange: string
+  features: string[]
+}
+type ParameterNote = {
+  name: string
+  detail: string
+}
+const crawlerLoading = ref(false)
+const crawlerError = ref('')
+const domesticDevices = ref<CrawlerDevice[]>([])
+const importedDevices = ref<CrawlerDevice[]>([])
+const parameterNotes = ref<ParameterNote[]>([])
 const createDefaultFilters = () => ({
   brand: '',
   type: '',
@@ -243,9 +324,70 @@ const currentPage = ref(1)
 const perPage = ref(8)
 
 onMounted(async () => {
-  products.value = await fetchProducts()
+  const [allProducts] = await Promise.all([
+    fetchProducts(),
+    loadCrawlerData(),
+  ])
+  products.value = allProducts
   isLoading.value = false
 })
+
+const asString = (value: unknown) => (typeof value === 'string' ? value.trim() : '')
+const asStringArray = (value: unknown) => {
+  if (!Array.isArray(value)) return []
+  return value.map(item => (typeof item === 'string' ? item.trim() : '')).filter(Boolean)
+}
+
+const normalizeDevice = (item: any): CrawlerDevice => {
+  return {
+    brand: asString(item?.brand) || '未知品牌',
+    model: asString(item?.model) || '未知型号',
+    price: asString(item?.price) || '-',
+    pressureRange: asString(item?.pressure_range) || asString(item?.pressureRange) || '-',
+    features: asStringArray(item?.features),
+  }
+}
+
+const normalizeParameters = (raw: any): ParameterNote[] => {
+  if (Array.isArray(raw)) {
+    return raw.map((item: any) => ({
+      name: asString(item?.name) || asString(item?.label) || '参数',
+      detail: asString(item?.detail) || asString(item?.description) || asString(item?.range) || '-',
+    }))
+  }
+  if (raw && typeof raw === 'object') {
+    return Object.entries(raw).map(([name, value]) => ({
+      name,
+      detail: typeof value === 'string' ? value : JSON.stringify(value),
+    }))
+  }
+  return []
+}
+
+const loadCrawlerData = async () => {
+  crawlerLoading.value = true
+  crawlerError.value = ''
+  try {
+    const [domesticRes, importedRes, paramsRes] = await Promise.all([
+      fetch('/data/respirators/domestic.json', { cache: 'no-store' }),
+      fetch('/data/respirators/imported.json', { cache: 'no-store' }),
+      fetch('/data/respirators/parameters.json', { cache: 'no-store' }),
+    ])
+    if (!domesticRes.ok || !importedRes.ok || !paramsRes.ok) {
+      throw new Error('crawler data files not found')
+    }
+    const domesticRaw = await domesticRes.json()
+    const importedRaw = await importedRes.json()
+    const paramsRaw = await paramsRes.json()
+    domesticDevices.value = Array.isArray(domesticRaw) ? domesticRaw.map(normalizeDevice) : []
+    importedDevices.value = Array.isArray(importedRaw) ? importedRaw.map(normalizeDevice) : []
+    parameterNotes.value = normalizeParameters(paramsRaw).slice(0, 12)
+  } catch (error) {
+    crawlerError.value = '爬虫数据库尚未同步到站点，当前先展示内置产品库。'
+  } finally {
+    crawlerLoading.value = false
+  }
+}
 
 const buyingTips = ref([
   {
@@ -631,6 +773,37 @@ const cancelPreview = () => {
 
 .guide-section {
   margin: 24px 0;
+}
+
+.crawler-section {
+  margin-top: 30px;
+}
+
+.crawler-hint {
+  margin: 0 0 12px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.crawler-card {
+  margin-top: 10px;
+}
+
+.crawler-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.parameter-card {
+  margin-top: 14px;
+}
+
+.parameter-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #4b5563;
+  line-height: 1.6;
 }
 
 .tip-card,

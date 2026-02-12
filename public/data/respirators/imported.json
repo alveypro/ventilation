@@ -1,0 +1,23 @@
+[
+  {
+    "brand": "飞利浦伟康",
+    "model": "DreamStation Auto CPAP",
+    "price": "4500-6000",
+    "features": ["智能算法", "湿化集成", "远程管理"],
+    "pressure_range": "4-20 cmH2O"
+  },
+  {
+    "brand": "瑞思迈",
+    "model": "AirSense 11 AutoSet",
+    "price": "6200-7900",
+    "features": ["自动调压", "呼气缓释", "云端随访"],
+    "pressure_range": "4-20 cmH2O"
+  },
+  {
+    "brand": "费雪派克",
+    "model": "SleepStyle Auto",
+    "price": "5200-6800",
+    "features": ["智能舒适算法", "集成湿化", "低噪音"],
+    "pressure_range": "4-20 cmH2O"
+  }
+]

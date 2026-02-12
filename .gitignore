@@ -13,6 +13,9 @@ dist-ssr
 *.local
 screenshots
 data
+!public/data/
+!public/data/respirators/
+!public/data/respirators/*.json
 public/ingested-images
 __pycache__/
 *.pyc
