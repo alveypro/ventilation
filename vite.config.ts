@@ -1,8 +1,22 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import { execSync } from 'child_process'
+
+const resolveAppVersion = () => {
+  try {
+    return execSync('git rev-parse --short HEAD').toString().trim()
+  } catch (error) {
+    return 'dev'
+  }
+}
+
+const appVersion = process.env.VITE_APP_VERSION || resolveAppVersion()
 
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion),
+  },
   plugins: [vue()],
   resolve: {
     alias: {
