@@ -193,6 +193,27 @@
           </li>
         </ul>
       </el-card>
+      <el-card class="parameter-card">
+        <template #header>
+          <strong>市场实时抓取（淘宝/天猫）</strong>
+        </template>
+        <el-empty v-if="!marketPlatforms.length" description="暂无市场抓取结果" />
+        <div v-else class="market-grid">
+          <el-card v-for="item in marketPlatforms" :key="item.platform" shadow="never" class="market-card">
+            <div class="crawler-head">
+              <strong>{{ item.platform }}</strong>
+              <el-tag :type="item.status === 'ok' ? 'success' : 'warning'" size="small">
+                {{ item.status }}
+              </el-tag>
+            </div>
+            <p class="crawler-hint">抓取条数：{{ item.count }}，抓取页数：{{ item.pages }}</p>
+            <el-table v-if="item.offers.length" :data="item.offers.slice(0, 5)" size="small" stripe>
+              <el-table-column prop="title" label="商品" min-width="220" show-overflow-tooltip />
+              <el-table-column prop="price" label="价格" min-width="90" />
+            </el-table>
+          </el-card>
+        </div>
+      </el-card>
     </section>
 
     <section class="guide-section">
@@ -298,11 +319,23 @@ type ParameterNote = {
   name: string
   detail: string
 }
+type MarketOffer = {
+  title: string
+  price: string
+}
+type MarketPlatform = {
+  platform: string
+  status: string
+  count: number
+  pages: number
+  offers: MarketOffer[]
+}
 const crawlerLoading = ref(false)
 const crawlerError = ref('')
 const domesticDevices = ref<CrawlerDevice[]>([])
 const importedDevices = ref<CrawlerDevice[]>([])
 const parameterNotes = ref<ParameterNote[]>([])
+const marketPlatforms = ref<MarketPlatform[]>([])
 const createDefaultFilters = () => ({
   brand: '',
   type: '',
@@ -372,19 +405,21 @@ const loadCrawlerData = async () => {
       'https://ai.airivo.cn/data/respirators',
       '/data/respirators',
     ]
-    let payload: { domestic: any; imported: any; params: any } | null = null
+    let payload: { domestic: any; imported: any; params: any; market: any } | null = null
     for (const base of dataBases) {
       const ts = Date.now()
-      const [domesticRes, importedRes, paramsRes] = await Promise.all([
+      const [domesticRes, importedRes, paramsRes, marketRes] = await Promise.all([
         fetch(`${base}/domestic.json?t=${ts}`, { cache: 'no-store' }),
         fetch(`${base}/imported.json?t=${ts}`, { cache: 'no-store' }),
         fetch(`${base}/parameters.json?t=${ts}`, { cache: 'no-store' }),
+        fetch(`${base}/free_market_prices.json?t=${ts}`, { cache: 'no-store' }).catch(() => null),
       ])
       if (!domesticRes.ok || !importedRes.ok || !paramsRes.ok) continue
       payload = {
         domestic: await domesticRes.json(),
         imported: await importedRes.json(),
         params: await paramsRes.json(),
+        market: marketRes && marketRes.ok ? await marketRes.json() : null,
       }
       break
     }
@@ -392,6 +427,22 @@ const loadCrawlerData = async () => {
     domesticDevices.value = Array.isArray(payload.domestic) ? payload.domestic.map(normalizeDevice) : []
     importedDevices.value = Array.isArray(payload.imported) ? payload.imported.map(normalizeDevice) : []
     parameterNotes.value = normalizeParameters(payload.params).slice(0, 12)
+    const marketRaw = payload.market?.platforms && typeof payload.market.platforms === 'object'
+      ? payload.market.platforms
+      : {}
+    marketPlatforms.value = Object.entries(marketRaw).map(([platform, detail]: [string, any]) => {
+      const rawOffers = Array.isArray(detail?.offers) ? detail.offers : []
+      return {
+        platform,
+        status: asString(detail?.status) || 'unknown',
+        count: rawOffers.length,
+        pages: Number(detail?.pages_crawled || 0),
+        offers: rawOffers.slice(0, 20).map((offer: any) => ({
+          title: asString(offer?.title) || '未知商品',
+          price: Array.isArray(offer?.prices) && offer.prices.length ? asString(offer.prices[0]) : '-',
+        })),
+      }
+    })
   } catch (error) {
     crawlerError.value = '爬虫数据库尚未同步到站点，当前先展示内置产品库。'
   } finally {
@@ -807,6 +858,16 @@ const cancelPreview = () => {
 
 .parameter-card {
   margin-top: 14px;
+}
+
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.market-card {
+  border: 1px solid #e5e7eb;
 }
 
 .parameter-card ul {
