@@ -8,6 +8,7 @@ import { chromium } from 'playwright'
 const args = new Set(process.argv.slice(2))
 const loginMode = args.has('--login')
 const skipUpload = args.has('--no-upload')
+const interactiveBypass = !args.has('--no-interactive')
 
 const HOME = os.homedir()
 const WORK_DIR = process.cwd()
@@ -75,6 +76,15 @@ const run = async () => {
     headless: false,
     viewport: { width: 1440, height: 2200 },
     locale: 'zh-CN',
+    args: [
+      '--disable-blink-features=AutomationControlled',
+      '--start-maximized',
+      '--no-default-browser-check',
+      '--disable-dev-shm-usage',
+    ],
+  })
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, 'webdriver', { get: () => undefined })
   })
 
   if (loginMode) {
@@ -104,11 +114,20 @@ const run = async () => {
   for (const t of targets) {
     const page = await context.newPage()
     try {
-      await page.goto(t.url, { waitUntil: 'domcontentloaded', timeout: 60000 })
-      await page.waitForTimeout(5000)
-      const html = await page.content()
-      const finalUrl = page.url()
-      const blocked = detectBlocked(html, finalUrl)
+      await page.goto(t.url, { waitUntil: 'commit', timeout: 90000 })
+      await page.waitForTimeout(10000)
+      let html = await page.content()
+      let finalUrl = page.url()
+      let blocked = detectBlocked(html, finalUrl)
+      if (blocked && interactiveBypass) {
+        console.log(`[${t.id}] 检测到拦截，请在浏览器中手动完成验证/滑块，完成后回终端按 Enter 继续...`)
+        process.stdin.resume()
+        await new Promise(resolve => process.stdin.once('data', resolve))
+        await page.waitForTimeout(4000)
+        html = await page.content()
+        finalUrl = page.url()
+        blocked = detectBlocked(html, finalUrl)
+      }
       const offers = blocked ? [] : await collectOffers(page)
       result.platforms[t.id] = {
         status: blocked ? 'blocked' : offers.length ? 'ok' : 'empty',
@@ -116,6 +135,7 @@ const run = async () => {
         offers: offers.slice(0, 12),
         at: now(),
       }
+      await page.screenshot({ path: path.join(STATE_DIR, `${t.id}-last.png`), fullPage: true }).catch(() => {})
     } catch (error) {
       result.platforms[t.id] = {
         status: 'error',
@@ -128,6 +148,7 @@ const run = async () => {
   }
 
   saveResult(result)
+  await context.storageState({ path: STATE_FILE })
   console.log(`已写入: ${OUT_FILE}`)
 
   if (!skipUpload) {
