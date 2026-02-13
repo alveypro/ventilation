@@ -198,20 +198,38 @@
           <strong>市场实时抓取（淘宝/天猫）</strong>
         </template>
         <el-empty v-if="!marketPlatforms.length" description="暂无市场抓取结果" />
-        <div v-else class="market-grid">
-          <el-card v-for="item in marketPlatforms" :key="item.platform" shadow="never" class="market-card">
-            <div class="crawler-head">
-              <strong>{{ item.platform }}</strong>
-              <el-tag :type="item.status === 'ok' ? 'success' : 'warning'" size="small">
-                {{ item.status }}
+        <div v-else>
+          <el-tabs v-model="activeMarketPlatform" class="market-tabs">
+            <el-tab-pane
+              v-for="item in marketPlatforms"
+              :key="item.platform"
+              :label="`${item.platform} (${item.count})`"
+              :name="item.platform"
+            />
+          </el-tabs>
+          <div v-if="activeMarketData" class="market-panel">
+            <div class="market-meta">
+              <el-tag :type="activeMarketData.status === 'ok' ? 'success' : 'warning'" size="small">
+                状态：{{ activeMarketData.status }}
               </el-tag>
+              <el-tag size="small">抓取条数：{{ activeMarketData.count }}</el-tag>
+              <el-tag size="small" type="info">抓取页数：{{ activeMarketData.pages }}</el-tag>
             </div>
-            <p class="crawler-hint">抓取条数：{{ item.count }}，抓取页数：{{ item.pages }}</p>
-            <el-table v-if="item.offers.length" :data="item.offers.slice(0, 5)" size="small" stripe>
-              <el-table-column prop="title" label="商品" min-width="220" show-overflow-tooltip />
-              <el-table-column prop="price" label="价格" min-width="90" />
+            <el-empty v-if="!marketPagedOffers.length" description="该平台暂无抓取结果" />
+            <el-table v-else :data="marketPagedOffers" size="small" stripe>
+              <el-table-column prop="title" label="商品" min-width="260" show-overflow-tooltip />
+              <el-table-column prop="price" label="价格" min-width="110" />
             </el-table>
-          </el-card>
+            <div class="market-pagination" v-if="marketTotal > marketPerPage">
+              <el-pagination
+                background
+                v-model:current-page="marketPage"
+                :page-size="marketPerPage"
+                :total="marketTotal"
+                layout="prev, pager, next, jumper"
+              />
+            </div>
+          </div>
         </div>
       </el-card>
     </section>
@@ -336,6 +354,9 @@ const domesticDevices = ref<CrawlerDevice[]>([])
 const importedDevices = ref<CrawlerDevice[]>([])
 const parameterNotes = ref<ParameterNote[]>([])
 const marketPlatforms = ref<MarketPlatform[]>([])
+const activeMarketPlatform = ref('')
+const marketPage = ref(1)
+const marketPerPage = 10
 const createDefaultFilters = () => ({
   brand: '',
   type: '',
@@ -397,6 +418,20 @@ const normalizeParameters = (raw: any): ParameterNote[] => {
   return []
 }
 
+const activeMarketData = computed(() => {
+  if (!marketPlatforms.value.length) return null
+  const found = marketPlatforms.value.find(item => item.platform === activeMarketPlatform.value)
+  return found || marketPlatforms.value[0]
+})
+
+const marketTotal = computed(() => activeMarketData.value?.offers.length || 0)
+
+const marketPagedOffers = computed(() => {
+  const all = activeMarketData.value?.offers || []
+  const start = (marketPage.value - 1) * marketPerPage
+  return all.slice(start, start + marketPerPage)
+})
+
 const loadCrawlerData = async () => {
   crawlerLoading.value = true
   crawlerError.value = ''
@@ -443,6 +478,10 @@ const loadCrawlerData = async () => {
         })),
       }
     })
+    if (!marketPlatforms.value.find(item => item.platform === activeMarketPlatform.value)) {
+      activeMarketPlatform.value = marketPlatforms.value[0]?.platform || ''
+      marketPage.value = 1
+    }
   } catch (error) {
     crawlerError.value = '爬虫数据库尚未同步到站点，当前先展示内置产品库。'
   } finally {
@@ -711,6 +750,10 @@ watch(compareIds, () => {
   saveToStorage('compare-ids', compareIds.value)
 }, { deep: true })
 
+watch(activeMarketPlatform, () => {
+  marketPage.value = 1
+})
+
 const resetFilters = () => {
   Object.assign(draftFilters, createDefaultFilters())
   appliedFilters.value = createDefaultFilters()
@@ -860,14 +903,27 @@ const cancelPreview = () => {
   margin-top: 14px;
 }
 
-.market-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 12px;
+.market-tabs {
+  margin-bottom: 12px;
 }
 
-.market-card {
+.market-panel {
   border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.market-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.market-pagination {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .parameter-card ul {
