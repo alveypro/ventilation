@@ -89,7 +89,11 @@
     <!-- 底部 -->
     <el-footer class="footer">
       <p>&copy; 2024 呼吸机之家 | 专业呼吸机选购与使用指南</p>
-      <span class="version-badge" :title="`部署版本 ${appVersion}`">v{{ appVersion }}</span>
+      <div class="deploy-panel">
+        <span class="version-badge" :title="`部署版本 ${appVersion}`">v{{ appVersion }}</span>
+        <span class="deploy-meta">commit {{ gitCommit }}</span>
+        <span class="deploy-meta">build {{ buildTime }}</span>
+      </div>
     </el-footer>
 
     <AiAssistant v-if="showAiAssistant" />
@@ -126,6 +130,8 @@ const menuItems = [
 ]
 const showAiAssistant = import.meta.env.VITE_SHOW_AI_ASSISTANT === 'true'
 const appVersion = import.meta.env.VITE_APP_VERSION || 'dev'
+const gitCommit = import.meta.env.VITE_GIT_COMMIT || appVersion
+const buildTime = import.meta.env.VITE_BUILD_TIME || 'local'
 
 const syncActiveMenu = () => {
   const section = route.path.split('/')[1] || 'home'
@@ -371,6 +377,27 @@ const goSearch = () => {
   color: #1e5aa6;
   background: #eaf2ff;
   border: 1px solid rgba(30, 90, 166, 0.28);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.deploy-panel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.deploy-meta {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #475569;
+  border: 1px dashed rgba(30, 90, 166, 0.28);
+  background: rgba(248, 250, 252, 0.95);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
