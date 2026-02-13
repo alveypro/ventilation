@@ -195,7 +195,10 @@
       </el-card>
       <el-card class="parameter-card">
         <template #header>
-          <strong>市场实时抓取（淘宝/天猫）</strong>
+          <div class="crawler-head">
+            <strong>市场实时抓取（淘宝/天猫）</strong>
+            <el-tag v-if="marketGeneratedAt" size="small" type="info">更新时间 {{ marketGeneratedAt }}</el-tag>
+          </div>
         </template>
         <el-empty v-if="!marketPlatforms.length" description="暂无市场抓取结果" />
         <div v-else>
@@ -354,6 +357,7 @@ const domesticDevices = ref<CrawlerDevice[]>([])
 const importedDevices = ref<CrawlerDevice[]>([])
 const parameterNotes = ref<ParameterNote[]>([])
 const marketPlatforms = ref<MarketPlatform[]>([])
+const marketGeneratedAt = ref('')
 const activeMarketPlatform = ref('')
 const marketPage = ref(1)
 const marketPerPage = 10
@@ -482,6 +486,7 @@ const loadCrawlerData = async () => {
       activeMarketPlatform.value = marketPlatforms.value[0]?.platform || ''
       marketPage.value = 1
     }
+    marketGeneratedAt.value = asString(payload.market?.generated_at)
   } catch (error) {
     crawlerError.value = '爬虫数据库尚未同步到站点，当前先展示内置产品库。'
   } finally {

@@ -29,6 +29,24 @@ let tutorialsCache: Tutorial[] | null = null
 let brandsCache: Brand[] | null = null
 let reviewsCache: ReviewItem[] | null = null
 
+type CrawlerDevice = {
+  brand?: string
+  model?: string
+  price?: string
+  pressure_range?: string
+  features?: string[]
+}
+
+type MarketOffer = {
+  title?: string
+  url?: string
+  prices?: string[]
+}
+
+type MarketPayload = {
+  platforms?: Record<string, { offers?: MarketOffer[] }>
+}
+
 export const fetchProducts = async (): Promise<Product[]> => {
   if (productsCache) return productsCache
   try {
@@ -58,7 +76,8 @@ export const fetchProducts = async (): Promise<Product[]> => {
       ...item,
       ...applyPlatformRules(item),
     }))
-  productsCache = sanitizeProducts(normalized)
+  const enriched = await enrichByCrawlerFeeds(normalized)
+  productsCache = sanitizeProducts(enriched)
   return productsCache
 }
 
@@ -76,10 +95,10 @@ export const fetchProductById = async (id: number): Promise<Product | undefined>
     // Fallback to local data
   }
   const merged = productsCache
-    || sanitizeProducts(enrichProductsWithCatalog([...catalogProductsData, ...productsData] as Product[]).map(item => ({
+    || sanitizeProducts(await enrichByCrawlerFeeds(enrichProductsWithCatalog([...catalogProductsData, ...productsData] as Product[]).map(item => ({
       ...item,
       ...applyPlatformRules(item),
-    })))
+    }))))
   return merged.find(item => item.id === id) as Product | undefined
 }
 
@@ -137,6 +156,102 @@ const normalizeKey = (value: string) => {
     .toLowerCase()
     .replace(/[™®©]/g, '')
     .replace(/[\s\-_()［］【】\[\].,/]+/g, '')
+}
+
+const parsePriceNumber = (value: string | number | undefined) => {
+  if (typeof value === 'number' && value > 0) return value
+  const text = String(value || '')
+  const nums = [...text.matchAll(/(?:¥|￥|US\$|\$)?\s*(\d+(?:\.\d+)?)/g)]
+    .map(m => Number(m[1]))
+    .filter(n => Number.isFinite(n) && n > 50)
+  if (!nums.length) return 0
+  if (nums.length === 1) return nums[0]
+  nums.sort((a, b) => a - b)
+  return (nums[0] + nums[nums.length - 1]) / 2
+}
+
+const modelTokens = (name: string) => {
+  const raw = name || ''
+  const hits = raw.match(/[A-Za-z]+\d+[A-Za-z0-9-]*/g) || []
+  const pair = raw.split(/\s+/).slice(0, 2).join(' ')
+  return Array.from(new Set([raw, pair, ...hits].map(x => normalizeKey(x)).filter(Boolean)))
+}
+
+const fetchCrawlerJson = async (file: string) => {
+  const bases = ['https://ai.airivo.cn/data/respirators', '/data/respirators']
+  for (const base of bases) {
+    try {
+      const res = await fetch(`${base}/${file}?t=${Date.now()}`, { cache: 'no-store' })
+      if (res.ok) return await res.json()
+    } catch {}
+  }
+  return null
+}
+
+const enrichByCrawlerFeeds = async (items: Product[]) => {
+  const [domestic, imported, market] = await Promise.all([
+    fetchCrawlerJson('domestic.json') as Promise<CrawlerDevice[] | null>,
+    fetchCrawlerJson('imported.json') as Promise<CrawlerDevice[] | null>,
+    fetchCrawlerJson('free_market_prices.json') as Promise<MarketPayload | null>,
+  ])
+
+  const products = items.map(item => ({ ...item }))
+  const crawlerDevices = [...(Array.isArray(domestic) ? domestic : []), ...(Array.isArray(imported) ? imported : [])]
+
+  crawlerDevices.forEach(device => {
+    const brand = normalizeBrand(device.brand || '')
+    const model = (device.model || '').trim()
+    if (!brand || !model) return
+    const match = products.find(p =>
+      normalizeBrand(p.brand || '') === brand
+      && (normalizeKey(p.name || '').includes(normalizeKey(model)) || normalizeKey(model).includes(normalizeKey(p.name || '')))
+    )
+    if (!match) return
+    const price = parsePriceNumber(device.price)
+    if ((match.price || 0) <= 0 && price > 0) match.price = Math.round(price)
+    match.highlights = mergeArrays(match.highlights, [
+      ...(device.features || []),
+      device.pressure_range ? `压力范围 ${device.pressure_range}` : '',
+    ]).slice(0, 8)
+    match.specs = mergeSpecs(match.specs, {
+      '压力范围': match.specs?.['压力范围'] || device.pressure_range,
+      '快照参考价': match.specs?.['快照参考价'] || (device.price || ''),
+    })
+    match.sourceTypes = mergeArrays(match.sourceTypes, ['爬虫'])
+    match.sourcePaths = mergeArrays(match.sourcePaths, ['respirators/domestic.json', 'respirators/imported.json'])
+    match.dataCompleteness = Math.min(95, Math.max(match.dataCompleteness || 0, 84))
+  })
+
+  const offers = Object.values(market?.platforms || {})
+    .flatMap(platform => platform.offers || [])
+    .map(offer => ({
+      title: offer.title || '',
+      price: parsePriceNumber(offer.prices?.[0]),
+      url: offer.url || '',
+    }))
+    .filter(offer => offer.title && offer.price > 0)
+
+  products.forEach(item => {
+    const brandKey = normalizeKey(normalizeBrand(item.brand || ''))
+    const tokens = modelTokens(item.name || '')
+    const hits = offers.filter(offer => {
+      const text = normalizeKey(offer.title)
+      return text.includes(brandKey) && tokens.some(token => token && text.includes(token))
+    })
+    if (!hits.length) return
+    const prices = hits.map(hit => hit.price).filter(Boolean).sort((a, b) => a - b)
+    const mid = prices[Math.floor(prices.length / 2)] || 0
+    if ((item.price || 0) <= 0 && mid > 0) item.price = Math.round(mid)
+    item.specs = mergeSpecs(item.specs, {
+      '市场参考价': mid > 0 ? `¥${Math.round(mid)}` : undefined,
+      '市场样本数': String(hits.length),
+    })
+    item.sourceTypes = mergeArrays(item.sourceTypes, ['爬虫'])
+    item.sourcePaths = mergeArrays(item.sourcePaths, hits.map(hit => hit.url).filter(Boolean).slice(0, 2))
+    item.dataCompleteness = Math.min(95, Math.max(item.dataCompleteness || 0, 88))
+  })
+
+  return products
 }
 
 const scoreProduct = (item: Product) => {

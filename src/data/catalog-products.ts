@@ -1,4 +1,4 @@
-// 自动从站点内容包生成
+// 自动融合更新: 2026-02-13T01:17:26.356Z
 export const catalogProductsData = [
   {
     "id": 30001,
@@ -148,7 +148,10 @@ export const catalogProductsData = [
       "压力范围 4-20 cmH2O",
       "支持加温管路",
       "一体式加湿",
-      "价格区间 6500-12000 元"
+      "价格区间 6500-12000 元",
+      "自动调压",
+      "呼气缓释",
+      "云端随访"
     ],
     "description": "地区SKU可能不同；以当地官方为准。",
     "suitableFor": [
@@ -161,12 +164,15 @@ export const catalogProductsData = [
       "湿化器": "一体",
       "加温管路": "支持",
       "价格区间": "6500-12000 元",
-      "官方页面": "https://www.resmed.com/en-us/health-professionals/products/cpap/machines/airsense-11-autoset/"
+      "官方页面": "https://www.resmed.com/en-us/health-professionals/products/cpap/machines/airsense-11-autoset/",
+      "压力范围": "4-20 cmH2O",
+      "快照参考价": "6200-7900"
     },
     "image": "https://media.resmed.com/20250226175153/healthcare-professionals-airsense-11-cpap-qrhs-view.jpg",
     "sourcePaths": [
       "data/sources/呼吸机之家_进阶交付包/呼吸机完整参数版.csv",
-      "data/呼吸机之家_品牌批次_ResMed_全量型号+官方图URL映射/resmed_brand_model_master.csv"
+      "data/呼吸机之家_品牌批次_ResMed_全量型号+官方图URL映射/resmed_brand_model_master.csv",
+      "respirators/imported.json"
     ],
     "deviceType": "PAP_SLEEP",
     "platformFamily": "ResMed AirSense 10/11",
@@ -205,7 +211,8 @@ export const catalogProductsData = [
     "sourceTypes": [
       "目录",
       "进阶包",
-      "品牌批次"
+      "品牌批次",
+      "爬虫"
     ],
     "dataCompleteness": 88,
     "aliasNames": [
@@ -777,7 +784,10 @@ export const catalogProductsData = [
     "highlights": [
       "模式 APAP / CPAP",
       "压力范围 4-20 cmH2O",
-      "价格区间 3500-7000 元"
+      "价格区间 3500-7000 元",
+      "智能算法",
+      "湿化集成",
+      "远程管理"
     ],
     "description": "一代机型，部分地区停售/召回背景需提示",
     "suitableFor": [
@@ -790,12 +800,15 @@ export const catalogProductsData = [
       "湿化器": "可选",
       "加温管路": "可选",
       "价格区间": "3500-7000 元",
-      "官方页面": "https://www.philips.com/healthcare/solutions/sleep-respiratory-care"
+      "官方页面": "https://www.philips.com/healthcare/solutions/sleep-respiratory-care",
+      "压力范围": "4-20 cmH2O",
+      "快照参考价": "4500-6000"
     },
     "image": null,
     "sourcePaths": [
       "data/sources/呼吸机之家_进阶交付包/呼吸机完整参数版.csv",
-      "data/呼吸机之家_品牌批次_Philips_Respironics_全量型号+官方图URL映射/philips_respironics_brand_model_master.csv"
+      "data/呼吸机之家_品牌批次_Philips_Respironics_全量型号+官方图URL映射/philips_respironics_brand_model_master.csv",
+      "respirators/imported.json"
     ],
     "deviceType": "PAP_SLEEP",
     "platformFamily": "Philips DreamStation 1/2 (Sleep)",
@@ -834,7 +847,8 @@ export const catalogProductsData = [
     "sourceTypes": [
       "目录",
       "进阶包",
-      "品牌批次"
+      "品牌批次",
+      "爬虫"
     ],
     "dataCompleteness": 88,
     "aliasNames": [
@@ -4237,24 +4251,31 @@ export const catalogProductsData = [
     "platformId": null,
     "series": "SleepStyle",
     "type": "睡眠呼吸机",
-    "price": 0,
+    "price": 6000,
     "rating": 0,
     "reviewCount": 0,
     "tag": "品牌批次",
     "tagType": "success",
     "highlights": [
-      "官方型号整理"
+      "官方型号整理",
+      "智能舒适算法",
+      "集成湿化",
+      "低噪音",
+      "压力范围 4-20 cmH2O"
     ],
     "description": "官网产品页稳定，型号全球一致",
     "suitableFor": [
       "sleep_apnea"
     ],
     "specs": {
-      "官方页面": "https://www.fphcare.com/au/homecare/sleep-apnea/cpap-devices/sleepstyle/"
+      "官方页面": "https://www.fphcare.com/au/homecare/sleep-apnea/cpap-devices/sleepstyle/",
+      "压力范围": "4-20 cmH2O",
+      "快照参考价": "5200-6800"
     },
     "image": "https://resources.fphcare.com/resources/corporate/media/resources/images/homecare/sleepstyle/updated/sleepstyle-device-angle.png",
     "sourcePaths": [
-      "data/呼吸机之家_品牌批次_Fisher_Paykel_全量型号+官方图URL映射/fisher_paykel_brand_model_master.csv"
+      "data/呼吸机之家_品牌批次_Fisher_Paykel_全量型号+官方图URL映射/fisher_paykel_brand_model_master.csv",
+      "respirators/imported.json"
     ],
     "deviceType": "PAP_SLEEP",
     "platformFamily": "SleepStyle",
@@ -4281,9 +4302,10 @@ export const catalogProductsData = [
     "overclaimRisk": "低",
     "scenarioTags": [],
     "sourceTypes": [
-      "品牌批次"
+      "品牌批次",
+      "爬虫"
     ],
-    "dataCompleteness": 70,
+    "dataCompleteness": 82,
     "aliasNames": [],
     "evidenceSummaries": [
       "适用于睡眠呼吸障碍的常见通气支持场景，依从性与面罩匹配是关键。",
@@ -5879,24 +5901,30 @@ export const catalogProductsData = [
     "platformId": null,
     "series": "Luna",
     "type": "睡眠呼吸机",
-    "price": 0,
+    "price": 2164,
     "rating": 0,
     "reviewCount": 0,
     "tag": "品牌批次",
     "tagType": "success",
     "highlights": [
-      "官方型号整理"
+      "官方型号整理",
+      "市场样本 2 条",
+      "渠道 taobao/tmall"
     ],
     "description": "海外市场",
     "suitableFor": [
       "sleep_apnea"
     ],
     "specs": {
-      "官方页面": "https://en.bmc-medical.com/"
+      "官方页面": "https://en.bmc-medical.com/",
+      "市场参考价": "¥2164",
+      "市场样本数": "2",
+      "抓取渠道": "taobao/tmall"
     },
     "image": null,
     "sourcePaths": [
-      "data/BMC_全量型号+官方图URL映射/BMC_brand_model_master.csv"
+      "data/BMC_全量型号+官方图URL映射/BMC_brand_model_master.csv",
+      "https://detail.tmall.com/item.htm"
     ],
     "deviceType": "PAP_SLEEP",
     "platformFamily": "Luna",
@@ -5921,9 +5949,10 @@ export const catalogProductsData = [
     "overclaimRisk": "低",
     "scenarioTags": [],
     "sourceTypes": [
-      "品牌批次"
+      "品牌批次",
+      "爬虫"
     ],
-    "dataCompleteness": 70,
+    "dataCompleteness": 86,
     "aliasNames": [],
     "evidenceSummaries": [
       "适用于睡眠呼吸障碍的常见通气支持场景，依从性与面罩匹配是关键。",
@@ -9184,11 +9213,13 @@ export const catalogProductsData = [
     "brand": "瑞迈特",
     "series": "G3",
     "type": "睡眠呼吸机",
-    "price": 0,
+    "price": 2164,
     "highlights": [
       "入门APAP",
       "家用场景",
-      "性价比"
+      "性价比",
+      "市场样本 2 条",
+      "渠道 taobao/tmall"
     ],
     "description": "家用入门级自动调压机型。",
     "suitableFor": [
@@ -9198,7 +9229,10 @@ export const catalogProductsData = [
       "适用场景": "家用睡眠治疗",
       "通气模式": "APAP/CPAP",
       "价格区间": "待补充",
-      "官方页面": "https://www.bmc-medical.com"
+      "官方页面": "https://www.bmc-medical.com",
+      "市场参考价": "¥2164",
+      "市场样本数": "2",
+      "抓取渠道": "taobao/tmall"
     },
     "deviceType": "PAP_SLEEP",
     "status": "在售",
@@ -9223,20 +9257,26 @@ export const catalogProductsData = [
     "tag": "目录",
     "tagType": "success",
     "sourceTypes": [
-      "目录"
+      "目录",
+      "爬虫"
     ],
-    "dataCompleteness": 70
+    "dataCompleteness": 86,
+    "sourcePaths": [
+      "https://detail.tmall.com/item.htm"
+    ]
   },
   {
     "name": "G3 C20A",
     "brand": "瑞迈特",
     "series": "G3",
     "type": "睡眠呼吸机",
-    "price": 0,
+    "price": 2164,
     "highlights": [
       "自动调压",
       "家用",
-      "舒适度优化"
+      "舒适度优化",
+      "市场样本 2 条",
+      "渠道 taobao/tmall"
     ],
     "description": "面向家庭睡眠治疗的自动调压机型。",
     "suitableFor": [
@@ -9246,7 +9286,10 @@ export const catalogProductsData = [
       "适用场景": "家用睡眠治疗",
       "通气模式": "APAP/CPAP",
       "价格区间": "待补充",
-      "官方页面": "https://www.bmc-medical.com"
+      "官方页面": "https://www.bmc-medical.com",
+      "市场参考价": "¥2164",
+      "市场样本数": "2",
+      "抓取渠道": "taobao/tmall"
     },
     "deviceType": "PAP_SLEEP",
     "status": "在售",
@@ -9271,9 +9314,13 @@ export const catalogProductsData = [
     "tag": "目录",
     "tagType": "success",
     "sourceTypes": [
-      "目录"
+      "目录",
+      "爬虫"
     ],
-    "dataCompleteness": 70
+    "dataCompleteness": 86,
+    "sourcePaths": [
+      "https://detail.tmall.com/item.htm"
+    ]
   },
   {
     "name": "YH-830 Auto",
@@ -9611,5 +9658,125 @@ export const catalogProductsData = [
       "目录"
     ],
     "dataCompleteness": 70
+  },
+  {
+    "id": 30112,
+    "name": "YH-450 Auto",
+    "brand": "鱼跃",
+    "type": "睡眠呼吸机",
+    "price": 3150,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "爬虫",
+    "tagType": "warning",
+    "highlights": [
+      "自动滴定",
+      "静音设计",
+      "蓝牙传输",
+      "压力范围 4-20 cmH2O"
+    ],
+    "description": "由爬虫快照补充的机型数据。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "压力范围": "4-20 cmH2O",
+      "快照参考价": "2800-3500",
+      "数据来源": "respirators/domestic.json"
+    },
+    "image": null,
+    "sourcePaths": [
+      "respirators/domestic.json"
+    ],
+    "deviceType": "PAP_SLEEP",
+    "platformFamily": "鱼跃",
+    "status": "不明",
+    "modeTags": [],
+    "sourceTypes": [
+      "爬虫"
+    ],
+    "dataCompleteness": 72
+  },
+  {
+    "id": 30113,
+    "name": "G3 Auto CPAP",
+    "brand": "瑞迈特",
+    "type": "睡眠呼吸机",
+    "price": 2850,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "爬虫",
+    "tagType": "warning",
+    "highlights": [
+      "智能压力调节",
+      "数据导出",
+      "自动启停",
+      "压力范围 4-20 cmH2O",
+      "市场样本 2 条",
+      "渠道 taobao/tmall"
+    ],
+    "description": "由爬虫快照补充的机型数据。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "压力范围": "4-20 cmH2O",
+      "快照参考价": "2500-3200",
+      "数据来源": "respirators/domestic.json",
+      "市场参考价": "¥2164",
+      "市场样本数": "2",
+      "抓取渠道": "taobao/tmall"
+    },
+    "image": null,
+    "sourcePaths": [
+      "respirators/domestic.json",
+      "https://detail.tmall.com/item.htm"
+    ],
+    "deviceType": "PAP_SLEEP",
+    "platformFamily": "瑞迈特",
+    "status": "不明",
+    "modeTags": [],
+    "sourceTypes": [
+      "爬虫"
+    ],
+    "dataCompleteness": 86
+  },
+  {
+    "id": 30114,
+    "name": "S9 Auto",
+    "brand": "凯迪泰",
+    "type": "睡眠呼吸机",
+    "price": 2600,
+    "rating": 0,
+    "reviewCount": 0,
+    "tag": "爬虫",
+    "tagType": "warning",
+    "highlights": [
+      "自动调压",
+      "加温湿化",
+      "漏气监测",
+      "压力范围 4-20 cmH2O"
+    ],
+    "description": "由爬虫快照补充的机型数据。",
+    "suitableFor": [
+      "sleep_apnea"
+    ],
+    "specs": {
+      "压力范围": "4-20 cmH2O",
+      "快照参考价": "2200-3000",
+      "数据来源": "respirators/domestic.json"
+    },
+    "image": null,
+    "sourcePaths": [
+      "respirators/domestic.json"
+    ],
+    "deviceType": "PAP_SLEEP",
+    "platformFamily": "凯迪泰",
+    "status": "不明",
+    "modeTags": [],
+    "sourceTypes": [
+      "爬虫"
+    ],
+    "dataCompleteness": 72
   }
 ]
