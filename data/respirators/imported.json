@@ -1,0 +1,77 @@
+[
+  {
+    "brand": "瑞思迈",
+    "model": "AirSense 11 AutoSet",
+    "features": [
+      "自动调压",
+      "呼气缓释",
+      "云端随访"
+    ],
+    "pressure_range": "4-20 cmH2O",
+    "price": "US$2800.00-3500.00",
+    "source_name": "made-in-china",
+    "source_url": "https://cbmtec.en.made-in-china.com/product/lndRpCYTghkV/China-Machine-Medical-Equipment-Resmed-CPAP-Infant-CPAP.html",
+    "source_title": "Machine Medical Equipment Resmed CPAP Infant CPAP",
+    "source_company": "Ningbo Cbmtec Medical Equipment Co., Ltd.",
+    "source_moq": "5 Pieces",
+    "source_price_text": "US$ 2,800.00 - 3,500.00",
+    "source_search_url": "https://www.made-in-china.com/products-search/hot-china-products/CPAP.html",
+    "updated_at": "2026-02-13T03:12:29Z"
+  },
+  {
+    "brand": "飞利浦伟康",
+    "model": "DreamStation Auto CPAP",
+    "features": [
+      "智能算法",
+      "湿化集成",
+      "远程管理"
+    ],
+    "pressure_range": "4-20 cmH2O",
+    "price": "US$180.00-260.00",
+    "source_name": "made-in-china",
+    "source_url": "https://ventmed.en.made-in-china.com/product/AsWQdCLOkjka/China-Replacement-for-Respironics-Dreamstation-CPAP-Machines.html",
+    "source_title": "Replacement for Respironics Dreamstation CPAP Machines",
+    "source_company": "HUNAN VENTMED MEDICAL TECHNOLOGY CO., LTD.",
+    "source_moq": "10 Pieces",
+    "source_price_text": "US$ 180.00 - 260.00",
+    "source_search_url": "https://www.made-in-china.com/products-search/hot-china-products/DreamStation-Auto-CPAP.html",
+    "updated_at": "2026-02-13T03:12:35Z"
+  },
+  {
+    "brand": "费雪派克",
+    "model": "SleepStyle Auto",
+    "features": [
+      "智能舒适算法",
+      "集成湿化",
+      "低噪音"
+    ],
+    "pressure_range": "4-20 cmH2O",
+    "price": "未抓到外部价格",
+    "source_name": "made-in-china",
+    "source_url": "",
+    "source_title": "",
+    "source_company": "",
+    "source_moq": "",
+    "source_price_text": "",
+    "source_search_url": "",
+    "updated_at": "2026-02-13T03:12:42Z"
+  },
+  {
+    "brand": "律维施泰因",
+    "model": "Prisma SMART",
+    "features": [
+      "自动调压",
+      "数据追踪"
+    ],
+    "pressure_range": "4-20 cmH2O",
+    "price": "未抓到外部价格",
+    "source_name": "made-in-china",
+    "source_url": "",
+    "source_title": "",
+    "source_company": "",
+    "source_moq": "",
+    "source_price_text": "",
+    "source_search_url": "",
+    "updated_at": "2026-02-13T03:12:47Z"
+  }
+]

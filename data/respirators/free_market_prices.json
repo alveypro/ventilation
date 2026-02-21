@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-02-13T03:16:54.390Z",
+  "keyword": "呼吸机",
+  "note": "free mode: browser crawling with optional cookie injection",
+  "platforms": {
+    "jd": {
+      "status": "error",
+      "error": "Error: page.content: Unable to retrieve content because the page is navigating and changing the content.",
+      "cookie_loaded": false,
+      "at": "2026-02-13T03:17:05.769Z"
+    },
+    "taobao": {
+      "status": "error",
+      "error": "Error: page.goto: Page crashed\nCall log:\n  - navigating to \"https://s.taobao.com/search?q=%E5%91%BC%E5%90%B8%E6%9C%BA\", waiting until \"domcontentloaded\"\n",
+      "cookie_loaded": true,
+      "at": "2026-02-13T03:17:10.168Z"
+    },
+    "tmall": {
+      "status": "error",
+      "error": "Error: page.goto: net::ERR_NETWORK_CHANGED at https://s.taobao.com/search?fromTmallRedirect=true&tab=mall&q=%E5%91%BC%E5%90%B8%E6%9C%BA\nCall log:\n  - navigating to \"https://s.taobao.com/search?fromTmallRedirect=true&tab=mall&q=%E5%91%BC%E5%90%B8%E6%9C%BA\", waiting until \"domcontentloaded\"\n",
+      "cookie_loaded": true,
+      "at": "2026-02-13T03:17:10.801Z"
+    },
+    "xiaohongshu": {
+      "status": "blocked",
+      "final_url": "https://www.xiaohongshu.com/search_result?keyword=%E5%91%BC%E5%90%B8%E6%9C%BA&type=51",
+      "cookie_loaded": false,
+      "html_length": 516353,
+      "offers": [],
+      "at": "2026-02-13T03:17:20.372Z"
+    },
+    "alibaba": {
+      "status": "error",
+      "error": "Error: page.content: Target crashed ",
+      "cookie_loaded": false,
+      "at": "2026-02-13T03:17:27.413Z"
+    }
+  }
+}
