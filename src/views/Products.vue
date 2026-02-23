@@ -1,11 +1,121 @@
 <template>
   <div class="products-page">
     <div class="page-header handbook">
-      <p class="header-label">产品库</p>
-      <h1>设备与参数总览</h1>
-      <p>以模式、参数、适用人群为核心进行筛选与对比。</p>
+      <p class="header-label">机型库</p>
+      <h1>机型库</h1>
+      <p>机型参数筛选与对比。</p>
     </div>
+    <ContentMeta
+      title="页面定位与使用边界"
+      summary="此页用于初筛与对比，不替代医生诊断与参数处方。优先用“场景筛选 + 指标解读 + 决策流程”缩小范围。"
+      :items="productPageMetaItems"
+      source="机型库结构化数据 + 爬虫快照 + 平台规则"
+      updated-at="2026-02-22"
+      action-text="先做智能评估"
+      action-to="/selector"
+    />
 
+    <section class="decision-flow">
+      <h2>5步决策流</h2>
+      <p class="section-note">先判断适应证和风险，再看预算与品牌，减少“只看价格”的误选。</p>
+      <div class="flow-grid">
+        <el-card v-for="(item, index) in decisionFlowCards" :key="item.title" shadow="hover" class="flow-card">
+          <span class="flow-index">0{{ index + 1 }}</span>
+          <h4>{{ item.title }}</h4>
+          <p>{{ item.detail }}</p>
+        </el-card>
+      </div>
+    </section>
+
+
+    <section class="scenario-filter">
+      <h2>场景化快速筛选</h2>
+      <p class="section-note">先选场景，再看参数。点击即可应用筛选条件。</p>
+      <div class="scenario-chip-grid">
+        <el-button
+          v-for="item in scenarioFilters"
+          :key="item.key"
+          :type="scenarioSelected === item.key ? 'primary' : 'default'"
+          plain
+          @click="applyScenarioFilter(item)"
+        >
+          {{ item.label }}
+        </el-button>
+        <el-button v-if="scenarioSelected" text type="primary" @click="clearScenarioFilter">清除场景筛选</el-button>
+      </div>
+    </section>
+
+    <section class="metric-explain">
+      <h2>关键指标解读</h2>
+      <div class="metric-grid">
+        <el-card v-for="item in indicatorCards" :key="item.title" shadow="hover" class="metric-explain-card">
+          <div class="metric-icon">{{ item.icon }}</div>
+          <div>
+            <h4>{{ item.title }}</h4>
+            <p>{{ item.description }}</p>
+            <el-button text type="primary" @click="goTo(item.path)">查看说明 →</el-button>
+          </div>
+        </el-card>
+      </div>
+      <div class="chart-grid">
+        <el-card shadow="hover" class="chart-card">
+          <h4>核心指标可视化</h4>
+          <div class="segmented-chart" v-for="item in indicatorChart" :key="item.label">
+            <div class="chart-row-header">
+              <span class="bar-label">{{ item.label }}</span>
+              <span class="bar-note">{{ item.note }}</span>
+            </div>
+            <div class="segment-track">
+              <div
+                v-for="segment in item.segments"
+                :key="segment.label"
+                class="segment"
+                :class="segment.tone"
+                :style="{ width: segment.width + '%' }"
+              >
+                <span class="segment-label">{{ segment.label }}</span>
+              </div>
+              <div
+                v-for="tick in item.ticks"
+                :key="tick.label"
+                class="threshold"
+                :style="{ left: tick.position + '%' }"
+              >
+                <span class="threshold-label">{{ tick.label }}</span>
+              </div>
+            </div>
+          </div>
+        </el-card>
+        <el-card shadow="hover" class="chart-card">
+          <h4>参数标准速览</h4>
+          <div class="segmented-chart" v-for="item in parameterStandards" :key="item.label">
+            <div class="chart-row-header">
+              <span class="bar-label">{{ item.label }}</span>
+              <span class="bar-note">{{ item.note }}</span>
+            </div>
+            <div class="segment-track">
+              <div
+                v-for="segment in item.segments"
+                :key="segment.label"
+                class="segment"
+                :class="segment.tone"
+                :style="{ width: segment.width + '%' }"
+              >
+                <span class="segment-label">{{ segment.label }}</span>
+              </div>
+              <div
+                v-for="tick in item.ticks"
+                :key="tick.label"
+                class="threshold"
+                :style="{ left: tick.position + '%' }"
+              >
+                <span class="threshold-label">{{ tick.label }}</span>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </div>
+    </section>
     <el-card class="filters">
       <el-row :gutter="20">
         <el-col :xs="24" :sm="12" :md="6">
@@ -135,6 +245,12 @@
         <h2>爬虫呼吸机数据库</h2>
         <el-tag size="small" type="success">自动读取 /data/respirators</el-tag>
       </div>
+      <ContentMeta
+        title="抓取数据说明"
+        summary="抓取结果用于价格和型号发现，最终决策请以官方参数页、说明书和临床建议为准。"
+        :items="crawlerMetaItems"
+        :updated-at="marketGeneratedAt || '未检测到更新时间'"
+      />
       <p class="crawler-hint">当前展示国产与进口机型快照，可作为选机初筛参考。</p>
       <el-alert
         v-if="crawlerError"
@@ -274,6 +390,7 @@
             :product="product"
             :show-compare="true"
             :compare-checked="compareIds.includes(product.id)"
+            @click="goToProduct(product.id)"
             @detail="goToProduct(product.id)"
             @toggleCompare="onToggleCompare"
           />
@@ -293,23 +410,24 @@
             :product="product"
             :show-compare="true"
             :compare-checked="compareIds.includes(product.id)"
+            @click="goToProduct(product.id)"
             @detail="goToProduct(product.id)"
             @toggleCompare="onToggleCompare"
           />
         </el-col>
     </el-row>
 
-    <el-empty v-if="!isLoading && filteredProducts.length === 0" description="没有匹配的产品" />
+    <el-empty v-if="!isLoading && displayedProducts.length === 0" description="没有匹配的产品" />
     <div class="compare-bar" v-if="compareIds.length">
         <span>已选 {{ compareIds.length }} 个用于对比</span>
       <el-button type="warning" size="small" @click="gotoCompare">前往对比</el-button>
-      <el-button size="mini" @click="clearCompare">清除</el-button>
+      <el-button size="small" @click="clearCompare">清除</el-button>
     </div>
 
     <div class="pagination" v-if="totalPages > 1">
       <el-pagination
         background
-        :current-page.sync="currentPage"
+        v-model:current-page="currentPage"
         :page-size="perPage"
         :total="displayedProducts.length"
         layout="prev, pager, next, jumper"
@@ -321,7 +439,9 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import ProductCard from '@/components/ProductCard.vue'
+import ContentMeta from '@/components/ContentMeta.vue'
 import { fetchProducts } from '@/services/dataService'
 import { loadFromStorage, saveToStorage } from '@/utils/storage'
 import type { Product } from '@/types'
@@ -380,6 +500,7 @@ const appliedFilters = ref(createDefaultFilters())
 const compareIds = ref<number[]>(loadFromStorage('compare-ids', []))
 const currentPage = ref(1)
 const perPage = ref(8)
+const scenarioSelected = ref('')
 
 onMounted(async () => {
   const [allProducts] = await Promise.all([
@@ -396,6 +517,168 @@ const asStringArray = (value: unknown) => {
   return value.map(item => (typeof item === 'string' ? item.trim() : '')).filter(Boolean)
 }
 
+
+type ProductFilters = ReturnType<typeof createDefaultFilters>
+
+const scenarioFilters = [
+  { key: 'osa_entry', label: 'OSA 入门/轻中度', filters: { deviceType: 'PAP_SLEEP', modeTag: 'CPAP', search: '' } },
+  { key: 'osa_auto', label: '自动调压 APAP', filters: { deviceType: 'PAP_SLEEP', modeTag: 'APAP', search: '' } },
+  { key: 'copd_niv', label: 'COPD / 家用NIV', filters: { deviceType: 'NIV_HOME', modeTag: '', search: '' } },
+  { key: 'travel', label: '旅行便携', filters: { deviceType: 'PAP_TRAVEL', modeTag: '', search: 'mini' } },
+]
+
+const productPageMetaItems = [
+  '先用场景筛选锁定设备类型，再看模式与压力范围。',
+  'AHI、漏气、使用时长是连续观察指标，不看单点数据。',
+  '若存在持续低氧或并发高风险，请先做专业评估。',
+]
+
+const decisionFlowCards = [
+  { title: '识别疾病与风险', detail: '先确认 OSA / 通气不足 / 合并症，排除高危自调参数。' },
+  { title: '选择设备路径', detail: 'PAP_SLEEP / NIV_HOME / PAP_TRAVEL 三类先分流。' },
+  { title: '核对关键参数', detail: '模式、压力、漏气控制、数据能力必须满足场景。' },
+  { title: '验证舒适依从', detail: '面罩、湿化、噪音会直接影响长期使用时长。' },
+  { title: '评估长期成本', detail: '总成本 = 主机 + 耗材 + 售后 + 随访支持。' },
+]
+
+const crawlerMetaItems = [
+  '抓取价格可能有延迟或活动波动，仅作区间参考。',
+  '同型号不同渠道配置可能不同，需二次核验。',
+  '建议在本页筛选后进入详情页核对参数来源。',
+]
+
+const indicatorCards = [
+  { icon: '📉', title: 'AHI 指标', description: '核心目标通常是 AHI < 5/h 或较基线下降 ≥ 50%。', path: '/patient' },
+  { icon: '🫧', title: '漏气控制', description: '漏气过大会影响算法判读与疗效。', path: '/user-knowledge' },
+  { icon: '⏱️', title: '使用时长', description: '建议 ≥ 4 小时/晚，趋势比单晚重要。', path: '/patient' },
+  { icon: '🩸', title: '低氧负荷', description: '关注 T90 与最低血氧，持续低氧需复诊。', path: '/clinical' },
+]
+
+const percent = (value: number, max: number) => Math.min(100, Math.max(0, (value / max) * 100))
+
+const indicatorChart = [
+  {
+    label: 'AHI (次/小时)',
+    note: '阈值线：5 / 15 / 30',
+    segments: [
+      { label: '0-5 正常', width: percent(5, 40), tone: 'tone-good' },
+      { label: '5-15 轻度', width: percent(10, 40), tone: 'tone-mild' },
+      { label: '15-30 中度', width: percent(15, 40), tone: 'tone-warn' },
+      { label: '30+ 重度', width: percent(10, 40), tone: 'tone-risk' },
+    ],
+    ticks: [
+      { label: '5', position: percent(5, 40) },
+      { label: '15', position: percent(15, 40) },
+      { label: '30', position: percent(30, 40) },
+    ],
+  },
+  {
+    label: '漏气 (L/min)',
+    note: '阈值线：24 / 40',
+    segments: [
+      { label: '0-24 目标', width: percent(24, 60), tone: 'tone-good' },
+      { label: '24-40 注意', width: percent(16, 60), tone: 'tone-warn' },
+      { label: '40+ 高漏气', width: percent(20, 60), tone: 'tone-risk' },
+    ],
+    ticks: [
+      { label: '24', position: percent(24, 60) },
+      { label: '40', position: percent(40, 60) },
+    ],
+  },
+  {
+    label: '使用时长 (小时/晚)',
+    note: '阈值线：2 / 4 / 6',
+    segments: [
+      { label: '0-2 不足', width: percent(2, 8), tone: 'tone-risk' },
+      { label: '2-4 过渡', width: percent(2, 8), tone: 'tone-warn' },
+      { label: '4-6 目标', width: percent(2, 8), tone: 'tone-good' },
+      { label: '6-8 稳定', width: percent(2, 8), tone: 'tone-mild' },
+    ],
+    ticks: [
+      { label: '2', position: percent(2, 8) },
+      { label: '4', position: percent(4, 8) },
+      { label: '6', position: percent(6, 8) },
+    ],
+  },
+  {
+    label: '最低血氧 (SpO₂%)',
+    note: '阈值线：88 / 90 / 95',
+    segments: [
+      { label: '0-88 风险', width: percent(88, 100), tone: 'tone-risk' },
+      { label: '88-90 边缘', width: percent(2, 100), tone: 'tone-warn' },
+      { label: '90-95 可接受', width: percent(5, 100), tone: 'tone-mild' },
+      { label: '95-100 理想', width: percent(5, 100), tone: 'tone-good' },
+    ],
+    ticks: [
+      { label: '88', position: percent(88, 100) },
+      { label: '90', position: percent(90, 100) },
+      { label: '95', position: percent(95, 100) },
+    ],
+  },
+]
+
+const parameterStandards = [
+  {
+    label: '压力范围 (cmH₂O)',
+    note: '阈值线：4 / 12 / 20',
+    segments: [
+      { label: '0-4 起始', width: percent(4, 25), tone: 'tone-neutral' },
+      { label: '4-12 常用', width: percent(8, 25), tone: 'tone-mild' },
+      { label: '12-20 中高压', width: percent(8, 25), tone: 'tone-warn' },
+      { label: '20-25 高压', width: percent(5, 25), tone: 'tone-risk' },
+    ],
+    ticks: [
+      { label: '4', position: percent(4, 25) },
+      { label: '12', position: percent(12, 25) },
+      { label: '20', position: percent(20, 25) },
+    ],
+  },
+  {
+    label: '湿化等级',
+    note: '阈值线：2 / 4 / 6',
+    segments: [
+      { label: '0-2 低', width: percent(2, 8), tone: 'tone-neutral' },
+      { label: '2-4 中', width: percent(2, 8), tone: 'tone-mild' },
+      { label: '4-6 高', width: percent(2, 8), tone: 'tone-warn' },
+      { label: '6-8 强', width: percent(2, 8), tone: 'tone-accent' },
+    ],
+    ticks: [
+      { label: '2', position: percent(2, 8) },
+      { label: '4', position: percent(4, 8) },
+      { label: '6', position: percent(6, 8) },
+    ],
+  },
+  {
+    label: '噪音 (dB)',
+    note: '阈值线：25 / 30 / 35',
+    segments: [
+      { label: '0-25 安静', width: percent(25, 40), tone: 'tone-good' },
+      { label: '25-30 可接受', width: percent(5, 40), tone: 'tone-mild' },
+      { label: '30-35 偏高', width: percent(5, 40), tone: 'tone-warn' },
+      { label: '35-40 偏吵', width: percent(5, 40), tone: 'tone-risk' },
+    ],
+    ticks: [
+      { label: '25', position: percent(25, 40) },
+      { label: '30', position: percent(30, 40) },
+      { label: '35', position: percent(35, 40) },
+    ],
+  },
+  {
+    label: '便携重量 (kg)',
+    note: '阈值线：0.5 / 1.0 / 1.5',
+    segments: [
+      { label: '0-0.5 轻', width: percent(0.5, 2), tone: 'tone-good' },
+      { label: '0.5-1.0 便携', width: percent(0.5, 2), tone: 'tone-mild' },
+      { label: '1.0-1.5 中等', width: percent(0.5, 2), tone: 'tone-warn' },
+      { label: '1.5-2.0 偏重', width: percent(0.5, 2), tone: 'tone-risk' },
+    ],
+    ticks: [
+      { label: '0.5', position: percent(0.5, 2) },
+      { label: '1.0', position: percent(1.0, 2) },
+      { label: '1.5', position: percent(1.5, 2) },
+    ],
+  },
+]
 const normalizeDevice = (item: any): CrawlerDevice => {
   return {
     brand: asString(item?.brand) || '未知品牌',
@@ -441,26 +724,30 @@ const loadCrawlerData = async () => {
   crawlerError.value = ''
   try {
     const dataBases = [
-      'https://ai.airivo.cn/data/respirators',
+      'https://api.airivo.cn/data/respirators',
       '/data/respirators',
     ]
     let payload: { domestic: any; imported: any; params: any; market: any } | null = null
     for (const base of dataBases) {
-      const ts = Date.now()
-      const [domesticRes, importedRes, paramsRes, marketRes] = await Promise.all([
-        fetch(`${base}/domestic.json?t=${ts}`, { cache: 'no-store' }),
-        fetch(`${base}/imported.json?t=${ts}`, { cache: 'no-store' }),
-        fetch(`${base}/parameters.json?t=${ts}`, { cache: 'no-store' }),
-        fetch(`${base}/free_market_prices.json?t=${ts}`, { cache: 'no-store' }).catch(() => null),
-      ])
-      if (!domesticRes.ok || !importedRes.ok || !paramsRes.ok) continue
-      payload = {
-        domestic: await domesticRes.json(),
-        imported: await importedRes.json(),
-        params: await paramsRes.json(),
-        market: marketRes && marketRes.ok ? await marketRes.json() : null,
+      try {
+        const ts = Date.now()
+        const [domesticRes, importedRes, paramsRes, marketRes] = await Promise.all([
+          fetch(`${base}/domestic.json?t=${ts}`, { cache: 'no-store' }),
+          fetch(`${base}/imported.json?t=${ts}`, { cache: 'no-store' }),
+          fetch(`${base}/parameters.json?t=${ts}`, { cache: 'no-store' }),
+          fetch(`${base}/free_market_prices.json?t=${ts}`, { cache: 'no-store' }).catch(() => null),
+        ])
+        if (!domesticRes.ok || !importedRes.ok || !paramsRes.ok) continue
+        payload = {
+          domestic: await domesticRes.json(),
+          imported: await importedRes.json(),
+          params: await paramsRes.json(),
+          market: marketRes && marketRes.ok ? await marketRes.json() : null,
+        }
+        break
+      } catch {
+        continue
       }
-      break
     }
     if (!payload) throw new Error('crawler data files not found')
     domesticDevices.value = Array.isArray(payload.domestic) ? payload.domestic.map(normalizeDevice) : []
@@ -476,7 +763,7 @@ const loadCrawlerData = async () => {
         status: asString(detail?.status) || 'unknown',
         count: rawOffers.length,
         pages: Number(detail?.pages_crawled || 0),
-        offers: rawOffers.slice(0, 20).map((offer: any) => ({
+        offers: rawOffers.map((offer: any) => ({
           title: asString(offer?.title) || '未知商品',
           price: Array.isArray(offer?.prices) && offer.prices.length ? asString(offer.prices[0]) : '-',
         })),
@@ -488,7 +775,7 @@ const loadCrawlerData = async () => {
     }
     marketGeneratedAt.value = asString(payload.market?.generated_at)
   } catch (error) {
-    crawlerError.value = '爬虫数据库尚未同步到站点，当前先展示内置产品库。'
+    crawlerError.value = '爬虫数据库尚未同步到站点，当前先展示内置机型库。'
   } finally {
     crawlerLoading.value = false
   }
@@ -572,23 +859,41 @@ const stageGuidance = ref([
 ])
 
 const brandOptions = computed(() => {
-  return Array.from(new Set(products.value.map(product => product.brand))).sort()
+  return Array.from(
+    new Set(
+      products.value
+        .map(product => (product.brand || '').trim())
+        .filter(Boolean),
+    ),
+  ).sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'))
 })
 
 const typeOptions = computed(() => {
-  return Array.from(new Set(products.value.map(product => product.type))).sort()
+  return Array.from(
+    new Set(
+      products.value
+        .map(product => (product.type || '').trim())
+        .filter(Boolean),
+    ),
+  ).sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'))
 })
 
 const seriesOptions = computed(() => {
-  return Array.from(new Set(products.value.map(product => product.series).filter(Boolean) as string[])).sort()
+  return Array.from(
+    new Set(
+      products.value
+        .map(product => (product.series || '').trim())
+        .filter(Boolean),
+    ),
+  ).sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'))
 })
 
 const modeOptions = computed(() => {
   const modes = products.value.flatMap(product => product.modeTags || [])
-  return Array.from(new Set(modes)).sort()
+  return Array.from(new Set(modes)).sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'))
 })
 
-const filterWith = (filters: ReturnType<typeof createDefaultFilters>) => {
+const filterWith = (filters: ProductFilters) => {
   const keyword = filters.search.trim().toLowerCase()
   const tokens = keyword.split(/[\s,，。；;、/\\|]+/).filter(Boolean)
   let result = products.value.filter(product => {
@@ -617,9 +922,11 @@ const filterWith = (filters: ReturnType<typeof createDefaultFilters>) => {
       product.platformFamily,
       (product.modeTags || []).join(' '),
       (product.aliasNames || []).join(' '),
+      Object.values(product.specs || {}).join(' '),
     ].filter(Boolean).join(' ')
-    const matchesSearch = keyword
-      ? searchTarget.toLowerCase().includes(keyword)
+    const searchText = searchTarget.toLowerCase()
+    const matchesSearch = tokens.length
+      ? tokens.every(token => searchText.includes(token))
       : true
     return matchesBrand
       && matchesType
@@ -699,7 +1006,7 @@ const appliedProducts = computed(() => filterWith(appliedFilters.value))
 const isDirty = computed(() => JSON.stringify(draftFilters) !== JSON.stringify(appliedFilters.value))
 const displayedProducts = computed(() => (isDirty.value ? filteredProducts.value : appliedProducts.value))
 const isDefaultApplied = computed(() => JSON.stringify(appliedFilters.value) === JSON.stringify(createDefaultFilters()))
-const showSourceSection = computed(() => isDefaultApplied.value && !isDirty.value && !draftFilters.search)
+const showSourceSection = computed(() => isDefaultApplied.value && !isDirty.value && !draftFilters.search.trim())
 
 const appliedSummary = computed(() => {
   const items: string[] = []
@@ -736,6 +1043,10 @@ const pagedProducts = computed(() => {
 
 const onToggleCompare = (id: number, checked: boolean) => {
   if (checked) {
+    if (compareIds.value.length >= 4 && !compareIds.value.includes(id)) {
+      ElMessage.warning('最多同时对比 4 个机型')
+      return
+    }
     if (!compareIds.value.includes(id)) compareIds.value.push(id)
   } else {
     compareIds.value = compareIds.value.filter(i => i !== id)
@@ -759,6 +1070,21 @@ watch(activeMarketPlatform, () => {
   marketPage.value = 1
 })
 
+watch(displayedProducts, (list) => {
+  if (!list.length) {
+    currentPage.value = 1
+    return
+  }
+  if (currentPage.value > totalPages.value) {
+    currentPage.value = totalPages.value
+  }
+})
+
+watch(products, (list) => {
+  const validIds = new Set(list.map(item => item.id))
+  compareIds.value = compareIds.value.filter(id => validIds.has(id))
+})
+
 const resetFilters = () => {
   Object.assign(draftFilters, createDefaultFilters())
   appliedFilters.value = createDefaultFilters()
@@ -767,6 +1093,24 @@ const resetFilters = () => {
 
 const goToProduct = (id: number) => {
   router.push(`/product/${id}`)
+}
+
+const goTo = (path: string) => {
+  router.push(path)
+}
+
+const applyScenarioFilter = (item: { key: string; filters: Record<string, unknown> }) => {
+  scenarioSelected.value = item.key
+  Object.assign(draftFilters, createDefaultFilters(), item.filters)
+  appliedFilters.value = { ...draftFilters }
+  currentPage.value = 1
+}
+
+const clearScenarioFilter = () => {
+  scenarioSelected.value = ''
+  Object.assign(draftFilters, createDefaultFilters())
+  appliedFilters.value = createDefaultFilters()
+  currentPage.value = 1
 }
 
 const applySourceFilter = () => {
@@ -818,6 +1162,50 @@ const cancelPreview = () => {
 .page-header p {
   font-size: 14px;
   color: #6b7280;
+}
+
+.decision-flow {
+  margin: 18px 0 24px;
+}
+
+.decision-flow h2,
+.scenario-filter h2,
+.metric-explain h2,
+.guide-section h2 {
+  font-size: 24px;
+  color: #0f172a;
+}
+
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.flow-card {
+  position: relative;
+  border: 1px solid #e2e8f0;
+}
+
+.flow-card h4 {
+  margin: 8px 0 6px;
+  color: #1e293b;
+}
+
+.flow-card p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.flow-index {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #1d4ed8;
 }
 
 .filters {
@@ -1014,4 +1402,152 @@ const cancelPreview = () => {
     grid-template-columns: 1fr;
   }
 }
+
+.scenario-filter {
+  margin: 20px 0;
+}
+
+.scenario-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.metric-explain {
+  margin: 20px 0 30px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.metric-explain-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.metric-explain-card .metric-icon {
+  font-size: 22px;
+}
+
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.chart-card h4 {
+  margin: 0 0 12px 0;
+  color: #1f2937;
+}
+
+.segmented-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chart-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.bar-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.bar-note {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.segment-track {
+  position: relative;
+  display: flex;
+  height: 28px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+
+.segment-label {
+  opacity: 0.9;
+}
+
+.threshold {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  width: 2px;
+  background: #1f2937;
+}
+
+.threshold-label {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #475569;
+}
+
+.tone-good {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.tone-mild {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.tone-warn {
+  background: #fde68a;
+  color: #92400e;
+}
+
+.tone-risk {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.tone-neutral {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.tone-accent {
+  background: #c7d2fe;
+  color: #3730a3;
+}
+
+.bar-threshold {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background: #f97316;
+  box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.2);
+}
+
 </style>

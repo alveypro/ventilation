@@ -178,7 +178,7 @@ const modelTokens = (name: string) => {
 }
 
 const fetchCrawlerJson = async (file: string) => {
-  const bases = ['https://ai.airivo.cn/data/respirators', '/data/respirators']
+  const bases = ['https://api.airivo.cn/data/respirators', '/data/respirators']
   for (const base of bases) {
     try {
       const res = await fetch(`${base}/${file}?t=${Date.now()}`, { cache: 'no-store' })

@@ -440,11 +440,16 @@ const sendMessage = async (presetContent?: string) => {
     saveHistory()
     scrollToBottom()
   } catch (error) {
-    errorMessage.value = 'AI 服务暂不可用，请稍后重试或点“重试”。'
+    const detail = error instanceof Error ? error.message : ''
+    errorMessage.value = detail
+      ? `AI 服务暂不可用：${detail}`
+      : 'AI 服务暂不可用，请稍后重试或点“重试”。'
     messages.value.push({
       id: `assistant-error-${Date.now()}`,
       role: 'assistant',
-      content: '服务暂时拥堵，请稍后重试。建议把问题拆短一点再发送。',
+      content: detail
+        ? `服务暂不可用：${detail}`
+        : '服务暂时拥堵，请稍后重试。建议把问题拆短一点再发送。',
       time: toTimestamp(),
     })
     saveHistory()
