@@ -23,7 +23,6 @@
     "@types/multer": "^1.4.12",
     "@types/node": "^20.11.30",
     "@types/pdf-parse": "^1.1.4",
-    "@types/tesseract.js": "^2.1.0",
     "tsx": "^4.7.1",
     "typescript": "^5.4.5"
   }

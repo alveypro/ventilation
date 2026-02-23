@@ -14,10 +14,14 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
+  destination: (_req: unknown, _file: unknown, cb: (error: Error | null, destination: string) => void) => {
     cb(null, uploadsDir)
   },
-  filename: (_req, file, cb) => {
+  filename: (
+    _req: unknown,
+    file: { originalname?: string },
+    cb: (error: Error | null, filename: string) => void
+  ) => {
     const ext = path.extname(file.originalname || '')
     const name = `upload_${Date.now()}_${Math.floor(Math.random() * 10000)}${ext}`
     cb(null, name)
@@ -34,10 +38,19 @@ const OCR_ENABLED = process.env.OCR_ENABLED !== '0'
 
 async function ocrImage(filePath: string): Promise<string> {
   if (!OCR_ENABLED) return ''
-  const worker = await createWorker({})
+  const worker = (await createWorker()) as unknown as {
+    loadLanguage?: (lang: string) => Promise<void>
+    initialize?: (lang: string) => Promise<void>
+    recognize: (input: string) => Promise<{ data?: { text?: string } }>
+    terminate: () => Promise<void>
+  }
   try {
-    await worker.loadLanguage(OCR_LANG)
-    await worker.initialize(OCR_LANG)
+    if (worker.loadLanguage) {
+      await worker.loadLanguage(OCR_LANG)
+    }
+    if (worker.initialize) {
+      await worker.initialize(OCR_LANG)
+    }
     const result = await worker.recognize(filePath)
     return result.data?.text || ''
   } finally {

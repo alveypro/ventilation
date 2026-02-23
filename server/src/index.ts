@@ -9,7 +9,8 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { chatRouter } from './routes/chat.js'
 import { historyRouter } from './routes/history.js'
-import { uploadRouter } from './routes/upload.js'
+import { aiBridgeRouter } from './routes/aiBridge.js'
+import { metricsRouter } from './routes/metrics.js'
 
 const envPath =
   process.env.ENV_PATH ||
@@ -39,8 +40,21 @@ if (!fs.existsSync(uploadsDir)) {
 app.use('/uploads', express.static(uploadsDir))
 
 app.use('/api/chat', chatRouter)
+app.use('/api/ai/chat', aiBridgeRouter)
 app.use('/api/history', historyRouter)
-app.use('/api/upload', uploadRouter)
+app.use('/api/metrics', metricsRouter)
+
+try {
+  const { uploadRouter } = await import('./routes/upload.js')
+  app.use('/api/upload', uploadRouter)
+} catch (error) {
+  console.warn('Upload route disabled: optional dependencies are missing.', error)
+  app.all('/api/upload', (_req, res) => {
+    res.status(503).json({
+      error: 'Upload service is unavailable. Install server upload dependencies and restart.'
+    })
+  })
+}
 
 const PORT = Number(process.env.PORT || 3443)
 const keyPath = process.env.SSL_KEY_PATH
