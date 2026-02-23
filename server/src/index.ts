@@ -44,14 +44,24 @@ app.use('/api/ai/chat', aiBridgeRouter)
 app.use('/api/history', historyRouter)
 app.use('/api/metrics', metricsRouter)
 
-try {
-  const { uploadRouter } = await import('./routes/upload.js')
-  app.use('/api/upload', uploadRouter)
-} catch (error) {
-  console.warn('Upload route disabled: optional dependencies are missing.', error)
-  app.all('/api/upload', (_req, res) => {
+const enableUploadRoute = process.env.ENABLE_UPLOAD_ROUTE !== '0'
+if (enableUploadRoute) {
+  try {
+    const { uploadRouter } = await import('./routes/upload.js')
+    app.use('/api/upload', uploadRouter)
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error)
+    console.warn(`Upload route disabled: optional dependencies are missing. ${reason}`)
+    app.all('/api/upload{*rest}', (_req, res) => {
+      res.status(503).json({
+        error: 'Upload service is unavailable. Install upload dependencies and restart.'
+      })
+    })
+  }
+} else {
+  app.all('/api/upload{*rest}', (_req, res) => {
     res.status(503).json({
-      error: 'Upload service is unavailable. Install server upload dependencies and restart.'
+      error: 'Upload service is disabled by ENABLE_UPLOAD_ROUTE=0.'
     })
   })
 }
